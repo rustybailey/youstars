@@ -85,7 +85,7 @@ html {}
 /************************************************/
 
 body {
-
+	font-family: 'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {}
@@ -113,6 +113,45 @@ p {}
 
 
 
+#ys-player-bar {
+	display: block;
+	float: left;
+	width: 100%;
+	height: 3px;
+	background: #fcc6d0;
+}
+
+#ys-stats {
+	display: block;
+	float: left;
+	#ys-subs {
+		display: block;
+		float: left;
+		height: 45px;
+	}
+	ul#ys-social-links {
+		display: block;
+		float: left;
+		li {
+			display: block;
+			float: left;
+			width: 45px;
+			height: 45px;
+		}
+	}
+	#ys-views {
+		display: block;
+		float: left;
+		height: 45px;
+	}
+}
+
+
+#ys-player-controls {
+	display: block;
+	float: right;
+}
+
 
 
 
@@ -133,7 +172,6 @@ $ys-profile-tile-large-size:	230px;
 		li.ys-profile-tile-small,
 		li.ys-profile-tile-medium,
 		li.ys-profile-tile-large {
-			background: #cccccc;
 			display: block;
 			float: left;
 			width: $ys-profile-tile-large-size;
@@ -144,6 +182,8 @@ $ys-profile-tile-large-size:	230px;
 				float: left;
 				width: $ys-profile-tile-large-size;
 				height: $ys-profile-tile-large-size;
+				color: #ffffff;
+				background: #f51e56;
 				position: absolute;
 				overflow: hidden;
 				.ys-profile-tile-info {
