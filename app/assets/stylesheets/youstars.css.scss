@@ -1,0 +1,113 @@
+@import "compass/reset";
+@import "compass/typography";
+@import "compass/css3";
+@import "compass/utilities/general/clearfix";
+@import "compass/utilities/general/hacks";
+
+
+
+/****************************************************************************************************
+
+  Table of Contents
+
+*****************************************************************************************************
+
+  0.  SCSS Variables
+      - Font Sizing
+      - Media Size Breakpoints
+
+  1.  Universal Cascade
+      - Body
+
+  2.  Tag-Specific Styles
+      - Forms
+      - Tables
+
+  3.  Utility Classes
+      - Buttons
+
+  4.  Template Sections
+
+  5.  Content Elements
+
+  6.  Pages
+
+  7.  JS Widgets
+
+****************************************************************************************************/
+
+
+
+/****************************************************************************************************
+  0.  SCSS Variables
+****************************************************************************************************/
+
+
+/* Font Sizing */
+/************************************************/
+
+$base-font-size: 13px;
+$base-line-height: 20px;
+@include establish-baseline;
+
+
+/* Media Size Breakpoints */
+/************************************************/
+
+@media (min-width: 1200px) {}							/* Large Viewport */
+@media (min-width: 980px) and (max-width: 1199px) {}	/* Normal Viewport */
+@media (min-width: 768px) and (max-width: 979px) {}		/* Tablet Viewport */
+@media (min-width: 480px) and (max-width: 767px) {}		/* Phone Viewport */
+@media (max-width: 480px) {}							/* Small Viewport */
+
+
+/* Icon Font Names */
+/************************************************/
+
+$symbolset-standard: "SSStandard";
+$symbolset-symbolicons: "SSSymbolicons";
+$symbolset-social: "SSSocial";
+
+
+
+/****************************************************************************************************
+  1.  Universal Cascade
+****************************************************************************************************/
+
+
+/* HTML */
+/************************************************/
+
+html {}
+
+
+/* Body */
+/************************************************/
+
+body {
+
+}
+
+h1, h2, h3, h4, h5, h6 {}
+
+strong { font-weight: 700; }
+em { font-style: italic; }
+
+p {}
+
+
+
+
+/* Buttons */
+/************************************************/
+
+
+
+
+
+
+
+
+
+
+
