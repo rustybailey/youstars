@@ -111,3 +111,245 @@ p {}
 
 
 
+
+
+
+
+
+$ys-profile-tile-small-size:	70px;
+$ys-profile-tile-medium-size:	150px;
+$ys-profile-tile-large-size:	230px;
+
+
+#ys-profiles {
+	display: block;
+	float: right;
+	width: 250px;
+	ul#ys-profiles-list {
+		display: block;
+		float: left;
+		width: 240px;
+		padding: 10px 0 0 10px;
+		li.ys-profile-tile-small,
+		li.ys-profile-tile-medium,
+		li.ys-profile-tile-large {
+			background: #cccccc;
+			display: block;
+			float: left;
+			width: $ys-profile-tile-large-size;
+			height: $ys-profile-tile-large-size;
+			margin: 0 10px 10px 0;
+			a.ys-profile-tile-content {
+				display: block;
+				float: left;
+				width: $ys-profile-tile-large-size;
+				height: $ys-profile-tile-large-size;
+				position: absolute;
+				overflow: hidden;
+				.ys-profile-tile-info {
+					display: block;
+					float: left;
+					width: $ys-profile-tile-large-size;
+					height: $ys-profile-tile-large-size;
+					position: absolute;
+				}
+				.ys-profile-tile-door-1,
+				.ys-profile-tile-door-2,
+				.ys-profile-tile-door-3,
+				.ys-profile-tile-door-4 {
+					display: block;
+					float: left;
+					width: ($ys-profile-tile-large-size / 2);
+					height: ($ys-profile-tile-large-size / 2);
+					position: absolute;
+					overflow: hidden;
+					@include transition-property(margin);
+					@include transition-duration(0.33s);
+					img {
+						display: block;
+						float: left;
+						width: $ys-profile-tile-large-size;
+						height: $ys-profile-tile-large-size;
+						position: absolute;
+					}
+				}
+				.ys-profile-tile-door-2 {
+					margin: 0 0 0 ($ys-profile-tile-large-size / 2);
+					img { margin-left: -($ys-profile-tile-large-size / 2); }
+				}
+				.ys-profile-tile-door-3 {
+					margin: ($ys-profile-tile-large-size / 2) 0 0 ($ys-profile-tile-large-size / 2);
+					img {
+						margin-left: -($ys-profile-tile-large-size / 2);
+						margin-top: -($ys-profile-tile-large-size / 2);
+					}
+				}
+				.ys-profile-tile-door-4 {
+					margin: ($ys-profile-tile-large-size / 2) 0 0 0;
+					img {
+						margin-top: -($ys-profile-tile-large-size / 2);
+					}
+				}
+			}
+		}
+
+		li.ys-profile-tile-medium {
+			width: $ys-profile-tile-medium-size;
+			height: $ys-profile-tile-medium-size;
+			a.ys-profile-tile-content {
+				width: $ys-profile-tile-medium-size;
+				height: $ys-profile-tile-medium-size;
+				.ys-profile-tile-info {
+					width: $ys-profile-tile-medium-size;
+					height: $ys-profile-tile-medium-size;
+				}
+				.ys-profile-tile-door-1,
+				.ys-profile-tile-door-2,
+				.ys-profile-tile-door-3,
+				.ys-profile-tile-door-4 {
+					width: ($ys-profile-tile-medium-size / 2);
+					height: ($ys-profile-tile-medium-size / 2);
+					img {
+						width: $ys-profile-tile-medium-size;
+						height: $ys-profile-tile-medium-size;
+					}
+				}
+				.ys-profile-tile-door-2 {
+					margin: 0 0 0 ($ys-profile-tile-medium-size / 2);
+					img { margin-left: -($ys-profile-tile-medium-size / 2); }
+				}
+				.ys-profile-tile-door-3 {
+					margin: ($ys-profile-tile-medium-size / 2) 0 0 ($ys-profile-tile-medium-size / 2);
+					img {
+						margin-left: -($ys-profile-tile-medium-size / 2);
+						margin-top: -($ys-profile-tile-medium-size / 2);
+					}
+				}
+				.ys-profile-tile-door-4 {
+					margin: ($ys-profile-tile-medium-size / 2) 0 0 0;
+					img {
+						margin-top: -($ys-profile-tile-medium-size / 2);
+					}
+				}
+			}
+		}
+		li.ys-profile-tile-small {
+			width: $ys-profile-tile-small-size;
+			height: $ys-profile-tile-small-size;
+			a.ys-profile-tile-content {
+				width: $ys-profile-tile-small-size;
+				height: $ys-profile-tile-small-size;
+				.ys-profile-tile-info {
+					width: $ys-profile-tile-small-size;
+					height: $ys-profile-tile-small-size;
+				}
+				.ys-profile-tile-door-1,
+				.ys-profile-tile-door-2,
+				.ys-profile-tile-door-3,
+				.ys-profile-tile-door-4 {
+					width: ($ys-profile-tile-small-size / 2);
+					height: ($ys-profile-tile-small-size / 2);
+					img {
+						width: $ys-profile-tile-small-size;
+						height: $ys-profile-tile-small-size;
+					}
+				}
+				.ys-profile-tile-door-2 {
+					margin: 0 0 0 ($ys-profile-tile-small-size / 2);
+					img { margin-left: -($ys-profile-tile-small-size / 2); }
+				}
+				.ys-profile-tile-door-3 {
+					margin: ($ys-profile-tile-small-size / 2) 0 0 ($ys-profile-tile-small-size / 2);
+					img {
+						margin-left: -($ys-profile-tile-small-size / 2);
+						margin-top: -($ys-profile-tile-small-size / 2);
+					}
+				}
+				.ys-profile-tile-door-4 {
+					margin: ($ys-profile-tile-small-size / 2) 0 0 0;
+					img {
+						margin-top: -($ys-profile-tile-small-size / 2);
+					}
+				}
+			}
+		}
+		li.ys-profile-tile-large:hover {
+			a.ys-profile-tile-content {
+				.ys-profile-tile-door-1 {
+					margin-top: -($ys-profile-tile-large-size / 2);
+					margin-left: -($ys-profile-tile-large-size / 2);
+				}
+				.ys-profile-tile-door-2 {
+					margin-top: -($ys-profile-tile-large-size / 2);
+					margin-left: $ys-profile-tile-large-size;
+				}
+				.ys-profile-tile-door-3 {
+					margin-top: $ys-profile-tile-large-size;
+					margin-left: $ys-profile-tile-large-size;
+				}
+				.ys-profile-tile-door-4 {
+					margin-top: $ys-profile-tile-large-size;
+					margin-left: -($ys-profile-tile-large-size / 2);
+				}
+			}
+		}
+		li.ys-profile-tile-medium:hover {
+			a.ys-profile-tile-content {
+				.ys-profile-tile-door-1 {
+					margin-top: -($ys-profile-tile-medium-size / 2);
+					margin-left: -($ys-profile-tile-medium-size / 2);
+				}
+				.ys-profile-tile-door-2 {
+					margin-top: -($ys-profile-tile-medium-size / 2);
+					margin-left: $ys-profile-tile-medium-size;
+				}
+				.ys-profile-tile-door-3 {
+					margin-top: $ys-profile-tile-medium-size;
+					margin-left: $ys-profile-tile-medium-size;
+				}
+				.ys-profile-tile-door-4 {
+					margin-top: $ys-profile-tile-medium-size;
+					margin-left: -($ys-profile-tile-medium-size / 2);
+				}
+			}
+		}
+		li.ys-profile-tile-small:hover {
+			a.ys-profile-tile-content {
+				.ys-profile-tile-door-1 {
+					margin-top: -($ys-profile-tile-small-size / 2);
+					margin-left: -($ys-profile-tile-small-size / 2);
+				}
+				.ys-profile-tile-door-2 {
+					margin-top: -($ys-profile-tile-small-size / 2);
+					margin-left: $ys-profile-tile-small-size;
+				}
+				.ys-profile-tile-door-3 {
+					margin-top: $ys-profile-tile-small-size;
+					margin-left: $ys-profile-tile-small-size;
+				}
+				.ys-profile-tile-door-4 {
+					margin-top: $ys-profile-tile-small-size;
+					margin-left: -($ys-profile-tile-small-size / 2);
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
