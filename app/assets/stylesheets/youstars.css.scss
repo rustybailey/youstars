@@ -221,7 +221,7 @@ $ys-profile-tile-large-size:	230px;
 					overflow: hidden;
 					@include transition-property(margin);
 					@include transition-duration(0.33s);
-					@include transition-delay(0.2s);
+					/*@include transition-delay(0.2s);*/
 					img {
 						display: block;
 						float: left;
