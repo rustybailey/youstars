@@ -594,6 +594,7 @@ $ys-profile-tile-large-size:	230px;
 	position: absolute;
 	bottom: -20px;
 	overflow-x: scroll;
+	overflow-y: hidden;
 	background: transparent url("/assets/videos-background.png") repeat-x 0 0;
 	z-index: 15;
 	ul#ys-videos-list {
