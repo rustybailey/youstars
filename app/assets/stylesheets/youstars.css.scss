@@ -169,7 +169,7 @@ p {}
 		line-height: 42px;
 		color: #ffffff;
 		background: $teal;
-		font-weight: 300;
+		font-weight: 100;
 		font-style: italic;
 		strong {
 			font-style: normal;
@@ -199,6 +199,8 @@ p {}
 		li:nth-child(5) { background: $aqua; }
 		li:nth-child(6) { background: $red; }
 		li:nth-child(7) { background: $blue; }
+		li:nth-child(8) { background: $purple; }
+		li:nth-child(9) { background: $teal; }
 	}
 }
 
@@ -266,6 +268,15 @@ $ys-profile-tile-large-size:	230px;
 		float: left;
 		width: 240px;
 		padding: 10px 0 0 10px;
+		li:nth-child(1n) a.ys-profile-tile-content { background: $orange; }
+		li:nth-child(2n) a.ys-profile-tile-content { background: $green; }
+		li:nth-child(3n) a.ys-profile-tile-content { background: $crimson; }
+		li:nth-child(4n) a.ys-profile-tile-content { background: $marigold; }
+		li:nth-child(5n) a.ys-profile-tile-content { background: $aqua; }
+		li:nth-child(6n) a.ys-profile-tile-content { background: $red; }
+		li:nth-child(7n) a.ys-profile-tile-content { background: $blue; }
+		li:nth-child(8n) a.ys-profile-tile-content { background: $purple; }
+		li:nth-child(9n) a.ys-profile-tile-content { background: $teal; }
 		li.ys-profile-tile-small,
 		li.ys-profile-tile-medium,
 		li.ys-profile-tile-large {
@@ -281,7 +292,6 @@ $ys-profile-tile-large-size:	230px;
 				height: $ys-profile-tile-large-size;
 				color: #ffffff;
 				position: absolute;
-				background: #f51e56;
 				overflow: hidden;
 				.ys-profile-tile-info {
 					display: block;
@@ -509,6 +519,15 @@ $ys-profile-tile-large-size:	230px;
 		width: auto;
 		height: 125px;
 		white-space: nowrap;
+		li:nth-child(1n) a.ys-video-info { background: $orange; }
+		li:nth-child(2n) a.ys-video-info { background: $green; }
+		li:nth-child(3n) a.ys-video-info { background: $crimson; }
+		li:nth-child(4n) a.ys-video-info { background: $marigold; }
+		li:nth-child(5n) a.ys-video-info { background: $aqua; }
+		li:nth-child(6n) a.ys-video-info { background: $red; }
+		li:nth-child(7n) a.ys-video-info { background: $blue; }
+		li:nth-child(8n) a.ys-video-info { background: $purple; }
+		li:nth-child(9n) a.ys-video-info { background: $teal; }
 		li.ys-video-tile {
 			display: inline-block;
 			width: 240px;
@@ -525,7 +544,6 @@ $ys-profile-tile-large-size:	230px;
 				height: 105px;
 				padding: 15px;
 				margin-top: -7px;
-				background: #f8be0f;
 				color: #ffffff;
 				text-decoration: none;
 				@include transition-property(margin, bottom);
