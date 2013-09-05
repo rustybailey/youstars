@@ -13,6 +13,10 @@ class Suggest::ChannelsController < ApplicationController
       entry.dig("author", 0, "yt$userID", "$t")
     end
     
+    recs = recs.collect do |id|
+      YoutubeApi.channel_data_for_channel_id(id)
+    end
+
     render :json => recs
   end
 
@@ -37,8 +41,12 @@ class Suggest::ChannelsController < ApplicationController
     end
 
     channels = channel_videos.keys.sort { |a, b| channel_videos[a] <=> channel_videos[b] }
+    channels = channels.first(limit)
+    channels = channels.collect do |id|
+      YoutubeApi.channel_data_for_channel_id(id)
+    end
 
-    render :json => channels.first(limit)
+    render :json => channels
   end
 
   def topics

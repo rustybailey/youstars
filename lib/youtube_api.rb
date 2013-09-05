@@ -66,6 +66,24 @@ module YoutubeApi
     }
   end
 
+  def self.channel_data_for_channel_id(channel_id)
+    channel_url = @@v3_URL + "/channels"
+    query = {
+      key: ENV['YOUTUBE_API'],
+      id: channel_id,
+      part: "snippet"
+    }
+
+    json = JSON.parse( HTTParty.get(channel_url, query: query).body )    
+
+    {      
+      channel_id:   channel_id,
+      published_at: json['items'][0]['snippet']['publishedAt'],      
+      thumbnails:   json['items'][0]['snippet']['thumbnails'],
+      title:        json['items'][0]['snippet']['title']
+    }
+  end
+
   def self.channel_stats_for_channel_id(channel_id)
     channel_url = @@v3_URL + '/channels'
     query = {
