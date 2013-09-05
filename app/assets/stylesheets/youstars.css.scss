@@ -351,127 +351,41 @@ $ys-profile-tile-large-size:	230px;
 		float: left;
 		width: 240px;
 		padding: 10px 0 0 10px;
-		li:nth-child(1n) {
+		li.ys-profile-tile:nth-child(1n) {
 			float: left;
 			a.ys-profile-tile-content { background: $orange url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(2n) {
+		li.ys-profile-tile:nth-child(2n) {
 			float: left;
 			a.ys-profile-tile-content { background: $green url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(3n) {
+		li.ys-profile-tile:nth-child(3n) {
 			float: left;	
 			a.ys-profile-tile-content { background: $marigold url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(4n) {
+		li.ys-profile-tile:nth-child(4n) {
 			float: left;
 			a.ys-profile-tile-content { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(5n) {
+		li.ys-profile-tile:nth-child(5n) {
 			float: left;
 			a.ys-profile-tile-content { background: $red url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(6n) {
+		li.ys-profile-tile:nth-child(6n) {
 			float: left;
 			a.ys-profile-tile-content { background: $blue url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(7n) {
-			float: left;
+		li.ys-profile-tile:nth-child(7n) {
+			float: right;
 			a.ys-profile-tile-content { background: $purple url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(8n) {
+		li.ys-profile-tile:nth-child(8n) {
 			float: right;
 			a.ys-profile-tile-content { background: $teal url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(14n) { float: right; }
-		li.ys-profile-tile-small,
-		li.ys-profile-tile-medium,
-		li.ys-profile-tile-large {
-			display: block;
-			width: $ys-profile-tile-large-size;
-			height: $ys-profile-tile-large-size;
-			margin: 0 10px 10px 0;
-			a.ys-profile-action {
-				display: block;
-				float: right;
-				width: 23px;
-				height: 23px;
-				margin: 2px 2px 0 0;
-				background: $crimson;
-				position: relative;
-				z-index: 50;
-			}
-			a.ys-profile-action:hover {
-				@include opacity(0.75);
-			}
-			a.ys-profile-tile-content {
-				display: block;
-				float: left;
-				width: $ys-profile-tile-large-size;
-				height: $ys-profile-tile-large-size;
-				color: #ffffff;
-				position: absolute;
-				overflow: hidden;
-				z-index: 25;
-				.ys-profile-tile-info {
-					display: block;
-					float: left;
-					width: $ys-profile-tile-large-size;
-					height: $ys-profile-tile-large-size;
-					text-align: center;
-					text-transform: uppercase;
-					font-size: 18px;
-					font-weight: 700;
-					position: absolute;
-					span {
-						display: block;
-						float: left;
-						width: 100%;
-						margin: 110px 0 0 0;
-					}
-				}
-				.ys-profile-tile-door-1,
-				.ys-profile-tile-door-2,
-				.ys-profile-tile-door-3,
-				.ys-profile-tile-door-4 {
-					display: block;
-					float: left;
-					width: ($ys-profile-tile-large-size / 2);
-					height: ($ys-profile-tile-large-size / 2);
-					position: absolute;
-					overflow: hidden;
-					@include transition-property(margin);
-					@include transition-duration(0.33s);
-					/*@include transition-delay(0.2s);*/
-					img {
-						display: block;
-						float: left;
-						width: $ys-profile-tile-large-size;
-						height: $ys-profile-tile-large-size;
-						position: absolute;
-					}
-				}
-				.ys-profile-tile-door-2 {
-					margin: 0 0 0 ($ys-profile-tile-large-size / 2);
-					img { margin-left: -($ys-profile-tile-large-size / 2); }
-				}
-				.ys-profile-tile-door-3 {
-					margin: ($ys-profile-tile-large-size / 2) 0 0 ($ys-profile-tile-large-size / 2);
-					img {
-						margin-left: -($ys-profile-tile-large-size / 2);
-						margin-top: -($ys-profile-tile-large-size / 2);
-					}
-				}
-				.ys-profile-tile-door-4 {
-					margin: ($ys-profile-tile-large-size / 2) 0 0 0;
-					img {
-						margin-top: -($ys-profile-tile-large-size / 2);
-					}
-				}
-			}
-		}
-
-		li.ys-profile-tile-medium {
+		li.ys-profile-tile:nth-child(14n) { float: right; }
+		li.ys-profile-tile:nth-child(1n),
+		li.ys-profile-tile:nth-child(8n) {
 			width: $ys-profile-tile-medium-size;
 			height: $ys-profile-tile-medium-size;
 			a.ys-profile-tile-content {
@@ -515,29 +429,75 @@ $ys-profile-tile-large-size:	230px;
 				}
 			}
 		}
-		li.ys-profile-tile-small {
+		li.ys-profile-tile:nth-child(2n),
+		li.ys-profile-tile:nth-child(3n),
+		li.ys-profile-tile:nth-child(4n),
+		li.ys-profile-tile:nth-child(5n),
+		li.ys-profile-tile:nth-child(6n),
+		li.ys-profile-tile:nth-child(7n),
+		li.ys-profile-tile {
+			display: block;
 			width: $ys-profile-tile-small-size;
 			height: $ys-profile-tile-small-size;
+			margin: 0 10px 10px 0;
+			a.ys-profile-action {
+				display: block;
+				float: right;
+				width: 23px;
+				height: 23px;
+				margin: 2px 2px 0 0;
+				background: $crimson;
+				position: relative;
+				z-index: 50;
+			}
+			a.ys-profile-action:hover {
+				@include opacity(0.75);
+			}
 			a.ys-profile-tile-content {
+				display: block;
+				float: left;
 				width: $ys-profile-tile-small-size;
 				height: $ys-profile-tile-small-size;
+				color: #ffffff;
+				position: absolute;
+				overflow: hidden;
+				z-index: 25;
 				.ys-profile-tile-info {
+					display: block;
+					float: left;
 					width: $ys-profile-tile-small-size;
 					height: $ys-profile-tile-small-size;
-					font-size: 8px;
+					text-align: center;
+					text-transform: uppercase;
+					font-size: 18px;
+					font-weight: 700;
+					position: absolute;
 					span {
-						margin: 25px 0 0 0;
+						display: block;
+						float: left;
+						width: 100%;
+						margin: 110px 0 0 0;
 					}
 				}
 				.ys-profile-tile-door-1,
 				.ys-profile-tile-door-2,
 				.ys-profile-tile-door-3,
 				.ys-profile-tile-door-4 {
+					display: block;
+					float: left;
 					width: ($ys-profile-tile-small-size / 2);
 					height: ($ys-profile-tile-small-size / 2);
+					position: absolute;
+					overflow: hidden;
+					@include transition-property(margin);
+					@include transition-duration(0.33s);
+					/*@include transition-delay(0.2s);*/
 					img {
+						display: block;
+						float: left;
 						width: $ys-profile-tile-small-size;
 						height: $ys-profile-tile-small-size;
+						position: absolute;
 					}
 				}
 				.ys-profile-tile-door-2 {
@@ -559,31 +519,82 @@ $ys-profile-tile-large-size:	230px;
 				}
 			}
 		}
-		li.ys-profile-tile-large:hover {
+		li.ys-profile-tile:nth-child(10n) {
+			width: $ys-profile-tile-large-size;
+			height: $ys-profile-tile-large-size;
+			a.ys-profile-tile-content {
+				width: $ys-profile-tile-large-size;
+				height: $ys-profile-tile-large-size;
+				.ys-profile-tile-info {
+					width: $ys-profile-tile-large-size;
+					height: $ys-profile-tile-large-size;
+					font-size: 8px;
+					span {
+						margin: 25px 0 0 0;
+					}
+				}
+				.ys-profile-tile-door-1,
+				.ys-profile-tile-door-2,
+				.ys-profile-tile-door-3,
+				.ys-profile-tile-door-4 {
+					width: ($ys-profile-tile-large-size / 2);
+					height: ($ys-profile-tile-large-size / 2);
+					img {
+						width: $ys-profile-tile-large-size;
+						height: $ys-profile-tile-large-size;
+					}
+				}
+				.ys-profile-tile-door-2 {
+					margin: 0 0 0 ($ys-profile-tile-large-size / 2);
+					img { margin-left: -($ys-profile-tile-large-size / 2); }
+				}
+				.ys-profile-tile-door-3 {
+					margin: ($ys-profile-tile-large-size / 2) 0 0 ($ys-profile-tile-large-size / 2);
+					img {
+						margin-left: -($ys-profile-tile-large-size / 2);
+						margin-top: -($ys-profile-tile-large-size / 2);
+					}
+				}
+				.ys-profile-tile-door-4 {
+					margin: ($ys-profile-tile-large-size / 2) 0 0 0;
+					img {
+						margin-top: -($ys-profile-tile-large-size / 2);
+					}
+				}
+			}
+		}
+		li.ys-profile-tile:nth-child(2n):hover,
+		li.ys-profile-tile:nth-child(3n):hover,
+		li.ys-profile-tile:nth-child(4n):hover,
+		li.ys-profile-tile:nth-child(5n):hover,
+		li.ys-profile-tile:nth-child(6n):hover,
+		li.ys-profile-tile:nth-child(7n):hover,
+		li.ys-profile-tile:hover {
 			a.ys-profile-tile-content {
 				.ys-profile-tile-door-1 {
-					margin-top: -($ys-profile-tile-large-size / 2);
-					margin-left: -($ys-profile-tile-large-size / 2);
+					margin-top: -($ys-profile-tile-small-size / 2);
+					margin-left: -($ys-profile-tile-small-size / 2);
 					@include transition-delay(0);
 				}
 				.ys-profile-tile-door-2 {
-					margin-top: -($ys-profile-tile-large-size / 2);
-					margin-left: $ys-profile-tile-large-size;
+					margin-top: -($ys-profile-tile-small-size / 2);
+					margin-left: $ys-profile-tile-small-size;
 					@include transition-delay(0);
 				}
 				.ys-profile-tile-door-3 {
-					margin-top: $ys-profile-tile-large-size;
-					margin-left: $ys-profile-tile-large-size;
+					margin-top: $ys-profile-tile-small-size;
+					margin-left: $ys-profile-tile-small-size;
 					@include transition-delay(0);
 				}
 				.ys-profile-tile-door-4 {
-					margin-top: $ys-profile-tile-large-size;
-					margin-left: -($ys-profile-tile-large-size / 2);
+					margin-top: $ys-profile-tile-small-size;
+					margin-left: -($ys-profile-tile-small-size / 2);
 					@include transition-delay(0);
 				}
 			}
 		}
-		li.ys-profile-tile-medium:hover {
+		li.ys-profile-tile:nth-child(1n):hover,
+		li.ys-profile-tile:nth-child(8n):hover {
 			a.ys-profile-tile-content {
 				.ys-profile-tile-door-1 {
 					margin-top: -($ys-profile-tile-medium-size / 2);
@@ -607,26 +618,26 @@ $ys-profile-tile-large-size:	230px;
 				}
 			}
 		}
-		li.ys-profile-tile-small:hover {
+		li.ys-profile-tile:nth-child(10n):hover {
 			a.ys-profile-tile-content {
 				.ys-profile-tile-door-1 {
-					margin-top: -($ys-profile-tile-small-size / 2);
-					margin-left: -($ys-profile-tile-small-size / 2);
+					margin-top: -($ys-profile-tile-large-size / 2);
+					margin-left: -($ys-profile-tile-large-size / 2);
 					@include transition-delay(0);
 				}
 				.ys-profile-tile-door-2 {
-					margin-top: -($ys-profile-tile-small-size / 2);
-					margin-left: $ys-profile-tile-small-size;
+					margin-top: -($ys-profile-tile-large-size / 2);
+					margin-left: $ys-profile-tile-large-size;
 					@include transition-delay(0);
 				}
 				.ys-profile-tile-door-3 {
-					margin-top: $ys-profile-tile-small-size;
-					margin-left: $ys-profile-tile-small-size;
+					margin-top: $ys-profile-tile-large-size;
+					margin-left: $ys-profile-tile-large-size;
 					@include transition-delay(0);
 				}
 				.ys-profile-tile-door-4 {
-					margin-top: $ys-profile-tile-small-size;
-					margin-left: -($ys-profile-tile-small-size / 2);
+					margin-top: $ys-profile-tile-large-size;
+					margin-left: -($ys-profile-tile-large-size / 2);
 					@include transition-delay(0);
 				}
 			}
