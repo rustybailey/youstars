@@ -269,6 +269,107 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     """
 ])
 
+youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', ($window, $scope, $routeParams, userService)->
+  currentChannel = $routeParams.currentChannel || userService.userName
+  player = undefined
+  resize = ->
+    width = $(window).width()
+    pWidth = undefined
+    # player width, to be defined
+    height = $(window).height()
+    pHeight = undefined
+    # player height, tbd
+    currentPlayer = $("#ys-player")
+    return unless currentPlayer.length > 0
+    
+    # when screen aspect ratio differs from video, video must center and underlay one dimension
+    if width / (16 / 9) < height # if new video height < window height (gap underneath)
+      pWidth = Math.ceil(height * (16 / 9)) # get new player width
+      currentPlayer.width(pWidth).height(height).css # player width is greater, offset left; reset top
+        left: (width - pWidth) / 2
+        top: 0
+
+    else # new video width < window width (gap to right)
+      pHeight = Math.ceil(width / (16 / 9)) # get new player height
+      currentPlayer.width(width).height(pHeight).css # player height is greater, offset top; reset left
+        left: 0
+        top: (height - pHeight) / 2
+
+  loadingBar = setInterval(->
+    loadingBar = $(".ys-loading-bar")
+    duration = player.getDuration()
+    currentTime = player.getCurrentTime()
+    percentLoaded = currentTime / duration
+    if player.getPlayerState() is 1 # playing
+      loadingBar.width (percentLoaded * 100) + "%"
+    # unstarted (between videos)
+    else loadingBar.width "100%" if player.getPlayerState() is -1 and percentLoaded > 0
+  , 10)
+
+  onPlayerReady = (event) ->
+    resize()
+    event.target.mute()
+    event.target.loadPlaylist
+      listType: "user_uploads"
+      list: currentChannel
+
+  # Load the IFrame Player API code asynchronously.
+
+  # Replace the 'ys-player' element with an <iframe> and
+  # YouTube player after the API code downloads.
+  $window.onYouTubePlayerAPIReady = ->
+    player = new YT.Player("ys-player",
+      playerVars:
+        listType: "user_uploads"
+        list: currentChannel
+        enablejsapi: 1
+        autoplay: 1
+        controls: 0
+        iv_load_policy: 3
+        showinfo: 0
+        loop: 1
+        modestbranding: 1
+
+      events:
+        onReady: onPlayerReady
+    )
+
+    $(window).on "resize", resize
+    $(".mute").on "click", (e) ->
+      if player.isMuted()
+        $(".volume").val 100
+        player.unMute()
+        $(this).text "Mute"
+      else
+        $(".volume").val 0
+        player.mute()
+        $(this).text "Unmute"
+
+    $(".previous").on "click", ->
+      player.previousVideo()
+
+    $(".next").on "click", ->
+      player.nextVideo()
+
+    $(".pause").on "click", (e) ->
+      if player.getPlayerState() is 1
+        player.pauseVideo()
+        $(this).text "Play"
+      else
+        player.playVideo()
+        $(this).text "Pause"
+
+    $("#ys-player-controls").on "change", ".volume", ->
+      newVolume = @valueAsNumber
+      $(".mute").text "Mute"  if newVolume > 0
+      player.setVolume newVolume
+
+  tag = document.createElement("script")
+  tag.src = "https://www.youtube.com/player_api"
+  firstScriptTag = document.getElementsByTagName("script")[0]
+  firstScriptTag.parentNode.insertBefore tag, firstScriptTag
+
+])
 
 
 

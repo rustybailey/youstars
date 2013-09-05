@@ -5,4 +5,5 @@ Youstars::Application.routes.draw do
   root 'home#index'
   get  "login" => "home#login"
 
+  get '/:woo' => 'home#index'
 end

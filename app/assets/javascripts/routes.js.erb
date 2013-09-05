@@ -1,5 +1,10 @@
 var youstars = angular.module('youstars', [], function ($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode(true);
 	$routeProvider.when('', {
-		templateUrl: '<%= asset_path("index.html") %>'
-	})
+		templateUrl: '<%= asset_path("index.html") %>',
+    controller: 'indexController'
+	}).when('/:currentChannel', {
+    templateUrl: '<%= asset_path("index.html") %>',
+    controller: 'indexController'
+  })
 })
