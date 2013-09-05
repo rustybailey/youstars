@@ -308,7 +308,7 @@ p {}
 				@include transition-duration(0.33s);
 				@include transition-timing-function(cubic-bezier(.17, .67, .63, 1.56));
 			}
-			span.ys-header-before  {
+			span.ys-header-after  {
 				margin-top: 0;
 			}
 		}
@@ -676,8 +676,9 @@ $ys-profile-tile-large-size:	230px;
 			margin: 0 0 0 7px;
 			white-space: normal;
 			position: relative;
-			@include transition-property(margin, bottom);
+			@include transition-property(margin, bottom, opacity);
 			@include transition-duration(0.2s);
+			@include opacity(0);
 			a.ys-video-info {
 				display: block;
 				float: left;
@@ -757,6 +758,9 @@ $ys-profile-tile-large-size:	230px;
 					@include opacity(0);
 				}
 			}
+		}
+		li.ys-video-tile.ys-video-tile-after {
+			@include opacity(1);
 		}
 	}
 }
