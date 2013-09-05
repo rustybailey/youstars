@@ -1,1 +1,3 @@
-$YOUTUBE_V3_API_KEY = "AIzaSyCtxIe79MtKuhKlml1wy2JCLCTgSx9-R70"
+ENV['YOUTUBE_API']     = "AIzaSyACrPfUENSyXIzs0cyx5Pq7cFdsRJFEUeI"
+ENV['YOUTUBE_KEY']     = "136156756686.apps.googleusercontent.com"
+ENV['YOUTUBE_SECRET']  = "hT6oJPuawdWukr16pLOvNX5E"
