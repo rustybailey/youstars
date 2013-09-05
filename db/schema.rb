@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130905210912) do
+ActiveRecord::Schema.define(version: 20130905224420) do
 
   create_table "categories", force: true do |t|
     t.integer  "youtube_id"
@@ -37,6 +37,12 @@ ActiveRecord::Schema.define(version: 20130905210912) do
 
   add_index "channels_topics", ["channel_id", "topic_id"], name: "index_channels_topics_on_channel_id_and_topic_id"
   add_index "channels_topics", ["topic_id"], name: "index_channels_topics_on_topic_id"
+
+  create_table "ratings", force: true do |t|
+    t.integer "channel_id"
+    t.integer "video_id"
+    t.integer "score"
+  end
 
   create_table "topics", force: true do |t|
     t.string   "name"

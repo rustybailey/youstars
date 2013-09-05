@@ -10,9 +10,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token, :guid, :channel_name
 
   has_one :channel
-  has_many :views
-
-
+  has_many :views  
 
   def yt_client
     YouTubeIt::OAuth2Client.new(
