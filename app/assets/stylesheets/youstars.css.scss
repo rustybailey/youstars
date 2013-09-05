@@ -159,6 +159,7 @@ select {
 	img#ys-home-logo {
 		display: inline-block;
 		margin: 23px 0 300px 0;
+		@include opacity(0.66);
 	}
 
 	#ys-home-search {
