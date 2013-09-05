@@ -2,6 +2,11 @@ class Suggest::VideosController < ApplicationController
 
   before_filter :authenticate_user!
 
+  def video
+
+  end
+
+
   def user
     url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
     response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
@@ -29,6 +34,26 @@ class Suggest::VideosController < ApplicationController
     url           = "https://www.googleapis.com/youtube/v3/videos?part=id%2Csnippet%2CcontentDetails%2Cstatistics&id=#{youtube_ids.join(',')}"
     response      = YoutubeApi.v3_authorized_request( url, current_user.get_token )
     recs          = response.parsed_response["items"].map{ |entry| parse_v3_video_response( entry ) }
+
+    respond_to do |format|
+      format.json { render :json => recs, :callback => params[:callback] }
+    end
+  end
+
+  def trending
+    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/on_the_web"
+    response  = YoutubeApi.v2_authorized_request( url, nil )
+    recs      = response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+
+    respond_to do |format|
+      format.json { render :json => recs, :callback => params[:callback] }
+    end
+  end
+
+  def popular
+    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/most_popular"
+    response  = YoutubeApi.v2_authorized_request( url, nil )
+    recs      = response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
 
     respond_to do |format|
       format.json { render :json => recs, :callback => params[:callback] }
