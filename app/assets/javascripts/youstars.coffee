@@ -194,7 +194,7 @@ youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', (u
     replace: true
     link: (scope, element, attr) ->
       scope.headerArray = userService.userName.split("")
-      $timeout( mastheadService.animateMasthead, 0 )
+      $timeout( mastheadService.animateMasthead, 200 )
     template:
       """
       <div id="ys-header">
@@ -210,8 +210,8 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   replace: true
   link: (scope, element, attr) ->
     scope.videosArray = videosService.videos
-    $timeout( myvideosService.animateMyvideos, 0 )
-    $timeout( myvideosService.removeDelayFromMyvideos, 200 )
+    $timeout( myvideosService.animateMyvideos, 200 )
+    $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   template:
     """
     <div id="ys-videos">
