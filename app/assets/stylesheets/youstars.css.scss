@@ -265,6 +265,7 @@ p {}
 		dislay: block;
 		float: left;
 		width: 100%;
+		min-height: 114px;
 		padding: 0 270px 0 0;
 		background: transparent url("/assets/content-background.png") repeat-y top right;
 		color: #ffffff;
@@ -280,22 +281,39 @@ p {}
 			margin-top: -35px;
 			background: transparent url("/assets/logo.png") no-repeat 0 0;
 			position: absolute;
+			z-index: 60;
 		}
 		#ys-header {
 			dislay: block;
 			float: left;
-			min-height: 114px;
+			height: 114px;
 			padding: 0 0 0 15px;
 			font-size: 100px;
 			font-weight: 900;
 			line-height: 106px;
 			text-transform: uppercase;
+			position: absolute;
+			z-index: 55;
+			overflow: hidden;
 			@include text-shadow(3px 3px 0 #4df7bd);
+			span {
+				display: block;
+				float: left;
+				position: relative;
+				z-index: 55;
+				@include transition-property(margin);
+				@include transition-duration(0.33s);
+			}
 		}
 		#ys-viewport {
 			dislay: block;
 			float: left;
 			width: 100%;
+		}
+		#ys-header.ys-header-before {
+			span {
+				margin-top: 100px;
+			}
 		}
 	}
 
