@@ -296,6 +296,14 @@ select {
 				float: left;
 				width: 45px;
 				height: 45px;
+				text-decoration: none;
+				color: white;
+				.ss-icon {
+					font-size: 30px;
+					position: relative;
+					top: 15px;
+					left: 7px;
+				}
 			}
 			a:hover {
 				@include opacity(0.75);
