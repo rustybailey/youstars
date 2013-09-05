@@ -76,6 +76,8 @@ youstars.factory('myvideosService', [ () ->
   return {
     animateMyvideos: () ->
       $('#ys-videos ul#ys-videos-list li.ys-video-tile').addClass('ys-video-tile-after')
+    removeDelayFromMyvideos: () ->
+      $('#ys-videos ul#ys-videos-list li.ys-video-tile').removeAttr('style')
   }
 ])
 
@@ -103,11 +105,12 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   link: (scope, element, attr) ->
     scope.videosArray = videosService.videos
     $timeout( myvideosService.animateMyvideos, 0 )
+    $timeout( myvideosService.removeDelayFromMyvideos, 200 )
   template:
     """
     <div id="ys-videos">
       <ul id="ys-videos-list">
-        <li class="ys-video-tile" ng-repeat="video in videosArray" style=" transition-delay: {{$index * 100}}ms">
+        <li class="ys-video-tile" ng-repeat="video in videosArray" style="transition-delay: {{$index * 100}}ms">
           <a href="#" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.data.views}}&nbsp;&nbsp;|&nbsp;&nbsp;{{video.data.created_at}}</h4>
