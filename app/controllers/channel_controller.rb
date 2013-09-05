@@ -1,12 +1,12 @@
 require 'youtube_api'
 
-class CreatorController < ApplicationController
+class ChannelController < ApplicationController
 
   def show
     youtube_ids = params[:youtube_id].split(',')
 
     output = youtube_ids.collect do |youtube_id|
-      Creator.find_by_youtube_id(youtube_id).attributes
+      Channel.find_by_youtube_id(youtube_id).attributes
     end
 
     render :json => output
@@ -28,7 +28,7 @@ class CreatorController < ApplicationController
     topics = youtube_ids.collect do |youtube_id|
       { 
         youtube_id: youtube_id,
-        topics: Creator.find_by_youtube_id(youtube_id).topics.map(&:name)
+        topics: Channel.find_by_youtube_id(youtube_id).topics.map(&:name)
       }
     end
 

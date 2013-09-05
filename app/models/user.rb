@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token
 
+  has_one :channel
 
   def self.find_for_youtube_oauth(auth, signed_in_resource=nil)
     user = User.where( :provider => auth.provider, :uid => auth.uid ).first

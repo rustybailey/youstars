@@ -1,7 +1,7 @@
-class CreateCreators < ActiveRecord::Migration
+class CreateChannels < ActiveRecord::Migration
 
   def change
-    create_table :creators do |t|
+    create_table :channels do |t|
       t.string :name
       t.string :youtube_id
       t.string :gender
