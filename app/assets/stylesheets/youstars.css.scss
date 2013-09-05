@@ -121,7 +121,11 @@ em { font-style: italic; }
 
 p {}
 
-
+input,
+textarea,
+select {
+	font-family: 'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+}
 
 
 /* Buttons */
@@ -150,6 +154,53 @@ p {}
 	height: 100%;
 	background: $teal;
 	overflow: hidden;
+	text-align: center;
+
+	img#ys-home-logo {
+		display: inline-block;
+		margin: 23px 0 300px 0;
+	}
+
+	#ys-home-search {
+		display: inline-block;
+		margin: 0 auto;
+		color: #ffffff;
+		position: relative;
+		z-index: 100;
+		h1 {
+			display: inline-block;
+			text-transform: uppercase;
+			font-size: 84px;
+			font-weight: 900;
+			line-height: 1em;
+		}
+		h2 {
+			display: inline-block;
+			margin: 0 0 40px 0;
+			font-size: 60px;
+			font-weight: 100;
+			line-height: 1em;
+		}
+		input[type="text"] {
+			display: inline-block;
+			width: 1000px;
+			padding: 0;
+			margin: 0;
+			border: none;
+			background: transparent;
+			font-size: 136px;
+			text-align: center;
+			line-height: 1em;
+		    color: #ffffff;
+		    font-weight: 900;
+		    text-transform: uppercase;
+		    @include text-shadow(3px 3px 0 #4df7bd);
+		}
+		input[type="text"]:focus {
+			outline: 0;
+		}
+	}
+
 	ul.ys-home-tiles {
 		display: block;
 		float: left;
@@ -157,6 +208,7 @@ p {}
 		height: 140%;
 		margin: -100px 0 0 -100px;
 		position: absolute;
+		z-index: 50;
 		li.ys-home-tile {
 			display: block;
 			float: left;
@@ -191,6 +243,7 @@ p {}
 			@include rotate(0);
 		}
 	}
+
 }
 
 
