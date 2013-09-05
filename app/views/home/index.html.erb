@@ -1,8 +1,7 @@
 
 <div id="ys-app">
 
-	<div id="ys-player"></div>
-
+	<div id="ys-player"></div>  <!-- This div will become an iFrame for the YouTube player -->
 	<div id="ys-player-bar">
 		<div class="ys-loading-bar"></div>
 	</div>
@@ -11,11 +10,6 @@
 	<mysubscribers></mysubscribers>
 
 	<div id="ys-page">
-		<button class="mute">Unmute</button>
-		<button class="previous">Previous</button>
-		<button class="next">Next</button>
-		<button class="pause">Pause</button>
-
 
 		<script>
 		  // Load the IFrame Player API code asynchronously.
@@ -77,10 +71,12 @@
 		    $(window).on('resize', resize)
 		    
 		    $('.mute').on('click', function(e) {
-					if(player.isMuted()) { 
+					if(player.isMuted()) {
+		    		$(".volume").val(100);
 					  player.unMute();
 					  $(this).text("Mute");
 					} else {
+						$(".volume").val(0);
 					  player.mute();
 					  $(this).text("Unmute");
 					}
@@ -102,6 +98,12 @@
 					  player.playVideo();
 					  $(this).text("Pause");
 					}
+		    });
+
+		    $('#ys-player-controls').on('change', '.volume', function() {
+		    	var newVolume = this.valueAsNumber;
+		    	if(newVolume > 0) $('.mute').text("Mute");
+		    	player.setVolume(newVolume);
 		    });
 
 		    var loadingBar = setInterval(function() {
@@ -140,7 +142,15 @@
 		</div>
 		<!-- #ys-stats -->
 
-		<div id="ys-player-controls">Player Controls</div><!-- #ys-player-controls -->
+		<div id="ys-player-controls">
+			<button class="mute">Unmute</button>
+			<div class="volume-container">
+				<input class="volume" type="range" name="volume" min="0" max="100" step="1" value="0">
+			</div>
+			<button class="previous">Previous</button>
+			<button class="pause">Pause</button>
+			<button class="next">Next</button>
+		</div><!-- #ys-player-controls -->
 
 		<div id="ys-content">
 			<a id="ys-logo" href="#"></a><!-- #ys-logo -->
