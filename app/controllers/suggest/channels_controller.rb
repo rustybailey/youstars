@@ -1,8 +1,19 @@
 class Suggest::ChannelsController < ApplicationController
 
-  before_filter :authenticate_user!
+  #  before_filter :authenticate_user!
 
   def user
+    # retrieve youtube's recommended videos for a user
+    # and find the channels to which they belong
+
+    url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
+    response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+
+    recs = response.parsed_response["feed"]["entry"].map do |entry|
+      entry.dig("author", 0, "yt$userID", "$t")
+    end
+    
+    render :json => recs
   end
 
   def channel
