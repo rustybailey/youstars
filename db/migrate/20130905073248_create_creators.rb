@@ -8,6 +8,7 @@ class CreateCreators < ActiveRecord::Migration
       t.string :location
       t.string :description
 
+      t.timestamps
     end
   end
 

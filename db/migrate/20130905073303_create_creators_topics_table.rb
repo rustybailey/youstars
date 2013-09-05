@@ -1,4 +1,4 @@
-class CreateCreatorsTopics < ActiveRecord::Migration
+class CreateCreatorsTopicsTable < ActiveRecord::Migration
 
   def change
     create_table :creators_topics, :id => false do |t|
