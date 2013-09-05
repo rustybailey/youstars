@@ -170,7 +170,7 @@ p {}
 		font-size: 26px;
 		line-height: 44px;
 		color: #ffffff;
-		background: $teal;
+		background: $teal url("/assets/white-glare.png") no-repeat top right;
 		font-weight: 100;
 		font-style: italic;
 		strong {
@@ -197,15 +197,15 @@ p {}
 				@include opacity(0.75);
 			}
 		}
-		li:nth-child(1) { background: $orange; }
-		li:nth-child(2) { background: $green; }
-		li:nth-child(3) { background: $marigold; }
-		li:nth-child(4) { background: $aqua; }
-		li:nth-child(5) { background: $red; }
-		li:nth-child(6) { background: $blue; }
-		li:nth-child(7) { background: $purple; }
-		li:nth-child(8) { background: $crimson; }
-		li:nth-child(9) { background: $teal; }
+		li:nth-child(1) { background: $orange url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(2) { background: $green url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(3) { background: $marigold url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(4) { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(5) { background: $red url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(6) { background: $blue url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(7) { background: $purple url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(8) { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(9) { background: $teal url("/assets/white-glare.png") no-repeat top right; }
 	}
 }
 
@@ -286,15 +286,17 @@ p {}
 		#ys-header {
 			dislay: block;
 			float: left;
+			width: 100%;
 			height: 114px;
 			padding: 0 0 0 15px;
 			font-size: 100px;
 			font-weight: 900;
-			line-height: 106px;
+			line-height: 110px;
 			text-transform: uppercase;
 			position: absolute;
 			z-index: 55;
 			overflow: hidden;
+			background: transparent url("/assets/header-background.png") no-repeat top right;
 			@include text-shadow(3px 3px 0 #4df7bd);
 			span {
 				display: block;
@@ -351,36 +353,35 @@ $ys-profile-tile-large-size:	230px;
 		padding: 10px 0 0 10px;
 		li:nth-child(1n) {
 			float: left;
-			a.ys-profile-tile-content { background: $orange; }
+			a.ys-profile-tile-content { background: $orange url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(2n) {
 			float: left;
-			a.ys-profile-tile-content { background: $green; }
+			a.ys-profile-tile-content { background: $green url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(3n) {
 			float: left;	
-			a.ys-profile-tile-content { background: $marigold; }
+			a.ys-profile-tile-content { background: $marigold url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(4n) {
 			float: left;
-			a.ys-profile-tile-content { background: $aqua; }
+			a.ys-profile-tile-content { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
 		}
-
 		li:nth-child(5n) {
 			float: left;
-			a.ys-profile-tile-content { background: $red; }
+			a.ys-profile-tile-content { background: $red url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(6n) {
 			float: left;
-			a.ys-profile-tile-content { background: $blue; }
+			a.ys-profile-tile-content { background: $blue url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(7n) {
 			float: left;
-			a.ys-profile-tile-content { background: $purple; }
+			a.ys-profile-tile-content { background: $purple url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(8n) {
 			float: right;
-			a.ys-profile-tile-content { background: $teal; }
+			a.ys-profile-tile-content { background: $teal url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(14n) { float: right; }
 		li.ys-profile-tile-small,
@@ -659,15 +660,15 @@ $ys-profile-tile-large-size:	230px;
 		height: 125px;
 		padding: 0 3px;
 		white-space: nowrap;
-		li:nth-child(1n) a.ys-video-info { background: $orange; }
-		li:nth-child(2n) a.ys-video-info { background: $green; }
-		li:nth-child(3n) a.ys-video-info { background: $marigold; }
-		li:nth-child(4n) a.ys-video-info { background: $aqua; }
-		li:nth-child(5n) a.ys-video-info { background: $red; }
-		li:nth-child(6n) a.ys-video-info { background: $blue; }
-		li:nth-child(7n) a.ys-video-info { background: $crimson; }
-		li:nth-child(8n) a.ys-video-info { background: $purple; }
-		li:nth-child(9n) a.ys-video-info { background: $teal; }
+		li:nth-child(1n) a.ys-video-info { background: $orange url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(2n) a.ys-video-info { background: $green url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(3n) a.ys-video-info { background: $marigold url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(4n) a.ys-video-info { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(5n) a.ys-video-info { background: $red url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(6n) a.ys-video-info { background: $blue url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(7n) a.ys-video-info { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(8n) a.ys-video-info { background: $purple url("/assets/white-glare.png") no-repeat top right; }
+		li:nth-child(9n) a.ys-video-info { background: $teal url("/assets/white-glare.png") no-repeat top right; }
 		li.ys-video-tile {
 			display: inline-block;
 			width: 240px;
