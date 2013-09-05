@@ -1,6 +1,6 @@
 class Suggest::ChannelsController < ApplicationController
 
-  before_filter :authenticate_user!
+#  before_filter :authenticate_user!
 
   def user
     # retrieve youtube's recommended videos for a user
@@ -48,7 +48,7 @@ class Suggest::ChannelsController < ApplicationController
 
   def ratings
     # return the top channels sorted by ratings given by similar users
-    # distance metric on vector space of ratings
+    # define similarity with distance metric on vector space of ratings
     # and/or tf-idf relevance of positively-rated channels
   end
 
