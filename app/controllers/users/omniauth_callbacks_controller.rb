@@ -1,9 +1,17 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+
   def google_oauth2
     # You need to implement the method below in your model (e.g. app/models/user.rb)
     @user = User.find_for_youtube_oauth( request.env["omniauth.auth"], current_user )
 
     if @user.persisted?
+      
+      @user.update_attributes(
+        email:          request.env["omniauth.auth"]["info"]["email"],
+        oauth2_token:   request.env["omniauth.auth"]["credentials"]["token"],
+        refresh_token:  request.env["omniauth.auth"]["credentials"]["refresh_token"]
+      )
+
       sign_in_and_redirect @user, :event => :authentication #this will throw if @user is not activated
       set_flash_message(:notice, :success, :kind => "YouTube") if is_navigational_format?
     else
@@ -12,4 +20,5 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     end
 
   end
+
 end

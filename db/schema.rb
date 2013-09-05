@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130904212224) do
+ActiveRecord::Schema.define(version: 20130905042324) do
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -29,6 +29,8 @@ ActiveRecord::Schema.define(version: 20130904212224) do
     t.string   "provider"
     t.string   "uid"
     t.string   "name"
+    t.string   "oauth2_token"
+    t.string   "refresh_token"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

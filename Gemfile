@@ -35,3 +35,6 @@ gem 'omniauth', '1.1.0'
 gem 'omniauth-youtube'
 gem 'omniauth-oauth2'
 gem 'omniauth-google-oauth2', '0.1.17'
+
+
+gem 'quiet_assets', :group => :development
