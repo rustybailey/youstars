@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   devise :omniauthable, :omniauth_providers => [:google_oauth2]
 
-  attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token
+  attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token, :guid, :channel_name
 
 
   def self.find_for_youtube_oauth(auth, signed_in_resource=nil)
