@@ -13,4 +13,11 @@ Youstars::Application.routes.draw do
   put  '/channel/:youtube_id',       :controller => 'channel', :action => 'create'
   post '/channel/:youtube_id',       :controller => 'channel', :action => 'update'
 
+  namespace :suggest do
+
+    get '/channels',             :controller => 'channels', :action => 'user'
+    get '/channels/:youtube_id', :controller => 'channels', :action => 'channel'
+
+  end
+
 end
