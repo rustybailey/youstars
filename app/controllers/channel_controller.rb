@@ -2,6 +2,32 @@ require 'youtube_api'
 
 class ChannelController < ApplicationController
 
+  def create
+    channel = Channel.new do |c|
+      c.youtube_id  = params[:youtube_id]
+      c.name        = params[:name]
+      c.gender      = params[:gender]
+      c.location    = params[:location]
+      c.description = params[:description]
+    end
+
+    c.save
+
+    render :json => c.attributes
+  end
+
+  def update
+    c = Channel.find_by_youtube_id( params[:youtube_id] )
+    
+    [:youtube_id, :name, :gender, :location, :description].each do |attribute|   
+      c.update_attribute(attribute, params[attribute]) if params[attribute].present?
+    end
+
+    c.save
+
+    render :json => c.attributes
+  end
+
   def show
     youtube_ids = params[:youtube_id].split(',')
 
@@ -74,5 +100,8 @@ class ChannelController < ApplicationController
 
     render :json => estimates
   end
+
+  
   
 end
+

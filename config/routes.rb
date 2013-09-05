@@ -10,4 +10,7 @@ Youstars::Application.routes.draw do
   get '/channel/:youtube_id/topics', :controller => 'channel', :action => 'topics'
   get '/channel/:youtube_id/stream', :controller => 'channel', :action => 'stream'
 
+  put  '/channel/:youtube_id',       :controller => 'channel', :action => 'create'
+  post '/channel/:youtube_id',       :controller => 'channel', :action => 'update'
+
 end
