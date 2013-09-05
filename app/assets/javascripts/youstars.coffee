@@ -6,57 +6,6 @@ youstars.factory('userService', ['$http', ($http) ->
 
 
 
-
-
-
-# {
-#   "id":3,
-#   "name":"smosh",
-#   "youtube_id":"Y30JRSgfhYXA6i6xX1erWg",
-#   "created_at":"2012-05-03T19:35:05Z",
-#   "updated_at":"2013-09-03T08:00:07Z",
-#   "title":"Smosh",
-#   "gender":null,
-#   "location":"US",
-#   "thumbnail":"http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1",
-#   "tracking":true,
-#   "published_at":"2005-11-19T10:25:07Z",
-#   "data": {
-#     "views":0,
-#     "video_views":2610612808,
-#     "subscribers":12271323,
-#     "monthly_delta_views":-267398966,
-#     "monthly_delta_video_views":48332320,
-#     "monthly_delta_subscribers":582890,
-#     "weekly_delta_views":0,
-#     "weekly_delta_video_views":-2466323,
-#     "weekly_delta_subscribers":118863,
-#     "daily_delta_views":0,
-#     "daily_delta_video_views":0,
-#     "daily_delta_subscribers":22343,
-#     "monthly_growth_views":-100.0,
-#     "monthly_growth_video_views":1.9,
-#     "monthly_growth_subscribers":5.0,
-#     "weekly_growth_views":0.0,
-#     "weekly_growth_video_views":-0.1,
-#     "weekly_growth_subscribers":1.0,
-#     "daily_growth_views":0.0,
-#     "daily_growth_video_views":0.0,
-#     "daily_growth_subscribers":0.2,
-#     "quarterly_delta_views":-266815806,
-#     "quarterly_delta_video_views":210975767,
-#     "quarterly_delta_subscribers":2005181,
-#     "quarterly_growth_views":-100.0,
-#     "quarterly_growth_video_views":8.9,
-#     "quarterly_growth_subscribers":19.5,
-#     "sharebutton_totals": {},
-#     "external_referral_totals": {},
-#     "embedded_view_totals": {}
-#   }
-# }
-
-
-
 youstars.factory('channelsService', ['$http', ($http) ->
   return {
     channels: [
@@ -133,6 +82,16 @@ youstars.factory('channelsService', ['$http', ($http) ->
       { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
       { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
       { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }
+      { "id": 3, "name": "smosh", "youtube_id": "Y30JRSgfhYXA6i6xX1erWg", "created_at": "2012-05-03T19:35:05Z", "updated_at": "2013-09-03T08:00:07Z", "title": "Smosh", "gender": null, "location": "US", "thumbnail": "http://i1.ytimg.com/i/Y30JRSgfhYXA6i6xX1erWg/1.jpg?v=519198b1", "tracking": true, "published_at":"2005-11-19T10:25:07Z", "data": { "views": 0, "video_views": 2610612808, "subscribers": 12271323, "monthly_delta_views": -267398966, "monthly_delta_video_views": 48332320, "monthly_delta_subscribers": 582890, "weekly_delta_views": 0, "weekly_delta_video_views": -2466323, "weekly_delta_subscribers": 118863, "daily_delta_views": 0, "daily_delta_video_views": 0, "daily_delta_subscribers": 22343, "monthly_growth_views": -100.0, "monthly_growth_video_views": 1.9, "monthly_growth_subscribers": 5.0, "weekly_growth_views": 0.0, "weekly_growth_video_views": -0.1, "weekly_growth_subscribers": 1.0, "daily_growth_views": 0.0, "daily_growth_video_views": 0.0, "daily_growth_subscribers": 0.2, "quarterly_delta_views": -266815806, "quarterly_delta_video_views": 210975767, "quarterly_delta_subscribers": 2005181, "quarterly_growth_views": -100.0, "quarterly_growth_video_views": 8.9, "quarterly_growth_subscribers": 19.5, "sharebutton_totals": {}, "external_referral_totals": {}, "embedded_view_totals": {} } }      
     ]
   }
 ])
@@ -216,6 +175,21 @@ youstars.factory('myvideosService', [ () ->
   }
 ])
 
+youstars.factory('mysubscribersService', [ () ->
+  return {
+    sizeMysubscribers: () ->
+
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(1)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(8n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n)').toggleClass('ys-profile-tile-large', true).toggleClass('ys-profile-tile-small', false)
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(11n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+      # console.log(subscribersArray)
+      # console.log(subscribersArray[1])
+  }
+])
+
+
+
 
 youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', (userService, mastheadService, $timeout) ->
   return {
@@ -266,18 +240,19 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
 ])
 
 
-youstars.directive('mysubscribers', ['channelsService', '$timeout', (channelsService, $timeout) ->
+youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', '$timeout', (channelsService, mysubscribersService, $timeout) ->
   restrict: "E"
   replace: true
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
+    $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # $timeout( myvideosService.animateMyvideos, 0 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 200 )
   template:
     """
     <div id="ys-profiles">
       <ul id="ys-profiles-list">
-        <li class="ys-profile-tile" ng-repeat="channel in channelsArray">
+        <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray">
           <a href="#" class="ys-profile-tile-content">
             <div class="ys-profile-tile-info">
               <span>devinsupertramp</span>
