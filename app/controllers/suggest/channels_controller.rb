@@ -1,6 +1,6 @@
 class Suggest::ChannelsController < ApplicationController
 
-  #  before_filter :authenticate_user!
+  before_filter :authenticate_user!
 
   def user
     # retrieve youtube's recommended videos for a user
@@ -22,10 +22,10 @@ class Suggest::ChannelsController < ApplicationController
     # channels to which they belong
 
     channel_id = params[:channel_id]
-    limit      = (params[:limit] || 0).to_i
+    limit      = (params[:limit] || 10).to_i
 
     top_videos = YoutubeApi.video_search_for_channel_id(channel_id, 10)
-    
+
     related_videos = top_videos.collect do |video|
       YoutubeApi.related_videos_for_video_id( video[:video_id] )
     end

@@ -85,7 +85,7 @@ module YoutubeApi
   def self.related_videos_for_video_id(video_id, limit = 50)
     search_url = @@v3_URL + '/search'
     query = {
-      key: $YOUTUBE_V3_API_KEY,
+      key: ENV['YOUTUBE_API'],
       relatedToVideoId: video_id,
       maxResults: limit,
       part:  'snippet',
@@ -106,7 +106,7 @@ module YoutubeApi
   def self.video_search_for_channel_id(channel_id, limit = 50, order = 'relevance')
     search_url = @@v3_URL + '/search'
     query = {
-      key: $YOUTUBE_V3_API_KEY,
+      key: ENV['YOUTUBE_API'],
       channelId: channel_id,
       maxResults: limit,
       part: 'snippet',
