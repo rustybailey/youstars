@@ -2,7 +2,15 @@ class Suggest::VideosController < ApplicationController
 
   before_filter :authenticate_user!
 
-  def video
+  # params[:youtube_id]
+  def related
+    url       = "https://gdata.youtube.com/feeds/api/videos/#{params[:youtube_id]}/related?v=2&alt=json"
+    response  = YoutubeApi.v2_authorized_request( url, nil )
+    recs      = response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+
+    respond_to do |format|
+      format.json { render :json => recs, :callback => params[:callback] }
+    end
 
   end
 
