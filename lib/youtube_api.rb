@@ -58,6 +58,7 @@ module YoutubeApi
     json = JSON.parse( HTTParty.get(video_url, query: query).body )    
 
     {      
+      video_id:     video_id,
       published_at: json['items'][0]['snippet']['publishedAt'],      
       thumbnails:   json['items'][0]['snippet']['thumbnails'],
       title:        json['items'][0]['snippet']['title'],
