@@ -7,31 +7,23 @@ class User < ActiveRecord::Base
 
   devise :omniauthable, :omniauth_providers => [:google_oauth2]
 
-  attr_accessible :email, :password, :provider, :uid, :name
+  attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token
 
 
   def self.find_for_youtube_oauth(auth, signed_in_resource=nil)
     user = User.where( :provider => auth.provider, :uid => auth.uid ).first
-
     unless user
       user = User.create(
-        provider:   auth.provider,
-        uid:        auth.uid,
-        email:      auth.info.email,
-        password:   Devise.friendly_token[0,20]
+        provider:       auth.provider,
+        uid:            auth.uid,
+        email:          auth.info.email,
+        password:       Devise.friendly_token[0,20],
+        oauth2_token:   auth.token,
+        refresh_token:  auth.refresh_token
       )
     end
 
     user
-  end
-
-  def self.new_with_session(params, session)
-
-    super.tap do |user|
-      if data = session["devise.google_oauth2"] && session["devise.google_oauth2"]["extra"]["raw_info"]
-        user.email = data["email"] if user.email.blank?
-      end
-    end
   end
 
 end
