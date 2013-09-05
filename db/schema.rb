@@ -11,7 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130905042324) do
+ActiveRecord::Schema.define(version: 20130905073303) do
+
+  create_table "channels", force: true do |t|
+    t.string   "name"
+    t.string   "youtube_id"
+    t.string   "gender"
+    t.string   "location"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "channels_topics", id: false, force: true do |t|
+    t.integer "channel_id"
+    t.integer "topic_id"
+  end
+
+  add_index "channels_topics", ["channel_id", "topic_id"], name: "index_channels_topics_on_channel_id_and_topic_id"
+  add_index "channels_topics", ["topic_id"], name: "index_channels_topics_on_topic_id"
+
+  create_table "topics", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
