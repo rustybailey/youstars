@@ -1,0 +1,7 @@
+
+daily_data:
+  cron: "0 2 * * *"
+  class: DailyData
+  queue: immediate
+  args: 
+  description: "Queues up the initializers for all daily data tasks."

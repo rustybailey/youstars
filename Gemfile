@@ -12,6 +12,15 @@ gem 'unicorn'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
+gem 'httparty'
+gem 'redis'
+
+gem "redis"
+gem "resque", '~> 1.22.0'
+gem "resque-scheduler"
+gem "resque-retry"
+gem 'resque-heroku'
+
 gem 'sass-rails', '~> 4.0.0'
 gem "compass-rails", "~> 2.0.alpha.0"
 gem 'coffee-rails', '~> 4.0.0'
@@ -36,5 +45,12 @@ gem 'omniauth-youtube'
 gem 'omniauth-oauth2'
 gem 'omniauth-google-oauth2', '0.1.17'
 
+gem 'youtube_it', '~> 2.3.1'
 
-gem 'quiet_assets', :group => :development
+group :development, :test do
+  gem 'pry', require: 'pry'
+  gem 'pry-nav'
+  gem 'pry-rails'
+  gem 'pry-remote'
+  gem 'quiet_assets'
+end

@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  view_id: 1
+  youtube_id: MyString
+
+two:
+  view_id: 1
+  youtube_id: MyString

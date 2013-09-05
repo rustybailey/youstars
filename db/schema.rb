@@ -11,7 +11,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130905042324) do
+ActiveRecord::Schema.define(version: 20130905210912) do
+
+  create_table "categories", force: true do |t|
+    t.integer  "youtube_id"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "channels", force: true do |t|
+    t.string   "name"
+    t.string   "youtube_id"
+    t.string   "gender"
+    t.string   "location"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "channels_topics", id: false, force: true do |t|
+    t.integer "channel_id"
+    t.integer "topic_id"
+  end
+
+  add_index "channels_topics", ["channel_id", "topic_id"], name: "index_channels_topics_on_channel_id_and_topic_id"
+  add_index "channels_topics", ["topic_id"], name: "index_channels_topics_on_topic_id"
+
+  create_table "topics", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "unique_views", force: true do |t|
+    t.integer  "view_id"
+    t.string   "youtube_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -31,9 +69,27 @@ ActiveRecord::Schema.define(version: 20130905042324) do
     t.string   "name"
     t.string   "oauth2_token"
     t.string   "refresh_token"
+    t.string   "guid"
+    t.string   "channel_name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "videos", force: true do |t|
+    t.string   "youtube_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "category_id"
+  end
+
+  create_table "views", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "video_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "weight",            default: 0
+    t.integer  "unique_view_count"
+  end
 
 end

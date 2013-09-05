@@ -144,6 +144,55 @@ p {}
 	// background: transparent url("/assets/screen-background.png") repeat 0 0;
 }
 
+#ys-home {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background: $teal;
+	overflow: hidden;
+	ul.ys-home-tiles {
+		display: block;
+		float: left;
+		width: 140%;
+		height: 140%;
+		margin: -100px 0 0 -100px;
+		position: absolute;
+		li.ys-home-tile {
+			display: block;
+			float: left;
+			width: 230px;
+			height: 230px;
+			position: relative;
+			margin: -149px 0 0 -68px;
+			@include rotate(45deg);
+			@include opacity(0.1);
+			@include transition-property(opacity, rotate);
+			@include transition-duration(0.33s);
+			a {
+				display: block;
+				float: left;
+				width: 230px;
+				height: 230px;
+				cursor: pointer;
+			}
+		}
+		li.ys-home-tile:nth-child(2n) {
+			margin: 13px 0 0 -68px;
+			@include rotate(-45deg);
+		}
+		li.ys-home-tile:nth-child(3n) {
+			@include rotate(135deg);
+		}
+		li.ys-home-tile:nth-child(4n) {
+			@include rotate(-135deg);
+		}
+		li.ys-home-tile:hover {
+			@include opacity(1);
+			@include rotate(0);
+		}
+	}
+}
+
 
 
 #ys-player {
@@ -167,7 +216,7 @@ p {}
 		display: block;
 		float: left;
 		padding: 0 30px 0 10px;
-		margin: 0 10px 10px 0;
+		margin: 0 10px 5px 0;
 		font-size: 26px;
 		line-height: 44px;
 		color: #ffffff;
@@ -181,7 +230,7 @@ p {}
 	ul#ys-social-links {
 		display: block;
 		float: left;
-		margin: 0 0 10px 0;
+		margin: 0 0 5px 0;
 		li {
 			display: block;
 			float: left;

@@ -1,0 +1,4 @@
+development: localhost:6379
+test: localhost:6379
+staging: redis://redistogo:98eb8dc7cb15fa7a1734827e40e91180@dory.redistogo.com:9997
+production: redis://:4kp8IFTUp2pb9xxQx4qFs4HSaFrRJ5Tlr8ZMMzdaN4Ar3bAzk9c8zjULVj7h5jcX@54.235.243.236:12481
