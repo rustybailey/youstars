@@ -20,7 +20,7 @@ module YoutubeApi
 
     channel_url = @@v3_URL + "/channels"
     query = {
-      key: $YOUTUBE_V3_API_KEY,
+      key: ENV['YOUTUBE_API'],
       id: channel_id,
       part: "contentDetails"
     }
@@ -34,7 +34,7 @@ module YoutubeApi
   def self.video_list_for_playlist(playlist_id, limit, page_token)
     playlist_url = @@v3_URL + "/playlistItems"
     query = {
-      key: $YOUTUBE_V3_API_KEY,
+      key: ENV['YOUTUBE_API'],
       playlistId: playlist_id,
       part: "contentDetails",
       maxResults: limit,
@@ -51,7 +51,7 @@ module YoutubeApi
   def self.video_data_for_video_id(video_id)
     video_url = @@v3_URL + "/videos"
     query = {
-      key: $YOUTUBE_V3_API_KEY,
+      key: ENV['YOUTUBE_API'],
       id: video_id,
       part: "snippet,statistics"
     }
@@ -69,7 +69,7 @@ module YoutubeApi
   def self.channel_stats_for_channel_id(channel_id)
     channel_url = @@v3_URL + '/channels'
     query = {
-      key:  $YOUTUBE_V3_API_KEY,
+      key:  ENV['YOUTUBE_API'],
       id:   channel_id,
       part: 'statistics'
     }
