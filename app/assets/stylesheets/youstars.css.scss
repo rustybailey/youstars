@@ -732,8 +732,8 @@ $ys-profile-tile-large-size:	230px;
 					text-transform: uppercase;
 					font-weight: 300;
 					@include text-shadow(0 1px 1px #000000);
-					@include transition-property(padding);
-					@include transition-duration(0.2s);
+					@include transition-property(opacity);
+					@include transition-duration(0.33s);
 					@include opacity(0.75);
 				}
 				img {
@@ -753,7 +753,7 @@ $ys-profile-tile-large-size:	230px;
 			}
 			a.ys-video-content {
 				h3 {
-					padding-top: 145px;
+					@include opacity(0);
 				}
 			}
 		}
