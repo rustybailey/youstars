@@ -15,6 +15,12 @@ gem 'jquery-rails'
 gem 'httparty'
 gem 'redis'
 
+gem "redis"
+gem "resque", '~> 1.22.0'
+gem "resque-scheduler"
+gem "resque-retry"
+gem 'resque-heroku'
+
 gem 'sass-rails', '~> 4.0.0'
 gem "compass-rails", "~> 2.0.alpha.0"
 gem 'coffee-rails', '~> 4.0.0'
