@@ -208,19 +208,22 @@ youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', (u
 ])
 
 
-youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', (videosService, myvideosService, $timeout) ->
+youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 'youtubeInit', (videosService, myvideosService, $timeout, youtubeInit) ->
   restrict: "E"
   replace: true
   link: (scope, element, attr) ->
     scope.videosArray = videosService.videos
     $timeout( myvideosService.animateMyvideos, 0 )
     $timeout( myvideosService.removeDelayFromMyvideos, 200 )
+  controller: ['$scope', ($scope) ->
+    $scope.playVideo = youtubeInit.playVideo
+  ]
   template:
     """
     <div id="ys-videos">
       <ul id="ys-videos-list">
         <li class="ys-video-tile" ng-repeat="video in videosArray" style="transition-delay: {{$index * 100}}ms">
-          <a href="#" class="ys-video-info">
+          <a ng-click="playVideo('{{video.youtube_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.data.views}}&nbsp;&nbsp;|&nbsp;&nbsp;{{video.data.created_at}}</h4>
             <ul class="ys-video-actions">
@@ -268,10 +271,10 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     </div>
     """
 ])
-
-youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', ($window, $scope, $routeParams, userService)->
-  currentChannel = $routeParams.currentChannel || userService.userName
-  player = undefined
+youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService', ($window, $q, $routeParams, userService) ->
+  tag = document.createElement("script")
+  tag.src = "https://www.youtube.com/player_api"
+  firstScriptTag = document.getElementsByTagName("script")[0]
   resize = ->
     width = $(window).width()
     pWidth = undefined
@@ -295,35 +298,46 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         left: 0
         top: (height - pHeight) / 2
 
-  loadingBar = setInterval(->
-    loadingBar = $(".ys-loading-bar")
-    duration = player.getDuration()
-    currentTime = player.getCurrentTime()
-    percentLoaded = currentTime / duration
-    if player.getPlayerState() is 1 # playing
-      loadingBar.width (percentLoaded * 100) + "%"
-    # unstarted (between videos)
-    else loadingBar.width "100%" if player.getPlayerState() is -1 and percentLoaded > 0
-  , 10)
+  firstScriptTag.parentNode.insertBefore tag, firstScriptTag
 
-  onPlayerReady = (event) ->
-    resize()
-    event.target.mute()
-    event.target.loadPlaylist
+  hash = 
+    playerAPIReady: null
+    afterPlayerAPIReady: $.Deferred()
+    onPlayerReady: $.Deferred()
+    player: null
+    resize: resize
+    currentChannel: userService.userName
+
+  hash.playVideo = (videoId) ->
+    hash.onPlayerReady.then ->
+      hash.interruptedIndex = hash.player.getPlaylistIndex()
+      hash.player.loadVideoById(videoId)
+
+  videoStateChange = (ev) ->
+    return unless ev.data == 0
+    hash.player.loadPlaylist
       listType: "user_uploads"
-      list: currentChannel
+      list: hash.currentChannel
+      index: hash.interruptedIndex
 
-  # Load the IFrame Player API code asynchronously.
 
-  # Replace the 'ys-player' element with an <iframe> and
-  # YouTube player after the API code downloads.
+  hash.onPlayerReady.then ->
+    hash.player.onStateChange 
+    loadingBar = setInterval(->
+      loadingBar = $(".ys-loading-bar")
+      duration = hash.player.getDuration()
+      currentTime = hash.player.getCurrentTime()
+      percentLoaded = currentTime / duration
+      if hash.player.getPlayerState() is 1 # playing
+        loadingBar.width (percentLoaded * 100) + "%"
+      # unstarted (between videos)
+      else loadingBar.width "100%" if hash.player.getPlayerState() is -1 and percentLoaded > 0
+    , 100)
+
   $window.onYouTubePlayerAPIReady = ->
-    player = new YT.Player("ys-player",
+    hash.player = new YT.Player("ys-player",
       playerVars:
-        listType: "user_uploads"
-        list: currentChannel
         enablejsapi: 1
-        autoplay: 1
         controls: 0
         iv_load_policy: 3
         showinfo: 0
@@ -331,10 +345,37 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         modestbranding: 1
 
       events:
-        onReady: onPlayerReady
+        onReady: ->
+          hash.onPlayerReady.resolve()
+        onStateChange: videoStateChange
     )
+    hash.playerAPIReady = true
+    hash.afterPlayerAPIReady.resolve()
 
-    $(window).on "resize", resize
+  return hash
+])
+
+youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', ($window, $scope, $routeParams, userService, youtubeInit)->
+  if $routeParams.currentChannel
+    youtubeInit.currentChannel = $routeParams.currentChannel
+  player = youtubeInit.player
+
+
+
+  # Load the IFrame Player API code asynchronously.
+
+  # Replace the 'ys-player' element with an <iframe> and
+  # YouTube player after the API code downloads.
+  youtubeInit.onPlayerReady.then ->
+    player = youtubeInit.player
+    youtubeInit.resize()
+    player.mute()
+    player.loadPlaylist
+      listType: "user_uploads"
+      list: youtubeInit.currentChannel
+  youtubeInit.afterPlayerAPIReady.then(->    
+
+    $(window).on "resize", youtubeInit.resize
     $(".mute").on "click", (e) ->
       if player.isMuted()
         $(".volume").val 100
@@ -364,10 +405,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
       $(".mute").text "Mute"  if newVolume > 0
       player.setVolume newVolume
 
-  tag = document.createElement("script")
-  tag.src = "https://www.youtube.com/player_api"
-  firstScriptTag = document.getElementsByTagName("script")[0]
-  firstScriptTag.parentNode.insertBefore tag, firstScriptTag
+  )
 
 ])
 
