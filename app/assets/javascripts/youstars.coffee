@@ -188,13 +188,13 @@ youstars.factory('mysubscribersService', [ () ->
 
 
 
-youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', (userService, mastheadService, $timeout) ->
+youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', '$routeParams', (userService, mastheadService, $timeout, $routeParams) ->
   return {
     restrict: "E"
     replace: true
     link: (scope, element, attr) ->
-      scope.headerArray = userService.userName.split("")
-      $timeout( mastheadService.animateMasthead, 200 )
+      scope.headerArray = $routeParams.currentChannel.split("")
+      $timeout( mastheadService.animateMasthead, 1000 )
     template:
       """
       <div id="ys-header">
