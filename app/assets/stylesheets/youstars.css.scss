@@ -380,10 +380,9 @@ $ys-profile-tile-large-size:	230px;
 			a.ys-profile-tile-content { background: $purple url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li:nth-child(8n) {
-			float: right;
+			float: right !important;
 			a.ys-profile-tile-content { background: $teal url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(14n) { float: right; }
 		li.ys-profile-tile-small,
 		li.ys-profile-tile-medium,
 		li.ys-profile-tile-large {

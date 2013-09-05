@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 
   devise :omniauthable, :omniauth_providers => [:google_oauth2]
 
-  attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token
+  attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token, :guid, :channel_name
 
   has_one :channel
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130905073303) do
+ActiveRecord::Schema.define(version: 20130905151407) do
 
   create_table "channels", force: true do |t|
     t.string   "name"
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 20130905073303) do
     t.string   "name"
     t.string   "oauth2_token"
     t.string   "refresh_token"
+    t.string   "guid"
+    t.string   "channel_name"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
