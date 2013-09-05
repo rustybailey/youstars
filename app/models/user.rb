@@ -50,6 +50,7 @@ class User < ActiveRecord::Base
         oauth2_token:   auth.token,
         refresh_token:  auth.refresh_token
       )
+      Resque.enqueue_in_with_queue( :immediate, 0, UserDataJob, user.id )
     end
 
     user
