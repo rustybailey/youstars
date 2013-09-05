@@ -44,7 +44,13 @@ class UserDataJob
 
       new_views_this_page = false
       response.parsed_response["feed"]["entry"].each do |entry|
-        video       = Video.where( youtube_id: entry["media$group"]["yt$videoid"]["$t"] ).first_or_create
+        video       = Video.where( youtube_id: entry.dig( "media$group", "yt$videoid", "$t" ) ).first_or_create
+
+        unless video.category.present?
+          cat = Category.find_by_title( entry.dig("category", 0, "label") )
+          video.update_attributes( :category_id => cat.id ) if cat.present?
+        end
+
         view        = View.where( video_id: video.id, user_id: u.id ).first_or_initialize
         unique_view = UniqueView.where( :youtube_id => entry["id"]["$t"] ).first_or_initialize
 

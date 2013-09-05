@@ -110,8 +110,8 @@ body {
 	height: 100%;
 	font-family: 'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 	overflow: scroll;
-	background: transparent url("/assets/placeholders/player-test.png") no-repeat center center;
-	@include background-size(cover);
+	// background: transparent url("/assets/placeholders/player-test.png") no-repeat center center;
+	// @include background-size(cover);
 }
 
 h1, h2, h3, h4, h5, h6 {}
@@ -141,16 +141,66 @@ p {}
 	width: 100%;
 	height: 100%;
 	min-width: 1200px;
-	background: transparent url("/assets/screen-background.png") repeat 0 0;
+	// background: transparent url("/assets/screen-background.png") repeat 0 0;
+}
+
+#ys-home {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background: $teal;
+	overflow: hidden;
+	ul.ys-home-tiles {
+		display: block;
+		float: left;
+		width: 140%;
+		height: 140%;
+		margin: -100px 0 0 -100px;
+		position: absolute;
+		li.ys-home-tile {
+			display: block;
+			float: left;
+			width: 230px;
+			height: 230px;
+			position: relative;
+			margin: -149px 0 0 -68px;
+			@include rotate(45deg);
+			@include opacity(0.1);
+			@include transition-property(opacity, rotate);
+			@include transition-duration(0.33s);
+			a {
+				display: block;
+				float: left;
+				width: 230px;
+				height: 230px;
+				cursor: pointer;
+			}
+		}
+		li.ys-home-tile:nth-child(2n) {
+			margin: 13px 0 0 -68px;
+			@include rotate(-45deg);
+		}
+		li.ys-home-tile:nth-child(3n) {
+			@include rotate(135deg);
+		}
+		li.ys-home-tile:nth-child(4n) {
+			@include rotate(-135deg);
+		}
+		li.ys-home-tile:hover {
+			@include opacity(1);
+			@include rotate(0);
+		}
+	}
 }
 
 
 
-
-
-
-
-
+#ys-player {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -9999;
+}
 
 
 
@@ -220,14 +270,23 @@ p {}
 	display: block;
 	float: left;
 	width: 100%;
-	height: 3px;
+	height: 4px;
 	background: #fcc6d0;
+	position: fixed;
+	z-index: 100;
+	.ys-loading-bar {
+		width: 0;
+		height: 100%;
+		background: $teal;
+		@include transition-property(width);
+		@include transition-duration(.1s);
+	}
 }
 
 
 
 #ys-page {
-	dislay: block;
+	display: block;
 	float: left;
 	width: 100%;
 	height: 100%;
@@ -262,7 +321,7 @@ p {}
 	}
 
 	#ys-content {
-		dislay: block;
+		display: block;
 		float: left;
 		width: 100%;
 		min-height: 114px;
@@ -284,7 +343,7 @@ p {}
 			z-index: 60;
 		}
 		#ys-header {
-			dislay: block;
+			display: block;
 			float: left;
 			width: 100%;
 			height: 114px;
@@ -313,7 +372,7 @@ p {}
 			}
 		}
 		#ys-viewport {
-			dislay: block;
+			display: block;
 			float: left;
 			width: 100%;
 		}
@@ -327,8 +386,38 @@ p {}
 
 
 #ys-player-controls {
+	padding: 5px 0 0 0;
 	display: block;
 	float: right;
+	> * {
+		float: left;
+	}
+}
+
+.volume-container {
+	border: 1px solid white;
+	border-radius: 10px;
+	width: 154px;
+	height: 12px;
+	margin-top: 4px;
+}
+
+input[type="range"].volume {
+	-webkit-appearance: none;
+	width: 150px;
+	height: 8px;
+	background-color: rgba(white, 0.8);
+	border-radius: 10px;
+	position: relative;
+	top: -4px;
+}
+
+input[type="range"].volume::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 12px;
+	height: 12px;
+	background-color: rgba(white, 0.8);
+	border-radius: 90px;
 }
 
 
