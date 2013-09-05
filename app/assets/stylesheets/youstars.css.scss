@@ -301,21 +301,21 @@ p {}
 			span {
 				display: block;
 				float: left;
+				margin: 100px 0 0 0;
 				position: relative;
 				z-index: 55;
 				@include transition-property(margin);
 				@include transition-duration(0.33s);
+				@include transition-timing-function(cubic-bezier(.17, .67, .63, 1.56));
+			}
+			span.ys-header-before  {
+				margin-top: 0;
 			}
 		}
 		#ys-viewport {
 			dislay: block;
 			float: left;
 			width: 100%;
-		}
-		#ys-header.ys-header-before {
-			span {
-				margin-top: 100px;
-			}
 		}
 	}
 
