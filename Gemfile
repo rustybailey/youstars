@@ -41,4 +41,10 @@ gem 'omniauth-google-oauth2', '0.1.17'
 
 gem 'youtube_it', '~> 2.3.1'
 
-gem 'quiet_assets', :group => :development
+group :development, :test do
+  gem 'pry', require: 'pry'
+  gem 'pry-nav'
+  gem 'pry-rails'
+  gem 'pry-remote'
+  gem 'quiet_assets'
+end

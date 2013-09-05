@@ -39,7 +39,7 @@ class UserDataJob
     url = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
 
     while url.present? 
-      response = v2_authorized_request( url, user_oauth_token )
+      response = YoutubeApi.v2_authorized_request( url, user_oauth_token )
       return if response.nil?
 
       new_views_this_page = false
@@ -77,7 +77,7 @@ class UserDataJob
     offset        = 0
 
     while url.present?
-      result = v3_authorized_request( url, user_oauth_token )
+      result = YoutubeApi.v3_authorized_request( url, user_oauth_token )
 
       new_likes_this_page = false
       result.parsed_response["items"].each do |video|
@@ -97,14 +97,6 @@ class UserDataJob
 
   end
 
-
-  def self.v2_authorized_request( url, oauth2_token, params = {} )
-    v3_authorized_request( url, oauth2_token, {"v" => 2, "alt" => "json"} )
-  end
-
-  def self.v3_authorized_request( url, oauth2_token, params = {})
-    HTTParty.get( url, :query => params, :headers => {"Authorization" =>  "Bearer #{oauth2_token}", "X-GData-Key" => "key=#{ENV['YOUTUBE_API']}"} )
-  end
 
 
 
