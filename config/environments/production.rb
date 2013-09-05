@@ -51,8 +51,11 @@ Youstars::Application.configure do
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Cache Store
+  rails_root          = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
+  rails_env           = ENV['RAILS_ENV'] || 'development'
+  resque_config       = YAML.load_file(rails_root + '/config/resque.yml')
+  config.cache_store  = :redis_store, resque_config[rails_env]
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
