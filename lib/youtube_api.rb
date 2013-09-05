@@ -66,4 +66,20 @@ module YoutubeApi
     }
   end
 
+  def self.channel_stats_for_channel_id(channel_id)
+    channel_url = @@v3_URL + '/channels'
+    query = {
+      key:  $YOUTUBE_V3_API_KEY,
+      id:   channel_id,
+      part: 'statistics'
+    }
+
+    json = JSON.parse( HTTParty.get(channel_url, query: query).body )
+
+    {
+      view_count:       json['items'][0]['statistics']['viewCount'].to_i,
+      subscriber_count: json['items'][0]['statistics']['subscriberCount'].to_i
+    }
+  end
+
 end

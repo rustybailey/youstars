@@ -34,5 +34,11 @@ class ChannelController < ApplicationController
 
     render :json => topics
   end
+
+  def stream
+    youtube_id = params[:youtube_id]
+
+    render :json => YoutubeApi.channel_stats_for_channel_id(youtube_id)
+  end
   
 end
