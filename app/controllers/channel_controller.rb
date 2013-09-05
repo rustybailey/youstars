@@ -3,6 +3,9 @@ require 'youtube_api'
 class ChannelController < ApplicationController
 
   def create
+    return if current_user.nil?
+    return unless current_user.guid == params[:youtube_id]
+
     channel = Channel.new do |c|
       c.youtube_id  = params[:youtube_id]
       c.name        = params[:name]
@@ -17,6 +20,9 @@ class ChannelController < ApplicationController
   end
 
   def update
+    return if current_user.nil?
+    return unless current_user.guid == params[:youtube_id]
+
     c = Channel.find_by_youtube_id( params[:youtube_id] )
     
     [:youtube_id, :name, :gender, :location, :description].each do |attribute|   
