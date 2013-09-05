@@ -10,15 +10,11 @@ youstars.directive('masthead', ['userService', '$timeout', (userService, $timeou
 		restrict: "E"
 		replace: true
 		link: (scope, element, attr) ->
-
-			# scope.headerString = userService.userName.split("")
 			scope.headerArray = userService.userName.split("")
-			# $(document).ready($('#ys-header span').addClass('ys-header-before'))
 			$timeout( () ->
 				$('#ys-header span').addClass('ys-header-before')
 			, 0
 			)
-			
 		template:
 			"""
 			<div id="ys-header">
