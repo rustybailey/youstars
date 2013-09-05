@@ -12,6 +12,8 @@ gem 'unicorn'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
+gem 'httparty'
+
 gem 'sass-rails', '~> 4.0.0'
 gem "compass-rails", "~> 2.0.alpha.0"
 gem 'coffee-rails', '~> 4.0.0'
