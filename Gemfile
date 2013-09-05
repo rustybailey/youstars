@@ -6,6 +6,9 @@ gem 'rails', '4.0.0'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
+# Use unicorn as the app server
+gem 'unicorn'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
@@ -25,14 +28,10 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'protected_attributes' # for attr_accessible
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'devise'
+gem 'omniauth', '1.1.0'
+gem 'omniauth-youtube'
+gem 'omniauth-oauth2'
+gem 'omniauth-google-oauth2', '0.1.17'
