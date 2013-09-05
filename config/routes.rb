@@ -5,8 +5,8 @@ Youstars::Application.routes.draw do
   root 'home#index'
   get  "login" => "home#login"
 
-  get '/creator/:youtube_id',        :controller => 'creator', :action => 'show'
-  get '/creator/:youtube_id/videos', :controller => 'creator', :action => 'videos'
-  get '/creator/:youtube_id/topics', :controller => 'creator', :action => 'topics'
+  get '/channel/:youtube_id',        :controller => 'channel', :action => 'show'
+  get '/channel/:youtube_id/videos', :controller => 'channel', :action => 'videos'
+  get '/channel/:youtube_id/topics', :controller => 'channel', :action => 'topics'
 
 end
