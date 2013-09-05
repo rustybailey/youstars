@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130905160651) do
+ActiveRecord::Schema.define(version: 20130905182551) do
 
   create_table "channels", force: true do |t|
     t.string   "name"
@@ -33,6 +33,13 @@ ActiveRecord::Schema.define(version: 20130905160651) do
 
   create_table "topics", force: true do |t|
     t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "unique_views", force: true do |t|
+    t.integer  "view_id"
+    t.string   "youtube_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -73,6 +80,7 @@ ActiveRecord::Schema.define(version: 20130905160651) do
     t.integer  "video_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "weight",     default: 0
   end
 
 end
