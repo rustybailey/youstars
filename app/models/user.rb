@@ -9,6 +9,36 @@ class User < ActiveRecord::Base
 
   attr_accessible :email, :password, :provider, :uid, :name, :oauth2_token, :refresh_token, :guid, :channel_name
 
+  has_one :channel
+  has_many :views
+
+
+
+  def yt_client
+    YouTubeIt::OAuth2Client.new(
+      client_access_token:  self.oauth2_token,
+      client_refresh_token: self.refresh_token,
+      client_id:            ENV['YOUTUBE_KEY'], 
+      client_secret:        ENV['YOUTUBE_SECRET'],
+      dev_key:              ENV['YOUTUBE_API']
+    )
+  end
+
+
+  def get_token
+
+    begin
+      omniauth = yt_client.refresh_access_token!
+      self.update_attributes!(:oauth2_token => omniauth.token)
+    rescue Exception => e
+      message = e.class == OAuth2::Error ? e.response.body : e.message
+      raise message
+    end
+
+    self.oauth2_token
+
+  end
+
   def self.find_for_youtube_oauth(auth, signed_in_resource=nil)
     user = User.where( :provider => auth.provider, :uid => auth.uid ).first
     unless user
