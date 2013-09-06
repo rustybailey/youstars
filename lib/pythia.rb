@@ -22,14 +22,12 @@ module Pythia
     channels.sort { |a, b| Pythia.score(b) <=> Pythia.score(a) } # descending
   end
 
-  def self.score(channel_data)
+  def self.score(channel_data, target_channel_data = nil, channel_data_set = nil)
     # geometric mean of subscribers and views 
     score = (channel_data[:subscriber_count] * channel_data[:view_count]) ** 0.5
 
     # penalize channels that don't have a description
     score *= 0.8 if channel_data[:description] == ""
-
-    
   end
 
   def self.string_score(target_0, target_1, space)
