@@ -85,7 +85,7 @@ module YoutubeApi
         channel_id:       item['id'],
         published_at:     item['snippet']['publishedAt'],      
         thumbnails:       item['snippet']['thumbnails'],
-        title:            item['snippet']['title'],
+         title:            item['snippet']['title'],
         view_count:       item['statistics']['viewCount'].to_i,
         subscriber_count: item['statistics']['subscriberCount'].to_i
       }
@@ -95,7 +95,7 @@ module YoutubeApi
       v2_channel_url = "https://gdata.youtube.com/feeds/api/users/#{ output[i][:channel_id] }"
       v2_query = {
         v: 2,
-        alt: 'json'     
+        alt: 'json'
       }
     
       output[i][:name] = JSON.parse( HTTParty.get(v2_channel_url, query: v2_query).body ).dig('entry', 'author', 0, 'name', '$t')
