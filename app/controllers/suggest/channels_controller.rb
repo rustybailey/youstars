@@ -1,4 +1,4 @@
-class Suggest::ChannelsController < ApplicationController
+class Suggest::ChannelsController < ApiController
 
 #  before_filter :authenticate_user!
 
@@ -50,15 +50,15 @@ class Suggest::ChannelsController < ApplicationController
     render :json => channel_recs
   end
 
-  def channel
+  def related
     # retrieve the most popular videos for the target channel
     # then retrieve the related videos for those and find the
     # channels to which they belong
+    load_channel_id params[:channel]
 
-    channel_id = params[:youtube_id]
     limit      = (params[:limit] || 10).to_i
 
-    top_videos = YoutubeApi.video_search_for_channel_id(channel_id, 10)
+    top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 10)
 
     related_videos = top_videos.collect do |video|
       YoutubeApi.related_videos_for_video_id( video[:video_id] )

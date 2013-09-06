@@ -7,10 +7,10 @@ Youstars::Application.routes.draw do
 
 
   get '/:channel_name' => 'home#index'
-  get '/channel/:youtube_id',        :controller => 'channel', :action => 'show'
-  get '/channel/:youtube_id/videos', :controller => 'channel', :action => 'videos'
-  get '/channel/:youtube_id/topics', :controller => 'channel', :action => 'topics'
-  get '/channel/:youtube_id/stream', :controller => 'channel', :action => 'stream'
+  get '/channel/:channel',        :controller => 'channel', :action => 'show'
+  get '/channel/:channel/videos', :controller => 'channel', :action => 'videos'
+  get '/channel/:channel/topics', :controller => 'channel', :action => 'topics'
+  get '/channel/:channel/stream', :controller => 'channel', :action => 'stream'
 
   put  '/channel/:youtube_id',       :controller => 'channel', :action => 'create'
   post '/channel/:youtube_id',       :controller => 'channel', :action => 'update'
@@ -18,7 +18,7 @@ Youstars::Application.routes.draw do
   namespace :suggest do
 
     get '/channels',                  :controller => 'channels', :action => 'user'
-    get '/channels/:youtube_id',      :controller => 'channels', :action => 'channel'
+    get '/channels/:channel',         :controller => 'channels', :action => 'related'
 
     get '/videos',                    :controller => 'videos', :action => 'user'
     get '/videos/related/:youtube_id',:controller => 'videos', :action => 'related'
