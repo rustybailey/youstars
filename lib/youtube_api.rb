@@ -1,70 +1,73 @@
 module YoutubeApi
 
-  @@v3_URL = "https://www.googleapis.com/youtube/v3"
-  @@v2_URL = "https://gdata.youtube.com/feeds/api"
+  @@V3_URL = "https://www.googleapis.com/youtube/V3"
+  @@V2_URL = "https://gdata.youtube.com/feeds/api"
 
-  def self.video_list(channel_id, page, limit)
+  def self.video_list(channel_id, limit, page_token = nil)
     playlist_id = uploads_playlist_id_for_channel(channel_id)
-    video_list  = video_list_for_playlist(playlist_id, page, limit)
+    video_list  = video_list_for_playlist(playlist_id, limit, page_token)
+    video_data  = video_data_for_video_ids( video_list[:video_ids].join(',') )
 
-    video_data = video_list[:video_ids].collect do |video_id|
-      video_data_for_video_id(video_id)
-    end
-
-    next_page_token = video_list[:next_page_token]
-
-    { videos: video_data, next_page_token: next_page_token }
+    { videos: video_data, next_page_token: video_list[:next_page_token] }
   end
 
   def self.uploads_playlist_id_for_channel(channel_id)
-    channel_url = @@v3_URL + "/channels"
+    url   = "#{@@V3_URL}/channels"
     query = {
-      key: ENV['YOUTUBE_API'],
-      id: channel_id,
-      part: "contentDetails"
+      key:    ENV['YOUTUBE_API'],
+      id:     channel_id,
+      part:   'contentDetails',
+      fields: 'items/contentDetails/relatedPlaylists/uploads'
     }
 
-    json = JSON.parse( HTTParty.get(channel_url, query: query).body )
-    uploads_id = json['items'][0]['contentDetails']['relatedPlaylists']['uploads']
+    json = JSON.parse( HTTParty.get(url, query: query).body )
 
-    uploads_id
+    json['items'][0]['contentDetails']['relatedPlaylists']['uploads']
   end
 
-  def self.video_list_for_playlist(playlist_id, limit, page_token, sort = nil)
-    playlist_url = @@v3_URL + "/playlistItems"
+  def self.video_list_for_playlist(playlist_id, limit, page_token = nil)
+    url   = @@V3_URL + "/playlistItems"
     query = {
-      key: ENV['YOUTUBE_API'],
+      key:        ENV['YOUTUBE_API'],
       playlistId: playlist_id,
-      part: "contentDetails",
+      part:       'contentDetails',
+      fields:     'nextPageToken,pageInfo,items/contentDetails/videoId',
       maxResults: limit,
-      pageToken: page_token
+      pageToken:  page_token
     }
 
-    json = JSON.parse( HTTParty.get(playlist_url, query: query).body )    
-    video_ids = json['items'].collect { |i| i['contentDetails']['videoId'] }
-    next_page_token =  json['nextPageToken']
+    json = JSON.parse( HTTParty.get(url, query: query).body )    
+
+    video_ids       = json['items'].collect { |i| i['contentDetails']['videoId'] }
+    next_page_token = json['nextPageToken']
 
     { video_ids: video_ids, next_page_token: next_page_token }
   end
   
-  def self.video_data_for_video_id(video_id)
-    video_url = @@v3_URL + "/videos"
+  def self.video_data_for_video_ids(video_ids)
+    url   = @@V3_URL + "/videos"
     query = {
-      key: ENV['YOUTUBE_API'],
-      id: video_id,
-      part: "snippet,statistics"
+      key:    ENV['YOUTUBE_API'],
+      id:     video_ids,
+      part:   'snippet,statistics',
+      fields: 'items(id,snippet(title,thumbnails,tags),statistics/viewCount)'
     }
 
-    json = JSON.parse( HTTParty.get(video_url, query: query).body )
+    json = JSON.parse( HTTParty.get(url, query: query).body )    
+    data = []
 
-    {      
-      video_id:     video_id,
-      channel_id:   json['items'][0]['snippet']['channelId'],
-      published_at: json['items'][0]['snippet']['publishedAt'],
-      thumbnails:   json['items'][0]['snippet']['thumbnails'],
-      title:        json['items'][0]['snippet']['title'],
-      view_count:   json['items'][0]['statistics']['viewCount'].to_i
-    }
+    json['items'].each do |item|
+      data << {
+        video_id:     item['id'],
+        title:        item['snippet']['title'],
+        published_at: item['snippet']['publishedAt'],
+        tags:         item['snippet']['tags'],
+        thumbnails:   item['snippet']['thumbnails'],
+        view_count:   item['statistics']['viewCount'].to_i
+      }
+    end
+
+    data
   end
 
   def self.channel_data_for_channel_id(channel_id)
@@ -119,7 +122,7 @@ module YoutubeApi
   end
 
   def self.channel_stats_for_channel_id(channel_id)
-    channel_url = @@v3_URL + '/channels'
+    channel_url = @@V3_URL + '/channels'
     query = {
       key:  ENV['YOUTUBE_API'],
       id:   channel_id,
@@ -136,7 +139,7 @@ module YoutubeApi
 
 
   def self.related_videos_for_video_id(video_id, limit = 50)
-    search_url = @@v3_URL + '/search'
+    search_url = @@V3_URL + '/search'
     query = {
       key: ENV['YOUTUBE_API'],
       relatedToVideoId: video_id,
@@ -178,11 +181,11 @@ module YoutubeApi
     end
   end
   
-  def self.v2_authorized_request( url, oauth2_token, params = {} )
-    v3_authorized_request( url, oauth2_token, {"v" => 2, "alt" => "json"} )
+  def self.V2_authorized_request( url, oauth2_token, params = {} )
+    V3_authorized_request( url, oauth2_token, {"v" => 2, "alt" => "json"} )
   end
 
-  def self.v3_authorized_request( url, oauth2_token, params = {})
+  def self.V3_authorized_request( url, oauth2_token, params = {})
     headers = { "X-GData-Key" => "key=#{ENV['YOUTUBE_API']}" }
     headers["Authorization"] = "Bearer #{oauth2_token}" if oauth2_token.present?
     HTTParty.get( url, :query => params, :headers => headers )
