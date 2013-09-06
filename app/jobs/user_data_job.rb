@@ -26,6 +26,7 @@ class UserDataJob
 
     user_oauth_token = u.get_token # force a refresh if required and cache as local var
 
+    return if user_oauth_token.nil?
 
     build_watch_history( u, user_oauth_token )
     build_view_weights( u, user_oauth_token, "like", 1 )
@@ -37,7 +38,12 @@ class UserDataJob
 
   def self.build_suggestions_list(u)
 
-    # Some naive secret sauce -- 10 videos that are that are the most frequently re-watched and liked; 10 that are the most frequently re-watched but not voted; 10 that are liked ordered by like time.
+    # Some naive secret sauce -- 
+    #   10 videos that are that are the most frequently re-watched and liked; 
+    #   10 that are the most frequently re-watched but not voted; 
+    #   10 that are liked ordered by like time.
+    # Then we get reccomended videos for all of them, remove viewed videos, sort on views, and enforce variety.
+
     ids = Set.new ( Video.where(:id => u.views.where(:weight => 1).order("unique_view_count desc, weight desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id) )
     ids.merge( Video.where( :id => u.views.where(:weight => 0).order("unique_view_count desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id ) )
     ids.merge( Video.where( :id => u.views.order("weight desc, updated_at desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id ) )

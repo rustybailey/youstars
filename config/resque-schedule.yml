@@ -1,7 +1,6 @@
-
-daily_data:
-  cron: "0 2 * * *"
-  class: DailyData
+hourly_data:
+  cron: "0 * * * *"
+  class: HourlyData
   queue: immediate
   args: 
-  description: "Queues up the initializers for all daily data tasks."
+  description: "Queues up the initializers for all hourly data tasks."
