@@ -461,8 +461,9 @@ select {
 		color: white;
 		cursor: pointer;
 		font-size: 18px;
+		opacity: 0.8;
 		&:hover {
-			opacity: 0.8;
+			opacity: 0.6;
 		}
 	}
 }
