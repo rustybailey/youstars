@@ -55,7 +55,7 @@ class Suggest::ChannelsController < ApplicationController
     # then retrieve the related videos for those and find the
     # channels to which they belong
 
-    channel_id = params[:channel_id]
+    channel_id = params[:youtube_id]
     limit      = (params[:limit] || 10).to_i
 
     top_videos = YoutubeApi.video_search_for_channel_id(channel_id, 10)
