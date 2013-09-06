@@ -1056,7 +1056,7 @@ $ys-profile-tile-large-size:	230px;
 					margin: 0 0 10px 0;
 					@include opacity(0);
 					@include transition-property(opacity);
-					@include transition-delay(1.6s);
+					@include transition-delay(0.8s);
 				}
 				h4 {
 					font-weight: 700;
@@ -1065,7 +1065,7 @@ $ys-profile-tile-large-size:	230px;
 					text-transform: uppercase;
 					@include opacity(0);
 					@include transition-property(opacity);
-					@include transition-delay(1.6s);
+					@include transition-delay(0.8s);
 				}
 				ul.ys-video-actions {
 					display: block;
@@ -1117,17 +1117,6 @@ $ys-profile-tile-large-size:	230px;
 				}
 			}
 		}
-		li.ys-video-tile:hover {
-			bottom: 40px;
-			a.ys-video-info {
-				margin-top: -135px;
-			}
-			a.ys-video-content {
-				h3 {
-					@include opacity(0);
-				}
-			}
-		}
 		li.ys-video-tile.ys-video-tile-after {
 			a.ys-video-info {
 				h3 {
@@ -1139,6 +1128,17 @@ $ys-profile-tile-large-size:	230px;
 			}
 			a.ys-video-content {
 				@include opacity(1);
+			}
+		}
+		li.ys-video-tile.ys-video-tile-after:hover {
+			bottom: 40px;
+			a.ys-video-info {
+				margin-top: -135px;
+			}
+			a.ys-video-content {
+				h3 {
+					@include opacity(0);
+				}
 			}
 		}
 	}
