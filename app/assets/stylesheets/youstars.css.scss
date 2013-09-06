@@ -1118,6 +1118,7 @@ $ys-profile-tile-large-size:	230px;
 				}
 			}
 		}
+
 		li.ys-video-tile.ys-video-tile-after {
 			a.ys-video-info {
 				h3 {
@@ -1131,7 +1132,7 @@ $ys-profile-tile-large-size:	230px;
 				@include opacity(1);
 			}
 		}
-		li.ys-video-tile.ys-video-tile-after:hover {
+		li.ys-video-tile.ys-video-tile-after.slideUp {
 			bottom: 40px;
 			a.ys-video-info {
 				margin-top: -135px;
