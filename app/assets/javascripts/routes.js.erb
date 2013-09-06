@@ -3,7 +3,7 @@ var youstars = angular.module('youstars', [], function ($routeProvider, $locatio
   $(document).keydown(function(e) {
     // Ctrl + H to hide UI (except player controls)
     if(e.ctrlKey && e.keyCode === 72) {
-      $('#ys-profiles, #ys-stats, #ys-content, #ys-videos').toggle();
+      $('#ys-profiles, #ys-stats, #ys-content, #ys-videos, #ys-player-controls').fadeToggle();
     }
   });
   $routeProvider.when('', {
