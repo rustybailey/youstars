@@ -116,10 +116,13 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     scope.leave = (e) ->
       $(e.currentTarget).removeClass('slideUp')
     scope.videosArray = ({} for ignored in [1..20]) #need empty videos at bottom
+    scope.$on '$destroy', ->
+      scope.destroyed = true
     videosService.fetch_videos().then (videos) ->
-      scope.videosArray = videos
-      $timeout( myvideosService.animateMyvideos, 200 )
-      $timeout( myvideosService.removeDelayFromMyvideos, 500 )
+      unless scope.destroyed # for if they click fast between channels
+        scope.videosArray = videos
+        scope.animatePromise = $timeout( myvideosService.animateMyvideos, 200 )
+        scope.removeDelayPromise = $timeout( myvideosService.removeDelayFromMyvideos, 500 )
     # $timeout( myvideosService.animateMyvideos, 200 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
