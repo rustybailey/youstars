@@ -218,7 +218,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   link: (scope, element, attr) ->
     scope.videosArray = videosService.videos
     videosService.fetch_videos().then (res) ->
-      scope.videosArray = res.data
+      scope.videosArray = res.videos
       $timeout( myvideosService.animateMyvideos, 200 )
       $timeout( myvideosService.removeDelayFromMyvideos, 500 )
     $timeout( myvideosService.animateMyvideos, 200 )
@@ -231,7 +231,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     <div id="ys-videos">
       <ul id="ys-videos-list">
         <li class="ys-video-tile" ng-repeat="video in videosArray" style="transition-delay: {{$index * 100}}ms">
-          <a ng-click="playVideo('{{video.youtube_id}}')" class="ys-video-info">
+          <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.data.views}}&nbsp;&nbsp;|&nbsp;&nbsp;{{video.data.created_at}}</h4>
             <ul class="ys-video-actions">
@@ -240,9 +240,9 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
               <li>3</li>
             </ul>
           </a>
-          <a href="#" class="ys-video-content">
+          <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-content">
             <h3>{{video.title}}</h3>
-            <img src="/assets/placeholders/video-test.png" />
+            <img src="{{ video.thumbnails.medium.url || video.thumbnails.medium.url }}" />
           </a>
         </li>
       </ul>
@@ -324,7 +324,7 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
       hash.interruptedIndex = hash.player.getPlaylistIndex()
       hash.player.loadVideoById(videoId)
 
-  videoStateChange = (ev) ->
+  hash.videoStateChange = (ev) ->
     return unless ev.data == 0
     hash.player.loadPlaylist
       listType: "user_uploads"
