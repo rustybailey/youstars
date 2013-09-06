@@ -400,6 +400,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
             listType: "user_uploads"
             list: youtubeInit.currentChannel
           youtubeInit.onPlayerReady.resolve()
+          player.setLoop(true)
         onStateChange: youtubeInit.videoStateChange
     )
 
