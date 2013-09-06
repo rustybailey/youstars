@@ -648,6 +648,7 @@ select {
 	border-radius: 10px;
 	width: 154px;
 	height: 12px;
+	cursor: pointer;
 }
 
 input[type="range"].volume {
@@ -658,6 +659,7 @@ input[type="range"].volume {
 	border-radius: 10px;
 	position: relative;
 	top: -4px;
+	cursor: pointer;
 }
 
 input[type="range"].volume::-webkit-slider-thumb {
