@@ -84,7 +84,7 @@ class ChannelController < ApiController
 
     delta_t0 = stats_series.last['timestamp'] - stats_series.first['timestamp']
     moving_averages = {
-      'view_count'       => (stats_series.last['view_count'] - stats_series.first['view_count'])             / delta_t0.to_f,
+      'view_count'       => (stats_series.last['view_count'] - stats_series.first['view_count'])             / delta_t0.to_f
       'subscriber_count' => (stats_series.last['subscriber_count'] - stats_series.first['subscriber_count']) / delta_t0.to_f
     }
 
@@ -95,8 +95,8 @@ class ChannelController < ApiController
     }
 
     estimates = {
-      'view_count'       => stats_series.last['view_count']       + (moving_averages['view_count']       * delta_t1),
-      'subscriber_count' => stats_series.last['subscriber_count'] + (moving_averages['subscriber_count'] * delta_t1)
+      'view_count'       => stats_series.last['view_count']       + (moving_averages['view_count']       * delta_t1).to_i,
+      'subscriber_count' => stats_series.last['subscriber_count'] + (moving_averages['subscriber_count'] * delta_t1).to_i
     }
 
     render :json => estimates
