@@ -1,13 +1,15 @@
 require 'youtube_api'
 
-class ChannelController < ApplicationController
+class ChannelController < ApiController
+
+  before_filter :load_channel_id
 
   def create
     return if current_user.nil?
-    return unless current_user.guid == params[:youtube_id]
+    return unless current_user.guid == @channel_id
 
     channel = Channel.new do |c|
-      c.youtube_id  = params[:youtube_id]
+      c.youtube_id  = @channel_id
       c.name        = params[:name]
       c.gender      = params[:gender]
       c.location    = params[:location]
@@ -21,9 +23,9 @@ class ChannelController < ApplicationController
 
   def update
     return if current_user.nil?
-    return unless current_user.guid == params[:youtube_id]
+    return unless current_user.guid == @channel_id
 
-    c = Channel.find_by_youtube_id( params[:youtube_id] )
+    c = Channel.find_by_youtube_id( @channel_id )
     
     [:youtube_id, :name, :gender, :location, :description].each do |attribute|   
       c.update_attribute(attribute, params[attribute]) if params[attribute].present?
@@ -35,7 +37,7 @@ class ChannelController < ApplicationController
   end
 
   def show
-    youtube_ids = params[:youtube_id].split(',')
+    youtube_ids = @channel_id.split(',')
 
     output = youtube_ids.collect do |youtube_id|
       Channel.find_by_youtube_id(youtube_id).attributes
@@ -45,34 +47,27 @@ class ChannelController < ApplicationController
   end
 
   def videos
-    youtube_id = params[:youtube_id]
     page_token = params[:page_token]
     limit      = params[:limit] || 20
 
-    video_list = YoutubeApi.video_list(youtube_id, limit, page_token)
+    video_list = YoutubeApi.video_list(@channel_id, limit, page_token)
 
     render :json => video_list
   end
-
+  
   def topics
-    youtube_ids = params[:youtube_id].split(',')
-
-    topics = youtube_ids.collect do |youtube_id|
-      { 
-        youtube_id: youtube_id,
-        topics: Channel.find_by_youtube_id(youtube_id).topics.map(&:name)
-      }
-    end
+    topics = { 
+      youtube_id: @channel_id,
+      topics: Channel.find_by_youtube_id(@channel_id).topics.map(&:name)
+    }    
 
     render :json => topics
   end
 
   def stream
-    youtube_id = params[:youtube_id]
-
     redis = Redis.connect
 
-    stats_series   = JSON.parse( redis.get( "#{youtube_id}_stats_series" ) || '[]' )
+    stats_series   = JSON.parse( redis.get( "#{@channel_id}_stats_series" ) || '[]' )
     stats_series ||= []
 
     if stats_series.length < 3 or Time.now.to_i > (stats_series.last['timestamp'] + 10.minutes.to_i)
@@ -80,12 +75,12 @@ class ChannelController < ApplicationController
       stats_series << { timestamp: Time.now.to_i }.merge( new_stats )
       stats_series  = stats_series.last(3)
 
-      redis.set "#{youtube_id}_stats_series", stats_series.slice('view_count', 'subscriber_count').to_json
+      redis.set "#{@channel_id}_stats_series", stats_series.slice('view_count', 'subscriber_count').to_json
     end
 
     render( :json => stats_series.last ) and return if stats_series.length < 3
 
-    stats_series = JSON.parse( redis.get( "#{youtube_id}_stats_series" ) )
+    stats_series = JSON.parse( redis.get( "#{@channel_id}_stats_series" ) )
 
     delta_t0 = stats_series.last['timestamp'] - stats_series.first['timestamp']
     moving_averages = {

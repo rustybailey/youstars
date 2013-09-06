@@ -94,6 +94,18 @@ module YoutubeApi
     output
   end
 
+  def self.channel_id_for_username(channel_username)
+    channel_url = "https://gdata.youtube.com/feeds/api/users/" + channel_username
+    query = {
+      v: 2,
+      alt: 'json'
+    }
+
+    json = JSON.parse( HTTParty.get(channel_url, query: query).body )
+
+    'UC' + json.dig('entry', 'author', 0, 'yt$userId', '$t')
+  end
+
   def self.channel_stats_for_channel_id(channel_id)
     channel_url = @@v3_URL + '/channels'
     query = {
