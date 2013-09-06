@@ -1,5 +1,11 @@
 var youstars = angular.module('youstars', [], function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
+  $(document).keydown(function(e) {
+    // Ctrl + H to hide UI (except player controls)
+    if(e.ctrlKey && e.keyCode === 72) {
+      $('#ys-profiles, #ys-stats, #ys-content, #ys-videos').toggle();
+    }
+  });
   $routeProvider.when('', {
     templateUrl: '<%= asset_path("index.html") %>',
     controller: 'indexController'
