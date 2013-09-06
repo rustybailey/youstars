@@ -58,7 +58,7 @@ class Suggest::ChannelsController < ApiController
 
 #    channels = Rails.cache.fetch("related_#{ @channel_id }", :expires_in => 1.day) do
       
-      limit      = (params[:limit] || 5).to_i
+      limit      = (params[:limit] || 20).to_i
 
       top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 50, 'viewCount')
 
