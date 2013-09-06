@@ -1,13 +1,16 @@
 youstars.factory('userService', ['$http', ($http) ->
   return {
     userName: "devinsupertramp"		# STATIC PLACEHOLDER.
+    currentChannel: null
   }
 ])
 
 
 
-youstars.factory('channelsService', ['$http', ($http) ->
+youstars.factory('channelsService', ['$http', 'userService', ($http, userService) ->
   return {
+    fetch_channels: ->
+      $http.get("/suggest/channels/#{userService.currentChannel}")
     channels: [
       {
         "id": 3
@@ -98,8 +101,8 @@ youstars.factory('channelsService', ['$http', ($http) ->
 
 
 
-youstars.factory('videosService', ['$http', ($http) ->
-  return {
+youstars.factory('videosService', ['$http', 'userService', ($http, userService) ->
+  hash = 
     videos: [
       {
         "title": "TEST 1: Angry Birds All 27 Golden Eggs Locations Guide"
@@ -156,7 +159,11 @@ youstars.factory('videosService', ['$http', ($http) ->
       { "title": "TEST 39: Angry Birds All 27 Golden Eggs Locations Guide", "youtube_id": "w__7apOnsYk", "tier": 1, "channel_name": "tinygalaxy", "data": { "comments": 96, "created_at": "2013-09-05T02:02:20Z", "dislikes": 989, "favorites": null, "id": 1638752524, "likes": 1494, "video_id": 3122710, "views": 2381116 } }
       { "title": "TEST 40: Angry Birds All 27 Golden Eggs Locations Guide", "youtube_id": "w__7apOnsYk", "tier": 1, "channel_name": "tinygalaxy", "data": { "comments": 96, "created_at": "2013-09-05T02:02:20Z", "dislikes": 989, "favorites": null, "id": 1638752524, "likes": 1494, "video_id": 3122710, "views": 2381116 } }
     ]
-  }
+
+  hash.fetch_videos = ->
+    $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
+      hash.videos = res.data
+  return hash
 ])
 
 youstars.factory('mastheadService', [ () ->
@@ -210,6 +217,10 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   replace: true
   link: (scope, element, attr) ->
     scope.videosArray = videosService.videos
+    videosService.fetch_videos().then (res) ->
+      scope.videosArray = res.data
+      $timeout( myvideosService.animateMyvideos, 200 )
+      $timeout( myvideosService.removeDelayFromMyvideos, 500 )
     $timeout( myvideosService.animateMyvideos, 200 )
     $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
@@ -245,6 +256,9 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
   replace: true
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
+    channelsService.fetch_channels().then (res) ->
+      scope.channelsArray = res.data
+      $timeout( mysubscribersService.sizeMysubscribers, 0 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # $timeout( myvideosService.animateMyvideos, 0 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 200 )
@@ -253,14 +267,14 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     <div id="ys-profiles">
       <ul id="ys-profiles-list">
         <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray">
-          <a href="#" class="ys-profile-tile-content">
+          <a href="/{{channel.name}}" class="ys-profile-tile-content">
             <div class="ys-profile-tile-info">
-              <span>devinsupertramp</span>
+              <span>{{channel.title}}</span>
             </div>
-            <div class="ys-profile-tile-door-1"><img src="/assets/placeholders/avatar-test.png" /></div>
-            <div class="ys-profile-tile-door-2"><img src="/assets/placeholders/avatar-test.png" /></div>
-            <div class="ys-profile-tile-door-3"><img src="/assets/placeholders/avatar-test.png" /></div>
-            <div class="ys-profile-tile-door-4"><img src="/assets/placeholders/avatar-test.png" /></div>
+            <div class="ys-profile-tile-door-1"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-2"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
           <a class="ys-profile-action" href="#"></a>
         </li>
@@ -303,7 +317,7 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
     onPlayerReady: $.Deferred()
     player: null
     resize: resize
-    currentChannel: userService.userName
+    currentChannel: userService.currentChannel
 
   hash.playVideo = (videoId) ->
     hash.onPlayerReady.then ->
@@ -317,9 +331,22 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
       list: hash.currentChannel
       index: hash.interruptedIndex
 
+  formatTime = (num) ->
+    sec_num = parseInt(num, 10)
+    hours = Math.floor(sec_num / 3600)
+    minutes = Math.floor((sec_num - (hours * 3600)) / 60)
+    seconds = sec_num - (hours * 3600) - (minutes * 60)
+    seconds = "0" + seconds  if seconds < 10
+    time = if parseInt(hours) > 0
+      minutes = "0" + minutes  if minutes < 10
+      hours + ":" + minutes + ":" + seconds
+    else if parseInt(minutes) > 0
+      minutes + ":" + seconds
+    else
+      ":" + seconds
+    time
 
   hash.onPlayerReady.then ->
-    hash.player.onStateChange 
     loadingBar = setInterval(->
       loadingBar = $(".ys-loading-bar")
       duration = hash.player.getDuration()
@@ -329,10 +356,33 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
         loadingBar.width (percentLoaded * 100) + "%"
       # unstarted (between videos)
       else loadingBar.width "100%" if hash.player.getPlayerState() is -1 and percentLoaded > 0
+
+      currentTimeFormatted = formatTime(Math.floor(currentTime))
+      durationFormatted = formatTime(duration)
+      $('.time-passed').text(currentTimeFormatted + "/")
+      $('.time-total').text(durationFormatted)
     , 100)
 
   $window.onYouTubePlayerAPIReady = ->
-    hash.player = new YT.Player("ys-player",
+    hash.playerAPIReady = true
+    hash.afterPlayerAPIReady.resolve()
+
+  return hash
+])
+
+youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', ($window, $scope, $routeParams, userService, youtubeInit)->
+  if $routeParams.currentChannel
+    #oof, too fast, too little knowledge of angular going around
+    youtubeInit.currentChannel = $routeParams.currentChannel
+    userService.currentChannel = $routeParams.currentChannel
+  player = youtubeInit.player
+
+  # Load the IFrame Player API code asynchronously.
+
+  # Replace the 'ys-player' element with an <iframe> and
+  # YouTube player after the API code downloads.
+  youtubeInit.afterPlayerAPIReady.then(->    
+    player = youtubeInit.player = new YT.Player("ys-player",
       playerVars:
         enablejsapi: 1
         controls: 0
@@ -343,34 +393,15 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
 
       events:
         onReady: ->
-          hash.onPlayerReady.resolve()
-        onStateChange: videoStateChange
+          player = youtubeInit.player
+          youtubeInit.resize()
+          player.mute()
+          player.loadPlaylist
+            listType: "user_uploads"
+            list: youtubeInit.currentChannel
+          youtubeInit.onPlayerReady.resolve()
+        onStateChange: youtubeInit.videoStateChange
     )
-    hash.playerAPIReady = true
-    hash.afterPlayerAPIReady.resolve()
-
-  return hash
-])
-
-youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', ($window, $scope, $routeParams, userService, youtubeInit)->
-  if $routeParams.currentChannel
-    youtubeInit.currentChannel = $routeParams.currentChannel
-  player = youtubeInit.player
-
-
-
-  # Load the IFrame Player API code asynchronously.
-
-  # Replace the 'ys-player' element with an <iframe> and
-  # YouTube player after the API code downloads.
-  youtubeInit.onPlayerReady.then ->
-    player = youtubeInit.player
-    youtubeInit.resize()
-    player.mute()
-    player.loadPlaylist
-      listType: "user_uploads"
-      list: youtubeInit.currentChannel
-  youtubeInit.afterPlayerAPIReady.then(->    
 
     $(window).on "resize", youtubeInit.resize
     $(".mute-container").on "click", (e) ->
@@ -406,18 +437,4 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
       player.setVolume newVolume
 
   )
-
 ])
-
-
-
-
-
-
-
-
-
-
-
-
-
