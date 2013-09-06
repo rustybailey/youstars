@@ -67,9 +67,6 @@ GEM
       multi_xml (>= 0.5.2)
     httpauth (0.2.0)
     i18n (0.6.5)
-    jbuilder (1.5.1)
-      activesupport (>= 3.0.0)
-      multi_json (>= 1.2.0)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -136,6 +133,11 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.0.0)
       sprockets-rails (~> 2.0.0)
+    rails_12factor (0.0.2)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.1)
+    rails_stdout_logging (0.0.2)
     railties (4.0.0)
       actionpack (= 4.0.0)
       activesupport (= 4.0.0)
@@ -247,7 +249,6 @@ DEPENDENCIES
   devise
   hirefire-resource
   httparty
-  jbuilder (~> 1.2)
   jquery-rails
   omniauth (= 1.1.0)
   omniauth-google-oauth2 (= 0.1.17)
@@ -261,6 +262,7 @@ DEPENDENCIES
   pry-remote
   quiet_assets
   rails (= 4.0.0)
+  rails_12factor
   redis
   redis-rails
   redis-store

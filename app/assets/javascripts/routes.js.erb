@@ -1,4 +1,4 @@
-var youstars = angular.module('youstars', [], function ($routeProvider, $locationProvider) {
+var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $(document).keydown(function(e) {
     // Ctrl + H to hide UI (except player controls)
     if(e.ctrlKey) {
@@ -51,12 +51,10 @@ var youstars = angular.module('youstars', [], function ($routeProvider, $locatio
     }
   });
   $routeProvider.when('', {
-    templateUrl: '<%= asset_path("index.html") %>',
-    controller: 'indexController'
-  }).when('/test', {
     templateUrl: '<%= asset_path("home.html") %>',
+    controller: 'homeController'
   }).when('/:currentChannel', {
     templateUrl: '<%= asset_path("index.html") %>',
     controller: 'indexController'
   })
-})
+}])
