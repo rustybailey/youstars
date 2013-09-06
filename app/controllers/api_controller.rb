@@ -1,17 +1,17 @@
 class ApiController < ApplicationController
-
+  
   def load_channel_id
     
     inputs  = params[:channel].split(',')
     outputs = []
     
     inputs.each do |string|
-
+      
       if validate_channel_id(string)
         outputs << string
         next
       end
-
+      
       c = Channel.find_by_name(string)
       if c.present?
         outputs << string
@@ -26,8 +26,8 @@ class ApiController < ApplicationController
       @channel_id = outputs[0]
     else
       @channel_id = outputs
-      
-    
+    end
+
   end
 
   private
