@@ -67,21 +67,31 @@ module YoutubeApi
   end
 
   def self.channel_data_for_channel_id(channel_id)
-    channel_url = @@v3_URL + "/channels"
-    query = {
+    v3_channel_url = @@v3_URL + "/channels"
+    v3_query = {
       key: ENV['YOUTUBE_API'],
       id: channel_id,
-      part: "snippet"
+      part: 'snippet'
     }
 
-    json = JSON.parse( HTTParty.get(channel_url, query: query).body )    
+    json = JSON.parse( HTTParty.get(v3_channel_url, query: v3_query).body )    
 
-    {      
+    output = {      
       channel_id:   channel_id,
       published_at: json['items'][0]['snippet']['publishedAt'],      
       thumbnails:   json['items'][0]['snippet']['thumbnails'],
       title:        json['items'][0]['snippet']['title']
     }
+
+    v2_channel_url = "https://gdata.youtube.com/feeds/api/users/#{ channel_id }"
+    v2_query = {
+      v: 2,
+      alt: 'json'     
+    }
+    
+    output[:name] = JSON.parse( HTTParty.get(v2_channel_url, query: v2_query).body ).dig('entry', 'author', 0, 'name', '$t')
+    
+    output
   end
 
   def self.channel_stats_for_channel_id(channel_id)

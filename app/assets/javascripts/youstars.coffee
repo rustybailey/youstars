@@ -8,6 +8,7 @@ youstars.factory('userService', ['$http', ($http) ->
 
 youstars.factory('channelsService', ['$http', ($http) ->
   return {
+    fetch_channels: $http.get('/suggest/channels/jakswa')
     channels: [
       {
         "id": 3
@@ -188,13 +189,13 @@ youstars.factory('mysubscribersService', [ () ->
 
 
 
-youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', (userService, mastheadService, $timeout) ->
+youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', '$routeParams', (userService, mastheadService, $timeout, $routeParams) ->
   return {
     restrict: "E"
     replace: true
     link: (scope, element, attr) ->
-      scope.headerArray = userService.userName.split("")
-      $timeout( mastheadService.animateMasthead, 200 )
+      scope.headerArray = $routeParams.currentChannel.split("")
+      $timeout( mastheadService.animateMasthead, 1000 )
     template:
       """
       <div id="ys-header">
@@ -245,6 +246,9 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
   replace: true
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
+    channelsService.fetch_channels.then (res) ->
+      scope.channelsArray = res.data
+      $timeout( mysubscribersService.sizeMysubscribers, 0 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # $timeout( myvideosService.animateMyvideos, 0 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 200 )
@@ -253,14 +257,14 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     <div id="ys-profiles">
       <ul id="ys-profiles-list">
         <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray">
-          <a href="#" class="ys-profile-tile-content">
+          <a href="/{{channel.title}}" class="ys-profile-tile-content">
             <div class="ys-profile-tile-info">
-              <span>devinsupertramp</span>
+              <span>{{channel.title}}</span>
             </div>
-            <div class="ys-profile-tile-door-1"><img src="/assets/placeholders/avatar-test.png" /></div>
-            <div class="ys-profile-tile-door-2"><img src="/assets/placeholders/avatar-test.png" /></div>
-            <div class="ys-profile-tile-door-3"><img src="/assets/placeholders/avatar-test.png" /></div>
-            <div class="ys-profile-tile-door-4"><img src="/assets/placeholders/avatar-test.png" /></div>
+            <div class="ys-profile-tile-door-1"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-2"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
           </a>
           <a class="ys-profile-action" href="#"></a>
         </li>
@@ -317,9 +321,22 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
       list: hash.currentChannel
       index: hash.interruptedIndex
 
+  formatTime = (num) ->
+    sec_num = parseInt(num, 10)
+    hours = Math.floor(sec_num / 3600)
+    minutes = Math.floor((sec_num - (hours * 3600)) / 60)
+    seconds = sec_num - (hours * 3600) - (minutes * 60)
+    seconds = "0" + seconds  if seconds < 10
+    time = if parseInt(hours) > 0
+      minutes = "0" + minutes  if minutes < 10
+      hours + ":" + minutes + ":" + seconds
+    else if parseInt(minutes) > 0
+      minutes + ":" + seconds
+    else
+      ":" + seconds
+    time
 
   hash.onPlayerReady.then ->
-    hash.player.onStateChange 
     loadingBar = setInterval(->
       loadingBar = $(".ys-loading-bar")
       duration = hash.player.getDuration()
@@ -329,23 +346,14 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
         loadingBar.width (percentLoaded * 100) + "%"
       # unstarted (between videos)
       else loadingBar.width "100%" if hash.player.getPlayerState() is -1 and percentLoaded > 0
+
+      currentTimeFormatted = formatTime(Math.floor(currentTime))
+      durationFormatted = formatTime(duration)
+      $('.time-passed').text(currentTimeFormatted + "/")
+      $('.time-total').text(durationFormatted)
     , 100)
 
   $window.onYouTubePlayerAPIReady = ->
-    hash.player = new YT.Player("ys-player",
-      playerVars:
-        enablejsapi: 1
-        controls: 0
-        iv_load_policy: 3
-        showinfo: 0
-        loop: 1
-        modestbranding: 1
-
-      events:
-        onReady: ->
-          hash.onPlayerReady.resolve()
-        onStateChange: videoStateChange
-    )
     hash.playerAPIReady = true
     hash.afterPlayerAPIReady.resolve()
 
@@ -357,31 +365,42 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     youtubeInit.currentChannel = $routeParams.currentChannel
   player = youtubeInit.player
 
-
-
   # Load the IFrame Player API code asynchronously.
 
   # Replace the 'ys-player' element with an <iframe> and
   # YouTube player after the API code downloads.
-  youtubeInit.onPlayerReady.then ->
-    player = youtubeInit.player
-    youtubeInit.resize()
-    player.mute()
-    player.loadPlaylist
-      listType: "user_uploads"
-      list: youtubeInit.currentChannel
   youtubeInit.afterPlayerAPIReady.then(->    
+    player = youtubeInit.player = new YT.Player("ys-player",
+      playerVars:
+        enablejsapi: 1
+        controls: 0
+        iv_load_policy: 3
+        showinfo: 0
+        loop: 1
+        modestbranding: 1
+
+      events:
+        onReady: ->
+          player = youtubeInit.player
+          youtubeInit.resize()
+          player.mute()
+          player.loadPlaylist
+            listType: "user_uploads"
+            list: youtubeInit.currentChannel
+          youtubeInit.onPlayerReady.resolve()
+        onStateChange: youtubeInit.videoStateChange
+    )
 
     $(window).on "resize", youtubeInit.resize
-    $(".mute").on "click", (e) ->
+    $(".mute-container").on "click", (e) ->
       if player.isMuted()
         $(".volume").val 100
         player.unMute()
-        $(this).text "Mute"
+        $(this).find(".ss-ban").hide();
       else
         $(".volume").val 0
         player.mute()
-        $(this).text "Unmute"
+        $(this).find(".ss-ban").show();
 
     $(".previous").on "click", ->
       player.previousVideo()
@@ -399,11 +418,13 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
     $("#ys-player-controls").on "change", ".volume", ->
       newVolume = @valueAsNumber
-      $(".mute").text "Mute"  if newVolume > 0
+      if newVolume > 0
+        $(".mute-container").find(".ss-ban").hide();
+      else
+        $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
 
   )
-
 ])
 
 

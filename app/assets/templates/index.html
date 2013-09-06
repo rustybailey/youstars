@@ -74,11 +74,11 @@
 		</div>
 		<!-- #ys-subs -->
 		<ul id="ys-social-links">
-			<li><a href="/test">Facebook</a></li>
-			<li><a href="/test">Twitter</a></li>
-			<li><a href="/test">Instagram</a></li>
-			<li><a href="/test">Tumblr</a></li>
-			<li><a href="/test">LinkedIn</a></li>
+			<li><a href="/test"><i class="ss-icon ss-social">Facebook</i></i></a></li>
+			<li><a href="/test"><i class="ss-icon ss-social">Twitter</i></a></li>
+			<li><a href="/test"><i class="ss-icon ss-social">Instagram</i></a></li>
+			<li><a href="/test"><i class="ss-icon ss-social">Tumblr</i></a></li>
+			<li><a href="/test"><i class="ss-icon ss-social">LinkedIn</i></a></li>
 		</ul>
 		<!-- #ys-social-links -->
 		<br />
@@ -90,13 +90,20 @@
 	<!-- #ys-stats -->
 
 	<div id="ys-player-controls">
-		<button class="mute">Unmute</button>
+		<div class="mute-container">
+			<div class="ss-icon ss-volume"></div>
+			<div class="ss-icon ss-ban"></div>
+		</div>
 		<div class="volume-container">
 			<input class="volume" type="range" name="volume" min="0" max="100" step="1" value="0">
 		</div>
-		<button class="previous">Previous</button>
-		<button class="pause">Pause</button>
-		<button class="next">Next</button>
+		<div class="ss-icon previous">Skipback</div>
+		<div class="ss-icon pause">Pause</div>
+		<div class="ss-icon next">Skipforward</div>
+		<div class="duration-container">
+			<div class="time-passed">:00/</div>
+			<div class="time-total">:00</div>
+		</div>
 	</div><!-- #ys-player-controls -->
 
 	<div id="ys-content">
