@@ -45,13 +45,15 @@ youstars.factory('videosService', ['$http', 'userService', '$location', ($http, 
     if cache && !$location.search().skip_cache
       d = $.Deferred()
       data = angular.fromJson(cache) 
-      d.resolve(data)
-      hash.videos = data
+      d.resolve(data.videos)
+      hash.videos = data.videos
+      hash.responseData = data
       return d
     else 
       return $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
         sessionStorage.setItem(key, angular.toJson(res.data))
-        hash.videos = res.data
+        hash.responseData = res.data
+        hash.videos = res.data.videos
 
   return hash
 ])
@@ -113,9 +115,9 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
       $(e.currentTarget).addClass('slideUp currentSelection')
     scope.leave = (e) ->
       $(e.currentTarget).removeClass('slideUp')
-    scope.videosArray = videosService.videos
-    videosService.fetch_videos().then (res) ->
-      scope.videosArray = res.videos
+    scope.videosArray = ({} for ignored in [1..20]) #need empty videos at bottom
+    videosService.fetch_videos().then (videos) ->
+      scope.videosArray = videos
       $timeout( myvideosService.animateMyvideos, 200 )
       $timeout( myvideosService.removeDelayFromMyvideos, 500 )
     # $timeout( myvideosService.animateMyvideos, 200 )
@@ -157,7 +159,6 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
     channelsService.fetch_channels().then (res) ->
-      console.log "working with ", res
       scope.channelsArray = res
       $timeout( mysubscribersService.sizeMysubscribers, 0 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
