@@ -4,27 +4,31 @@ module GatherChannelData
   def self.perform(channel_id)
     channel = Channel.find channel_id
 
-    calculate_base_topics(channel)
+    calculate_topics_from_videos(channel)
   end
 
-  def self.calculate_base_topics(channel)
-    tags      = []
-    tag_freq  = Hash.new(0)
+  def self.calculate_topics_from_videos(channel)
+    topics      = []
+    topic_freq  = Hash.new(0)
 
     page_token = nil
     loop do
-      video_list = YoutubeApi.video_list(channel.youtube_uid, 50, page_token)
+      video_list = YoutubeApi.video_list(channel.youtube_id, 50, page_token)
+      Rails.logger.warn(JSON.pretty_generate(video_list))
 
       video_list[:videos].each do |video|
-        tags += video[:tags]
-        video[:tags].inject(tag_freq) { |hash, tag| hash[tag] += 1; hash }
+        topics += video[:topics]
+        video[:topics].inject(topic_freq) { |hash, topic| hash[topic] += 1; hash }
       end
 
       page_token = video_list[:page_token]
       break if page_token.nil?
     end
 
-    tags.uniq.sort_by { |n| tag_freq[n] }.reverse
+    return topics.uniq.sort_by { |n| topic_freq[n] }.reverse[0...32]
+    topics.uniq.sort_by { |n| topic_freq[n] }.reverse[0...32].each do |topic|
+      channel.calculated_topics.create(name: topic)
+    end
   end
 
 end

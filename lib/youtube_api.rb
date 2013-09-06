@@ -1,6 +1,6 @@
 module YoutubeApi
 
-  @@V3_URL = "https://www.googleapis.com/youtube/V3"
+  @@V3_URL = "https://www.googleapis.com/youtube/v3"
   @@V2_URL = "https://gdata.youtube.com/feeds/api"
 
   def self.video_list(channel_id, limit, page_token = nil)
@@ -22,7 +22,7 @@ module YoutubeApi
 
     json = JSON.parse( HTTParty.get(url, query: query).body )
 
-    json['items'][0]['contentDetails']['relatedPlaylists']['uploads']
+    json.dig('items', 0, 'contentDetails', 'relatedPlaylists', 'uploads')
   end
 
   def self.video_list_for_playlist(playlist_id, limit, page_token = nil)
@@ -38,32 +38,35 @@ module YoutubeApi
 
     json = JSON.parse( HTTParty.get(url, query: query).body )    
 
-    video_ids       = json['items'].collect { |i| i['contentDetails']['videoId'] }
+    video_ids       = json['items'].collect { |i| i.dig('contentDetails', 'videoId') }
     next_page_token = json['nextPageToken']
 
     { video_ids: video_ids, next_page_token: next_page_token }
   end
   
   def self.video_data_for_video_ids(video_ids)
-    url   = @@V3_URL + "/videos"
+    url   = "#{@@V3_URL}/videos"
     query = {
       key:    ENV['YOUTUBE_API'],
       id:     video_ids,
-      part:   'snippet,statistics',
-      fields: 'items(id,snippet(title,thumbnails,tags),statistics/viewCount)'
+      part:   'snippet,statistics,topicDetails'
+      #fields: 'items(id,snippet(title,thumbnails,tags),statistics/viewCount,topicDetails/topicIds)'
     }
 
     json = JSON.parse( HTTParty.get(url, query: query).body )    
     data = []
+    20.times { |i| Rails.logger.warn('**********') }
+    Rails.logger.warn(JSON.pretty_generate(json))
+    20.times { |i| Rails.logger.warn('**********') }
 
     json['items'].each do |item|
       data << {
         video_id:     item['id'],
-        title:        item['snippet']['title'],
-        published_at: item['snippet']['publishedAt'],
-        tags:         item['snippet']['tags'],
-        thumbnails:   item['snippet']['thumbnails'],
-        view_count:   item['statistics']['viewCount'].to_i
+        title:        item.dig('snippet', 'title'),
+        published_at: item.dig('snippet', 'publishedAt'),
+        thumbnails:   item.dig('snippet', 'thumbnails'),
+        topics:       item.dig('topicDetails', 'topicIds'),
+        view_count:   item.dig('statistics', 'viewCount').to_i
       }
     end
 
