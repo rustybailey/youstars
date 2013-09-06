@@ -177,6 +177,8 @@ youstars.factory('myvideosService', [ () ->
   return {
     animateMyvideos: () ->
       $('#ys-videos ul#ys-videos-list li.ys-video-tile').addClass('ys-video-tile-after')
+      $('#ys-videos').addClass('ys-video-after')
+      $('#ys-content').addClass('ys-content-after')
     removeDelayFromMyvideos: () ->
       $('#ys-videos ul#ys-videos-list li.ys-video-tile').removeAttr('style')
   }
@@ -221,8 +223,8 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
       scope.videosArray = res.videos
       $timeout( myvideosService.animateMyvideos, 200 )
       $timeout( myvideosService.removeDelayFromMyvideos, 500 )
-    $timeout( myvideosService.animateMyvideos, 200 )
-    $timeout( myvideosService.removeDelayFromMyvideos, 500 )
+    # $timeout( myvideosService.animateMyvideos, 200 )
+    # $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
     $scope.playVideo = youtubeInit.playVideo
   ]
@@ -230,7 +232,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     """
     <div id="ys-videos">
       <ul id="ys-videos-list">
-        <li class="ys-video-tile" ng-repeat="video in videosArray" style="transition-delay: {{$index * 100}}ms">
+        <li class="ys-video-tile" ng-repeat="video in videosArray">
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.data.views}}&nbsp;&nbsp;|&nbsp;&nbsp;{{video.data.created_at}}</h4>
@@ -240,7 +242,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
               <li>3</li>
             </ul>
           </a>
-          <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-content">
+          <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-content" style="transition-delay: {{$index * 200}}ms">
             <h3>{{video.title}}</h3>
             <img src="{{ video.thumbnails.medium.url || video.thumbnails.medium.url }}" />
           </a>
