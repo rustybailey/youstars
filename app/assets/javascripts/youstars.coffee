@@ -373,15 +373,15 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
   youtubeInit.afterPlayerAPIReady.then(->    
 
     $(window).on "resize", youtubeInit.resize
-    $(".mute").on "click", (e) ->
+    $(".mute-container").on "click", (e) ->
       if player.isMuted()
         $(".volume").val 100
         player.unMute()
-        $(this).text "Mute"
+        $(this).find(".ss-ban").hide();
       else
         $(".volume").val 0
         player.mute()
-        $(this).text "Unmute"
+        $(this).find(".ss-ban").show();
 
     $(".previous").on "click", ->
       player.previousVideo()
@@ -399,7 +399,10 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
     $("#ys-player-controls").on "change", ".volume", ->
       newVolume = @valueAsNumber
-      $(".mute").text "Mute"  if newVolume > 0
+      if newVolume > 0
+        $(".mute-container").find(".ss-ban").hide();
+      else
+        $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
 
   )
