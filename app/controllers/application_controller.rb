@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def auto_cache_key(params = {})
-    output = "controller_path=#{controller_name}##{action_name}"
-    params.each{ |k,v| output += "|#{k}=#{v}" }
+    output = []
+    {"controller_path" => "#{self.class.name}##{action_name}"}.merge( params ).each{ |k,v| output << "#{k}=#{v}" }
+    output.join("|")
   end
 end

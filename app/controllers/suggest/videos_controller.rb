@@ -4,13 +4,12 @@ class Suggest::VideosController < ApplicationController
 
   # params[:youtube_id]
   def related
-    p auto_cache_key
-    #= Rails.cache.fetch(auto_cache_key({:user_id => current_user.id}), :expires_in => 1.day ) do
-    
+    recs = Rails.cache.fetch( auto_cache_key( params.slice(:youtube_id) ), :expires_in => 1.day ) do
       url       = "https://gdata.youtube.com/feeds/api/videos/#{params[:youtube_id]}/related?v=2&alt=json"
       response  = YoutubeApi.v2_authorized_request( url, nil )
       
-      recs = response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+      response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+    end
     
 
     respond_to do |format|
