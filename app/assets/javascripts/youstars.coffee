@@ -40,6 +40,7 @@ youstars.factory('videosService', ['$http', 'userService', ($http, userService) 
   hash.fetch_videos = ->
     $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
       hash.videos = res.data
+
   return hash
 ])
 
@@ -155,7 +156,7 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     <div id="ys-profiles">
       <ul id="ys-profiles-list">
         <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray">
-          <a href="/{{channel.name}}" class="ys-profile-tile-content">
+          <a href="#/{{channel.name}}" class="ys-profile-tile-content">
             <div class="ys-profile-tile-info">
               <span>{{channel.title}}</span>
             </div>
