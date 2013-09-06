@@ -173,7 +173,7 @@ youstars.factory('mastheadService', [ () ->
   }
 ])
 
-youstars.factory('myvideosService', [ () ->
+youstars.factory('myvideosService', ['$timeout', ($timeout) ->
   return {
     animateMyvideos: () ->
       $('#ys-videos ul#ys-videos-list li.ys-video-tile').addClass('ys-video-tile-after')
@@ -181,6 +181,10 @@ youstars.factory('myvideosService', [ () ->
       $('#ys-content').addClass('ys-content-after')
     removeDelayFromMyvideos: () ->
       $('#ys-videos ul#ys-videos-list li.ys-video-tile').removeAttr('style')
+    moveMyvideosBackwards: () ->
+      $('#ys-videos').removeClass('ys-move-myvideos-forwards')
+    moveMyvideosForwards: () ->
+      $('#ys-videos').addClass('ys-move-myvideos-forwards')
   }
 ])
 
@@ -223,6 +227,12 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
       $(e.currentTarget).addClass('slideUp currentSelection')
     scope.leave = (e) ->
       $(e.currentTarget).removeClass('slideUp')
+    scope.zIndexBackwards = () ->
+      console.log('backwards')
+      $timeout( myvideosService.moveMyvideosBackwards, 200 )
+    scope.zIndexForwards = () ->
+      console.log('forwards')
+      $timeout( myvideosService.moveMyvideosForwards, 0 )
     scope.videosArray = videosService.videos
     videosService.fetch_videos().then (res) ->
       scope.videosArray = res.videos
@@ -240,7 +250,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     """
     <div id="ys-videos">
       <ul id="ys-videos-list">
-        <li data-video-id="{{video.video_id}}" class="ys-video-tile" ng-mouseenter="enter($event)" ng-mouseleave="leave($event)" ng-repeat="video in videosArray">
+        <li data-video-id="{{video.video_id}}" class="ys-video-tile" ng-mouseenter="enter($event); zIndexForwards();" ng-mouseleave="leave($event); zIndexBackwards();" ng-repeat="video in videosArray">
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.view_count | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.published_at | date: 'mediumDate'}}</h4>
