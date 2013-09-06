@@ -1032,6 +1032,7 @@ $ys-profile-tile-large-size:	230px;
 				margin-top: -7px;
 				color: #ffffff;
 				text-decoration: none;
+				cursor: pointer;
 				@include transition-property(margin, bottom);
 				@include transition-duration(0.2s);
 				h3 {
@@ -1063,6 +1064,7 @@ $ys-profile-tile-large-size:	230px;
 				float: left;
 				width: 240px;
 				height: 135px;
+				cursor: pointer;
 				position: absolute;
 				h3 {
 					display: block;
