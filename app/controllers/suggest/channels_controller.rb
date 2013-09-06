@@ -56,9 +56,9 @@ class Suggest::ChannelsController < ApiController
     # channels to which they belong
     load_channel_id
 
-    limit      = (params[:limit] || 10).to_i
+    limit      = (params[:limit] || 20).to_i
 
-    top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 10)
+    top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 15, 'viewCount')
 
     related_videos = top_videos.collect do |video|
       YoutubeApi.related_videos_for_video_id( video[:video_id] )

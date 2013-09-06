@@ -144,7 +144,7 @@ module YoutubeApi
     end
   end
 
-  def self.video_search_for_channel_id(channel_id, limit = 50, order = 'relevance')
+  def self.video_search_for_channel_id(channel_id, limit = 50, order = 'viewCount')
     search_url = @@v3_URL + '/search'
     query = {
       key: ENV['YOUTUBE_API'],
