@@ -4,11 +4,11 @@ ruby '2.0.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.0'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
 
-# Use unicorn as the app server
-gem 'unicorn'
+group :production do
+  gem 'unicorn'
+  gem 'pg'
+end
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -52,6 +52,7 @@ gem 'omniauth-google-oauth2', '0.1.17'
 gem 'youtube_it', '~> 2.3.1'
 
 group :development, :test do
+  gem 'sqlite3'
   gem 'pry', require: 'pry'
   gem 'pry-nav'
   gem 'pry-rails'
