@@ -26,7 +26,7 @@ class ApiController < ApplicationController
       @channel_id = outputs[0]
     else
       @channel_id = outputs
-    end
+      
     
   end
 

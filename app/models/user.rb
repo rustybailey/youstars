@@ -55,4 +55,22 @@ class User < ActiveRecord::Base
     user
   end
 
+  def rated_videos(score = nil)
+    Video.where(:id => ratings_relation.map(&:id))
+  end
+
+  def liked_videos(score = 3)
+    ratings_relation = ratings
+    ratings_relation = ratings_relation.where( ["score >= ?", score] ) unless score.nil?
+    
+    Video.where(:id => ratings_relation.map(&:id))
+  end
+  
+  def disliked_videos(score = 2)
+    ratings_relation = ratings
+    ratings_relation = ratings_relation.where( ["score <= ?", score] ) unless score.nil?
+    
+    Video.where(:id => ratings_relation.map(&:id))
+  end
+
 end
