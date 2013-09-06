@@ -1,14 +1,16 @@
 youstars.factory('userService', ['$http', ($http) ->
   return {
     userName: "devinsupertramp"		# STATIC PLACEHOLDER.
+    currentChannel: null
   }
 ])
 
 
 
-youstars.factory('channelsService', ['$http', ($http) ->
+youstars.factory('channelsService', ['$http', 'userService', ($http, userService) ->
   return {
-    fetch_channels: $http.get('/suggest/channels/jakswa')
+    fetch_channels: ->
+      $http.get("/suggest/channels/#{userService.currentChannel}")
     channels: [
       {
         "id": 3
@@ -99,8 +101,8 @@ youstars.factory('channelsService', ['$http', ($http) ->
 
 
 
-youstars.factory('videosService', ['$http', ($http) ->
-  return {
+youstars.factory('videosService', ['$http', 'userService', ($http, userService) ->
+  hash = 
     videos: [
       {
         "title": "TEST 1: Angry Birds All 27 Golden Eggs Locations Guide"
@@ -157,7 +159,11 @@ youstars.factory('videosService', ['$http', ($http) ->
       { "title": "TEST 39: Angry Birds All 27 Golden Eggs Locations Guide", "youtube_id": "w__7apOnsYk", "tier": 1, "channel_name": "tinygalaxy", "data": { "comments": 96, "created_at": "2013-09-05T02:02:20Z", "dislikes": 989, "favorites": null, "id": 1638752524, "likes": 1494, "video_id": 3122710, "views": 2381116 } }
       { "title": "TEST 40: Angry Birds All 27 Golden Eggs Locations Guide", "youtube_id": "w__7apOnsYk", "tier": 1, "channel_name": "tinygalaxy", "data": { "comments": 96, "created_at": "2013-09-05T02:02:20Z", "dislikes": 989, "favorites": null, "id": 1638752524, "likes": 1494, "video_id": 3122710, "views": 2381116 } }
     ]
-  }
+
+  hash.fetch_videos = ->
+    $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
+      hash.videos = res.data
+  return hash
 ])
 
 youstars.factory('mastheadService', [ () ->
@@ -211,6 +217,10 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   replace: true
   link: (scope, element, attr) ->
     scope.videosArray = videosService.videos
+    videosService.fetch_videos().then (res) ->
+      scope.videosArray = res.data
+      $timeout( myvideosService.animateMyvideos, 200 )
+      $timeout( myvideosService.removeDelayFromMyvideos, 500 )
     $timeout( myvideosService.animateMyvideos, 200 )
     $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
@@ -246,7 +256,7 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
   replace: true
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
-    channelsService.fetch_channels.then (res) ->
+    channelsService.fetch_channels().then (res) ->
       scope.channelsArray = res.data
       $timeout( mysubscribersService.sizeMysubscribers, 0 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
@@ -257,14 +267,14 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     <div id="ys-profiles">
       <ul id="ys-profiles-list">
         <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray">
-          <a href="/{{channel.title}}" class="ys-profile-tile-content">
+          <a href="/{{channel.name}}" class="ys-profile-tile-content">
             <div class="ys-profile-tile-info">
               <span>{{channel.title}}</span>
             </div>
-            <div class="ys-profile-tile-door-1"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
-            <div class="ys-profile-tile-door-2"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
-            <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
-            <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.high.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-1"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-2"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
           <a class="ys-profile-action" href="#"></a>
         </li>
@@ -307,7 +317,7 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
     onPlayerReady: $.Deferred()
     player: null
     resize: resize
-    currentChannel: userService.userName
+    currentChannel: userService.currentChannel
 
   hash.playVideo = (videoId) ->
     hash.onPlayerReady.then ->
@@ -362,7 +372,9 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
 
 youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', ($window, $scope, $routeParams, userService, youtubeInit)->
   if $routeParams.currentChannel
+    #oof, too fast, too little knowledge of angular going around
     youtubeInit.currentChannel = $routeParams.currentChannel
+    userService.currentChannel = $routeParams.currentChannel
   player = youtubeInit.player
 
   # Load the IFrame Player API code asynchronously.
@@ -426,16 +438,3 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
   )
 ])
-
-
-
-
-
-
-
-
-
-
-
-
-
