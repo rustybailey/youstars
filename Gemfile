@@ -42,6 +42,7 @@ group :doc do
 end
 
 gem 'protected_attributes' # for attr_accessible
+gem "hirefire-resource"
 
 gem 'devise'
 gem 'omniauth', '1.1.0'

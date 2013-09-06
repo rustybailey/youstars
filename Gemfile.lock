@@ -61,6 +61,7 @@ GEM
     fssm (0.2.10)
     hashie (1.2.0)
     hike (1.2.3)
+    hirefire-resource (0.2.0)
     httparty (0.11.0)
       multi_json (~> 1.0)
       multi_xml (>= 0.5.2)
@@ -246,6 +247,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   compass-rails (~> 2.0.alpha.0)
   devise
+  hirefire-resource
   httparty
   jbuilder (~> 1.2)
   jquery-rails
