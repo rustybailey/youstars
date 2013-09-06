@@ -30,6 +30,51 @@ class UserDataJob
     build_watch_history( u, user_oauth_token )
     build_view_weights( u, user_oauth_token, "like", 1 )
     build_view_weights( u, user_oauth_token, "dislike", -1 )
+    build_suggestions_list(u)
+
+
+  end
+
+  def self.build_suggestions_list(u)
+
+    # Some naive secret sauce -- 10 videos that are that are the most frequently re-watched and liked; 10 that are the most frequently re-watched but not voted; 10 that are liked ordered by like time.
+    ids = Set.new ( Video.where(:id => u.views.where(:weight => 1).order("unique_view_count desc, weight desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id) )
+    ids.merge( Video.where( :id => u.views.where(:weight => 0).order("unique_view_count desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id ) )
+    ids.merge( Video.where( :id => u.views.order("weight desc, updated_at desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id ) )
+
+    recs = []
+    ids.each do |youtube_id|
+      url       = "https://gdata.youtube.com/feeds/api/videos/#{youtube_id}/related?v=2&alt=json"
+      recs += Rails.cache.fetch( url , :expires_in => 1.day ){ YoutubeApi.v2_authorized_request( url, nil ).parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) } }
+    end
+
+    recs.select!{ |v| !Bragi.test_video(u, v[:id]) }
+
+    recs.sort!{|a,b| b[:statistics][:views].to_i <=> a[:statistics][:views].to_i }
+
+    cat_count     = {}
+    channel_count = {}
+    recs_out      = []
+
+    recs.each do |r|
+      next if cat_count[ r[:category] ].present? && cat_count[ r[:category] ] >= 4
+      next if channel_count[ r[:channel_name] ].present? && channel_count[ r[:channel_name] ] >= 2
+
+      p [r[:category], cat_count[ r[:category] ].present?,  (cat_count[ r[:category] ] >= 4 if cat_count[ r[:category] ].present?) ]
+
+      recs_out << r
+
+      cat_count[ r[:category] ]         = 0 unless cat_count[ r[:category] ].present?
+      cat_count[ r[:category] ]         += 1
+
+      channel_count[ r[:channel_name] ] = 0 unless channel_count[ r[:channel_name] ].present?
+      channel_count[ r[:channel_name] ] += 1
+
+    end
+
+    u.update_attributes(
+      :custom_suggestions => recs_out.to_json
+    )
 
 
   end

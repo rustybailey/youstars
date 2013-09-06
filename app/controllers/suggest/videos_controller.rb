@@ -12,40 +12,9 @@ class Suggest::VideosController < ApplicationController
 
   def suggested
 
-    # Some naive secret sauce -- 10 videos that are that are the most frequently re-watched and liked; 10 that are the most frequently re-watched but not voted; 10 that are liked ordered by like time.
-    ids = Set.new ( Video.where(:id => current_user.views.where(:weight => 1).order("unique_view_count desc, weight desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id) )
-    ids.merge( Video.where( :id => current_user.views.where(:weight => 0).order("unique_view_count desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id ) )
-    ids.merge( Video.where( :id => current_user.views.order("weight desc, updated_at desc").select("video_id").limit(10).map(&:video_id) ).select("youtube_id").map(&:youtube_id ) )
-
-    recs = []
-    ids.each do |youtube_id|
-      url       = "https://gdata.youtube.com/feeds/api/videos/#{youtube_id}/related?v=2&alt=json"
-      recs += Rails.cache.fetch( url , :expires_in => 1.day ){ YoutubeApi.v2_authorized_request( url, nil ).parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) } }
+    respond_to do |format|
+      format.json { render :json => current_user.custom_suggestions, :callback => params[:callback] }
     end
-
-    recs.sort!{|a,b| b[:statistics][:views].to_i <=> a[:statistics][:views].to_i }
-
-    cat_count     = {}
-    channel_count = {}
-    recs_out      = []
-
-    recs.each do |r|
-      p r[:category], r[:channel]
-      next if cat_count[ r[:category] ].present? && cat_count[ r[:category] ] >= 4
-      next if channel_count[ r[:channel] ].present? && channel_count[ r[:channel] ] >= 2
-      p [r[:category], cat_count[ r[:category] ].present?,  (cat_count[ r[:category] ] >= 4 if cat_count[ r[:category] ].present?) ]
-
-      recs_out << r
-
-      cat_count[ r[:category] ]     = 0 unless cat_count[ r[:category] ].present?
-      channel_count[ r[:channel] ]  = 0 unless channel_count[ r[:channel] ].present?
-
-      cat_count[ r[:category] ]     += 1
-      channel_count[ r[:channel] ]  += 1
-
-    end
-
-
 
   end
 
