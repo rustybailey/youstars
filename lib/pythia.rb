@@ -44,7 +44,7 @@ module Pythia
       term_frequency_0 = Math.log( target_0.count )
       term_frequency_1 = Math.log( target_1.count )
 
-      inverse_document_frequency = Math.log( Topic.count.to_f / term.total )
+      inverse_document_frequency = Math.log( Channel.count.to_f / term.total )
 
       hash.merge( { term => [term_frequency_0, term_frequency_1, inverse_document_frequency] } )
 
@@ -60,8 +60,7 @@ module Pythia
       sum += v
     end
 
-    sum
-      
+    sum      
   end
 
   def self.string_score(target_0, target_1, space)
