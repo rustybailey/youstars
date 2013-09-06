@@ -12,6 +12,7 @@ gem 'unicorn'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'angularjs-rails'
 
 gem 'httparty'
 gem 'redis'
