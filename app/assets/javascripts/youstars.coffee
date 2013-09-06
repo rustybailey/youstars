@@ -321,6 +321,21 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
       list: hash.currentChannel
       index: hash.interruptedIndex
 
+  formatTime = (num) ->
+    sec_num = parseInt(num, 10)
+    hours = Math.floor(sec_num / 3600)
+    minutes = Math.floor((sec_num - (hours * 3600)) / 60)
+    seconds = sec_num - (hours * 3600) - (minutes * 60)
+    seconds = "0" + seconds  if seconds < 10
+    time = if parseInt(hours) > 0
+      minutes = "0" + minutes  if minutes < 10
+      hours + ":" + minutes + ":" + seconds
+    else if parseInt(minutes) > 0
+      minutes + ":" + seconds
+    else
+      ":" + seconds
+    time
+
   hash.onPlayerReady.then ->
     loadingBar = setInterval(->
       loadingBar = $(".ys-loading-bar")
@@ -331,6 +346,11 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
         loadingBar.width (percentLoaded * 100) + "%"
       # unstarted (between videos)
       else loadingBar.width "100%" if hash.player.getPlayerState() is -1 and percentLoaded > 0
+
+      currentTimeFormatted = formatTime(Math.floor(currentTime))
+      durationFormatted = formatTime(duration)
+      $('.time-passed').text(currentTimeFormatted + "/")
+      $('.time-total').text(durationFormatted)
     , 100)
 
   $window.onYouTubePlayerAPIReady = ->

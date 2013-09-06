@@ -466,6 +466,15 @@ select {
 			opacity: 0.6;
 		}
 	}
+	.duration-container {
+		float: right;
+		clear: both;
+		color: white;
+		font-size: 10px;
+		> * {
+			float: left;
+		}
+	}
 }
 
 #ys-player-controls .mute-container {
