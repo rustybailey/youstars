@@ -510,6 +510,18 @@ select {
 		background: $red;
 		@include transition-property(width);
 		@include transition-duration(.1s);
+		float: left;
+	}
+	#ys-seek-bar{
+		width: 1px;
+		height: 100%;
+		background: #333;
+		@include transition-property(width);
+		@include transition-duration(.1s);	
+		display: block; 
+		float:left;
+		position: absolute;
+		left: 0px;
 	}
 	&:hover {
 		height: 40px;
@@ -620,13 +632,26 @@ select {
 			opacity: 0.6;
 		}
 	}
-	.duration-container {
-		float: right;
+	.video-info-container {
 		clear: both;
 		color: white;
 		font-size: 10px;
+		width: 100%;
+		margin: 0;
 		> * {
 			float: left;
+		}
+		.video-title {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			width: 210px;
+		}
+		.duration-container {
+			float: right;
+			> * {
+				float: left;
+			}
 		}
 	}
 }
