@@ -28,6 +28,7 @@ module Pythia
 
 
   def self.score(channel_data, target_data = nil, data_space = nil)
+
     # geometric mean of subscribers and views 
     score = (channel_data[:subscriber_count] * channel_data[:view_count]) ** 0.5
 

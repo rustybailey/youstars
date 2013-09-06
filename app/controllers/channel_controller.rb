@@ -70,7 +70,7 @@ class ChannelController < ApiController
     stats_series   = JSON.parse( redis.get( "#{@channel_id}_stats_series" ) || '[]' )
     stats_series ||= []
 
-    if stats_series.length < 3 or Time.now.to_i > (stats_series.last['timestamp'] + 10.minutes.to_i)
+    if stats_series.length < 3 or Time.now.to_i > (stats_series.last['timestamp'] + 60.minutes.to_i)
       new_stats = YoutubeApi.channel_stats_for_channel_id(@channel_id)
       stats_series << { timestamp: Time.now.to_i }.merge( new_stats )
       stats_series  = stats_series.last(3)

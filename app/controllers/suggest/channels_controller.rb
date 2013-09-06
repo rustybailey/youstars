@@ -1,6 +1,48 @@
 class Suggest::ChannelsController < ApiController
 
-#  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
+
+  def related
+    # retrieve the most popular videos for the target channel
+    # then retrieve the related videos for those and find the
+    # channels to which they belong
+    load_channel_id
+    
+    limit      = (params[:limit] || 20).to_i
+    channels = Pythia.related(@channel_id).first(limit)
+    
+    render :json => channels
+  end
+
+  def most_viewed
+    url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
+    response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+    
+    recs = response.parsed_response["feed"]["entry"].map do |entry|
+      entry.dig("author", 0, "yt$userID", "$t")
+    end
+    
+    recs = recs.collect do |id|
+      YoutubeApi.channel_data_for_channel_id(id)
+    end
+
+    render :json => recs
+  end
+
+  def most_subscribed
+    url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json"
+    response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+    
+    recs = response.parsed_response["feed"]["entry"].map do |entry|
+      entry.dig("author", 0, "yt$userID", "$t")
+    end
+    
+    recs = recs.collect do |id|
+      YoutubeApi.channel_data_for_channel_id(id)
+    end
+
+    render :json => recs
+  end
 
   def user
     # retrieve youtube's recommended videos for a user
@@ -120,18 +162,6 @@ class Suggest::ChannelsController < ApiController
     channel_recs.flatten!
 
     render :json => channel_recs
-  end
-
-  def related
-    # retrieve the most popular videos for the target channel
-    # then retrieve the related videos for those and find the
-    # channels to which they belong
-    load_channel_id
-
-    limit      = (params[:limit] || 20).to_i
-    channels = Pythia.related(@channel_id).first(limit)
-
-    render :json => channels
   end
 
   def topics
