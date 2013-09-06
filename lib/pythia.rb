@@ -1,6 +1,7 @@
-module Pythia
-  require 'youtube_api.rb'
+require 'youtube_api.rb'
 
+module Pythia
+  
   def self.related(channel_id, limit = 20, width = 15)
     top_videos = YoutubeApi.video_search_for_channel_id(channel_id, width, 'viewCount')
     
@@ -30,6 +31,37 @@ module Pythia
     score *= 0.8 if channel_data[:description] == ""
 
     score
+  end
+
+  def self.channel_score_by_topics(channel_0, channel_1)
+    target_0 = channel_0.topics
+    target_1 = channel_1.topics
+
+    common_terms = target_0 & target_1
+
+    subscores = common_terms.inject({}) do |hash, term|
+      
+      term_frequency_0 = Math.log( target_0.count )
+      term_frequency_1 = Math.log( target_1.count )
+
+      inverse_document_frequency = Math.log( Topic.count.to_f / term.total )
+
+      hash.merge( { term => [term_frequency_0, term_frequency_1, inverse_document_frequency] } )
+
+    end
+
+    term_scores = {}
+    subscores.each_pair do |k, v|
+      term_scores[k] = v.inject(1) { |ac, v| ac * v }
+    end
+
+    sum = 0
+    term_scores.each_pair do |k, v|
+      sum += v
+    end
+
+    sum
+      
   end
 
   def self.string_score(target_0, target_1, space)
