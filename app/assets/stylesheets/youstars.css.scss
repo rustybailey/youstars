@@ -224,7 +224,7 @@ select {
 						width: 100%;
 						font-size: 12px;
 						line-height: 20px;
-						font-weight: 700;
+						font-weight: 900;
 						line-height: auto;
 						text-transform: uppercase;
 						white-space: normal;
@@ -1059,7 +1059,7 @@ $ys-profile-tile-large-size:	230px;
 					@include transition-delay(0.8s);
 				}
 				h4 {
-					font-weight: 700;
+					font-weight: 900;
 					font-size: 11px;
 					line-height: 20px;
 					text-transform: uppercase;
