@@ -7,39 +7,51 @@ youstars.factory('userService', ['$http', ($http) ->
 
 
 
-youstars.factory('channelsService', ['$http', 'userService', ($http, userService) ->
-  hash =
-    channels: []
+youstars.factory('channelsService', ['$http', 'userService', '$location',
+  ($http, userService, $location) ->
+    hash =
+      channels: []
 
-  hash.fetch_channels = ->
-    channel = userService.currentChannel
-    key = "fetch_channels:#{channel}"
-    console.log '  key is ', key
-    cache = sessionStorage.getItem(key)
-    if cache
-      console.log '::cache hit for channels', cache
-      d = $.Deferred()
-      d.resolve(angular.fromJson(cache))
-      return d
-    else 
-      console.log '::cache miss for channels'
-      return $http.get("/suggest/channels/#{channel}").then (res) ->
-        console.log 'returned'
-        sessionStorage.setItem(key, angular.toJson(res.data))
-        hash.channels = res.data
+    hash.fetch_channels = ->
+      # storing results of this request in session storage, so back-and-
+      # forth navigation can be faster
+      channel = userService.currentChannel
+      key = "fetch_channels:#{channel}"
+      cache = sessionStorage.getItem(key)
+      if cache && !$location.search().skip_cache
+        d = $.Deferred()
+        data = angular.fromJson(cache) 
+        d.resolve(data)
+        hash.channels = data
+        return d
+      else 
+        return $http.get("/suggest/channels/#{channel}").then (res) ->
+          sessionStorage.setItem(key, angular.toJson(res.data))
+          hash.channels = res.data
 
-  return hash
+    return hash
 ])
 
 
 
-youstars.factory('videosService', ['$http', 'userService', ($http, userService) ->
+youstars.factory('videosService', ['$http', 'userService', '$location', ($http, userService, $location) ->
   hash = 
     videos: []
 
   hash.fetch_videos = ->
-    $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
-      hash.videos = res.data
+    channel = userService.currentChannel
+    key = "fetch_videos:#{channel}"
+    cache = sessionStorage.getItem(key)
+    if cache && !$location.search().skip_cache
+      d = $.Deferred()
+      data = angular.fromJson(cache) 
+      d.resolve(data)
+      hash.videos = data
+      return d
+    else 
+      return $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
+        sessionStorage.setItem(key, angular.toJson(res.data))
+        hash.videos = res.data
 
   return hash
 ])
@@ -151,11 +163,14 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # $timeout( myvideosService.animateMyvideos, 0 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 200 )
+  controller: ($scope,$element,$attrs) ->
+    $scope.nameIsntPoop = (item) ->
+      !item.name.match(/[ .]/)?
   template:
     """
     <div id="ys-profiles">
       <ul id="ys-profiles-list">
-        <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray">
+        <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray | filter:nameIsntPoop">
           <a href="#/{{channel.name}}" class="ys-profile-tile-content">
             <div class="ys-profile-tile-info">
               <span>{{channel.title}}</span>
