@@ -461,10 +461,13 @@ select {
 				text-decoration: none;
 				color: white;
 				.ss-icon {
-					font-size: 30px;
-					position: relative;
-					top: 15px;
-					left: 7px;
+					display: block;
+					float: left;
+					width: 45px;
+					height: 45px;
+					font-size: 24px;
+					text-align: center;
+					line-height: 50px;
 				}
 			}
 			a:hover {
@@ -527,31 +530,6 @@ select {
 	position: absolute;
 	z-index: 5;
 	@include box-sizing(border-box);
-
-	#ys-stats {
-		display: block;
-		float: left;
-		#ys-subs {
-			display: block;
-			float: left;
-			height: 45px;
-		}
-		ul#ys-social-links {
-			display: block;
-			float: left;
-			li {
-				display: block;
-				float: left;
-				width: 45px;
-				height: 45px;
-			}
-		}
-		#ys-views {
-			display: block;
-			float: left;
-			height: 45px;
-		}
-	}
 
 	#ys-content {
 		display: block;
