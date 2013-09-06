@@ -6,7 +6,7 @@ class CreateChannelsTopicsTable < ActiveRecord::Migration
       t.references :topic
     end
 
-    add_index :channels_topics, [:channel_id, :topic_id]
+    add_index :channels_topics, [:channel_id, :topic_id], :unique => true
     add_index :channels_topics, :topic_id
   end
 
