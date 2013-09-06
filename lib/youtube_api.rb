@@ -71,7 +71,7 @@ module YoutubeApi
     v3_query = {
       key: ENV['YOUTUBE_API'],
       id: channel_id,
-      part: 'snippet,contentDetails,status'
+      part: 'snippet'
     }
 
     json = JSON.parse( HTTParty.get(v3_channel_url, query: v3_query).body )    
