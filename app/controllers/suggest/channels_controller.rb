@@ -56,33 +56,10 @@ class Suggest::ChannelsController < ApiController
     # channels to which they belong
     load_channel_id
 
-#    channels = Rails.cache.fetch("related_#{ @channel_id }", :expires_in => 1.day) do
-      
-      limit      = (params[:limit] || 20).to_i
+    limit      = (params[:limit] || 20).to_i
+    channels = Pythia.related(@channel_id).first(limit)
 
-      top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 50, 'viewCount')
-
-      related_videos = top_videos.collect do |video|
-        YoutubeApi.related_videos_for_video_id( video[:video_id] )
-      end
-      related_videos.flatten!
-      
-      channel_videos = Hash.new(0)
-      related_videos.each do |video|
-        channel_videos[video[:channel_id]] += 1 unless video[:channel_id] == @channel_id
-      end
-
-      channels = channel_videos.keys.sort { |a, b| channel_videos[b] <=> channel_videos[a] } # descending
-      channels = channels.first(limit * 3)
-
-      channels = YoutubeApi.channel_data_for_channel_id(channels)
-
-      channels.sort! { |a, b| b[:subscriber_count] <=> a[:subscriber_count] } # descending
-
-      channels = channels.first(limit).to_json
-#    end
-
-    render :json => channels
+    render :json => channels #@channel_id
   end
 
   def topics
