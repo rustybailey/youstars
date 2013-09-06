@@ -22,6 +22,13 @@ Youstars::Application.configure do
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
 
+  # Cache Store
+  rails_root          = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
+  rails_env           = ENV['RAILS_ENV'] || 'development'
+  resque_config       = YAML.load_file(rails_root + '/config/resque.yml')
+  config.cache_store  = :redis_store, resque_config[rails_env]
+
+
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.

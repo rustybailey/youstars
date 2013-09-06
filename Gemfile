@@ -16,6 +16,8 @@ gem 'httparty'
 gem 'redis'
 
 gem "redis"
+gem 'redis-store'
+gem 'redis-rails'
 gem "resque", '~> 1.22.0'
 gem "resque-scheduler"
 gem "resque-retry"

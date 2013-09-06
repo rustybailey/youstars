@@ -1,16 +1,25 @@
 class Suggest::VideosController < ApplicationController
 
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:related]
 
   # params[:youtube_id]
   def related
-    url       = "https://gdata.youtube.com/feeds/api/videos/#{params[:youtube_id]}/related?v=2&alt=json"
-    response  = YoutubeApi.v2_authorized_request( url, nil )
-    recs      = response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+    p auto_cache_key
+    #= Rails.cache.fetch(auto_cache_key({:user_id => current_user.id}), :expires_in => 1.day ) do
+    
+      url       = "https://gdata.youtube.com/feeds/api/videos/#{params[:youtube_id]}/related?v=2&alt=json"
+      response  = YoutubeApi.v2_authorized_request( url, nil )
+      
+      recs = response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+    
 
     respond_to do |format|
       format.json { render :json => recs, :callback => params[:callback] }
     end
+  end
+
+
+  def suggested
 
   end
 
@@ -57,6 +66,7 @@ class Suggest::VideosController < ApplicationController
       format.json { render :json => recs, :callback => params[:callback] }
     end
   end
+
 
   def popular
     url       = "https://gdata.youtube.com/feeds/api/standardfeeds/most_popular"
