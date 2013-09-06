@@ -85,7 +85,8 @@ module YoutubeApi
         channel_id:       item['id'],
         published_at:     item['snippet']['publishedAt'],      
         thumbnails:       item['snippet']['thumbnails'],
-         title:            item['snippet']['title'],
+        title:            item['snippet']['title'],
+        description:      item['snippet']['description'],
         view_count:       item['statistics']['viewCount'].to_i,
         subscriber_count: item['statistics']['subscriberCount'].to_i
       }
