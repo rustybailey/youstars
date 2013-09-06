@@ -510,6 +510,18 @@ select {
 		background: $red;
 		@include transition-property(width);
 		@include transition-duration(.1s);
+		float: left;
+	}
+	#ys-seek-bar{
+		width: 1px;
+		height: 100%;
+		background: #333;
+		@include transition-property(width);
+		@include transition-duration(.1s);	
+		display: block; 
+		float:left;
+		position: absolute;
+		left: 0px;
 	}
 	&:hover {
 		height: 40px;

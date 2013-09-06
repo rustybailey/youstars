@@ -462,5 +462,12 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
       player.seekTo(pointInVideo)
 
+    $("#ys-player-bar").on "mousemove", (e) ->
+      $("#ys-seek-bar").css("left", e.pageX )
+
+    $("#ys-player-bar").on "mouseleave", (e) ->
+      $("#ys-seek-bar").css("left", "0px")
+
+
   )
 ])
