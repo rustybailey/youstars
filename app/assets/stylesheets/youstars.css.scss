@@ -461,10 +461,13 @@ select {
 				text-decoration: none;
 				color: white;
 				.ss-icon {
-					font-size: 30px;
-					position: relative;
-					top: 15px;
-					left: 7px;
+					display: block;
+					float: left;
+					width: 45px;
+					height: 45px;
+					font-size: 24px;
+					text-align: center;
+					line-height: 50px;
 				}
 			}
 			a:hover {
@@ -527,31 +530,6 @@ select {
 	position: absolute;
 	z-index: 5;
 	@include box-sizing(border-box);
-
-	#ys-stats {
-		display: block;
-		float: left;
-		#ys-subs {
-			display: block;
-			float: left;
-			height: 45px;
-		}
-		ul#ys-social-links {
-			display: block;
-			float: left;
-			li {
-				display: block;
-				float: left;
-				width: 45px;
-				height: 45px;
-			}
-		}
-		#ys-views {
-			display: block;
-			float: left;
-			height: 45px;
-		}
-	}
 
 	#ys-content {
 		display: block;
@@ -1051,10 +1029,12 @@ $ys-profile-tile-large-size:	230px;
 				@include transition-property(margin, bottom);
 				@include transition-duration(0.2s);
 				h3 {
+					height: 72px;
 					font-weight: 100;
 					font-size: 18px;
 					line-height: 24px;
 					margin: 0 0 10px 0;
+					overflow: hidden;
 					@include opacity(0);
 					@include transition-property(opacity);
 					@include transition-delay(0.8s);
@@ -1093,6 +1073,7 @@ $ys-profile-tile-large-size:	230px;
 				h3 {
 					display: block;
 					width: 220px;
+					height: 125px;
 					padding: 5px 10px;
 					font-size: 10px;
 					position: absolute;
@@ -1106,7 +1087,8 @@ $ys-profile-tile-large-size:	230px;
 					@include text-shadow(0 1px 1px #000000);
 					@include transition-property(opacity);
 					@include transition-duration(0.33s);
-					@include opacity(0.75);
+					@include opacity(0.8);
+					@include background-image(linear-gradient(#000000, transparent 30%, transparent)); 
 				}
 				img {
 					display: block;
