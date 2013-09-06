@@ -65,6 +65,44 @@ youstars.factory('mastheadService', [ () ->
   }
 ])
 
+youstars.factory('statsService', ['$routeParams', '$filter', ($routeParams, $filter) ->
+  return {
+    getStats: () ->
+      channel = $routeParams.currentChannel
+      $.ajax
+        url: "http://youstars.dev/channel/" + channel + "/stream"
+        success: (data) =>
+          stats =
+            views: Math.floor(data.view_count)
+            subs: Math.floor(data.subscriber_count)
+          $('#ys-views strong').data('stat', stats.views)
+          $('#ys-subs strong').data('stat', stats.subs)
+
+    animateStats: () ->
+      $('#ys-views strong, #ys-subs strong').each (index) ->
+        target = this
+        targetNum = parseInt($(target).data('stat'))
+        baseNum = 0
+        incrementBy = (if Math.abs(targetNum) < 50 then 1 else Math.abs(Math.round(targetNum / 50)))
+        interval = setInterval(->
+          if targetNum > 0
+            $(target).html $filter('number')(baseNum)
+            baseNum += incrementBy
+            if baseNum > targetNum
+              $(target).html $filter('number')(targetNum)
+              clearInterval interval
+          else if targetNum < 0
+            $(target).html $filter('number')(baseNum)
+            baseNum -= incrementBy
+            if baseNum < targetNum
+              $(target).html $filter('number')(targetNum)
+              clearInterval interval
+          else
+            $(target).html $filter('number')(targetNum)
+        , 10)
+  }
+])
+
 youstars.factory('myvideosService', ['$timeout', ($timeout) ->
   return {
     animateMyvideos: () ->
@@ -90,7 +128,15 @@ youstars.factory('mysubscribersService', [ () ->
   }
 ])
 
-
+youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeParams', (userService, statsService, $timeout, $routeParams) ->
+  return {
+    restrict: "E"
+    replace: true
+    link: (scope, element, attr) ->
+      $timeout( statsService.getStats, 0 )
+      $timeout( statsService.animateStats, 1000 )
+  }
+])
 
 
 youstars.directive('masthead', ['userService', 'mastheadService', '$timeout', '$routeParams', (userService, mastheadService, $timeout, $routeParams) ->
