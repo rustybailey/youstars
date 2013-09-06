@@ -1010,6 +1010,7 @@ $ys-profile-tile-large-size:	230px;
 	overflow-x: scroll;
 	overflow-y: hidden;
 	z-index: 15;
+	background: transparent url("/assets/videos-background.png") repeat-x 0 0;
 	@include transition-property(bottom);
 	@include transition-duration(0.2s);
 	ul#ys-videos-list {
@@ -1143,7 +1144,6 @@ $ys-profile-tile-large-size:	230px;
 	}
 }
 #ys-videos.ys-video-after {
-	background: transparent url("/assets/videos-background.png") repeat-x 0 0;
 	bottom: -20px;
 }
 

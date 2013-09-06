@@ -242,7 +242,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
               <li>3</li>
             </ul>
           </a>
-          <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-content" style="transition-delay: {{$index * 200}}ms">
+          <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-content" style="transition-delay: {{$index * 100}}ms">
             <h3>{{video.title}}</h3>
             <img src="{{ video.thumbnails.medium.url || video.thumbnails.medium.url }}" />
           </a>
