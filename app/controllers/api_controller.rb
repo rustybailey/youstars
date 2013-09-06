@@ -38,4 +38,11 @@ class ApiController < ApplicationController
 
   end
 
+
+  def auto_cache_key(params = {})
+    output = []
+    {"controller_path" => "#{self.class.name}##{action_name}"}.merge( params ).each{ |k,v| output << "#{k}=#{v}" }
+    output.join("|")
+  end
+
 end
