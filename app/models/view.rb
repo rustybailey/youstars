@@ -9,4 +9,8 @@ class View < ActiveRecord::Base
     update_attributes( :unique_view_count => unique_views.count )
   end
 
+  after_create do
+    Bragi.register_view(user.guid, video.youtube_id)
+ end
+
 end

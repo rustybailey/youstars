@@ -59,7 +59,8 @@ module YoutubeApi
 
     {      
       video_id:     video_id,
-      published_at: json['items'][0]['snippet']['publishedAt'],      
+      channel_id:   json['items'][0]['snippet']['channelId'],
+      published_at: json['items'][0]['snippet']['publishedAt'],
       thumbnails:   json['items'][0]['snippet']['thumbnails'],
       title:        json['items'][0]['snippet']['title'],
       view_count:   json['items'][0]['statistics']['viewCount'].to_i
