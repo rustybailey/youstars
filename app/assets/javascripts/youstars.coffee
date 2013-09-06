@@ -218,6 +218,11 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   restrict: "E"
   replace: true
   link: (scope, element, attr) ->
+    scope.enter = (e) ->
+      $('.ys-video-tile').removeClass('slideUp')
+      $(e.currentTarget).addClass('slideUp')
+    scope.leave = (e) ->
+      $(e.currentTarget).removeClass('slideUp')
     scope.videosArray = videosService.videos
     videosService.fetch_videos().then (res) ->
       scope.videosArray = res.videos
@@ -227,12 +232,15 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     # $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
     $scope.playVideo = youtubeInit.playVideo
+    $scope.$on('playVideoMayne', (ev, arg) ->
+      $scope.playVideo(arg)
+    )
   ]
   template:
     """
     <div id="ys-videos">
       <ul id="ys-videos-list">
-        <li class="ys-video-tile" ng-repeat="video in videosArray">
+        <li data-video-id="{{video.video_id}}" class="ys-video-tile" ng-mouseenter="enter($event)" ng-mouseleave="leave($event)" ng-repeat="video in videosArray">
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.view_count | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.published_at | date: 'mediumDate'}}</h4>

@@ -2,8 +2,47 @@ var youstars = angular.module('youstars', [], function ($routeProvider, $locatio
   $locationProvider.html5Mode(true);
   $(document).keydown(function(e) {
     // Ctrl + H to hide UI (except player controls)
-    if(e.ctrlKey && e.keyCode === 72) {
-      $('#ys-profiles, #ys-stats, #ys-content, #ys-videos, #ys-player-controls').fadeToggle();
+    if(e.ctrlKey) {
+      if(e.keyCode === 72) {
+        $('#ys-profiles, #ys-stats, #ys-content, #ys-videos, #ys-player-controls').fadeToggle();
+      }
+    }
+    // Press left/right arrows and enter to select video from bottom list
+    var highlighted = $('.ys-video-tile.slideUp');
+    if(e.keyCode === 39) {
+      if(highlighted.length && highlighted.next().length) {
+        highlighted.removeClass('slideUp');
+        var next = highlighted.next();
+        next.addClass('slideUp');
+        if(next.offset().left + next.width() > $(document).width()) {
+          var diff = next.offset().left + next.width() - $(document).width();
+          var diffdiff = next.width() - diff;
+          var currScroll = $('#ys-videos').scrollLeft();
+          $('#ys-videos').animate({scrollLeft: currScroll + $(document).width() - diffdiff - 7}, 500);
+        }
+      } else {
+        highlighted.removeClass('slideUp');
+        $('.ys-video-tile').eq(0).addClass('slideUp');
+        $('#ys-videos').animate({scrollLeft: 0}, 500);
+      }
+    } else if(e.keyCode === 37) {
+      if(highlighted.length && highlighted.prev().length) {
+        highlighted.removeClass('slideUp');
+        var prev = highlighted.prev();
+        prev.addClass('slideUp');
+        if(prev.offset().left < 0) {
+          var currScroll = $('#ys-videos').scrollLeft();
+          $('#ys-videos').animate({scrollLeft: currScroll - $(document).width() + 21}, 500);
+        }
+      } else {
+        highlighted.removeClass('slideUp');
+        $('.ys-video-tile:last').addClass('slideUp');
+        var left = $('#ys-videos .ys-video-tile').length * ($('#ys-videos .ys-video-tile:first').width() + 10);
+        $('#ys-videos').animate({scrollLeft: left}, 500);
+      }
+    } else if(e.keyCode === 13 && highlighted.length) {
+      var vid = highlighted.data('video-id');
+      angular.element('body').injector().get('$rootScope').$broadcast('playVideoMayne', vid);
     }
   });
   $routeProvider.when('', {
