@@ -235,7 +235,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
         <li class="ys-video-tile" ng-repeat="video in videosArray">
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
-            <h4>{{video.data.views}}&nbsp;&nbsp;|&nbsp;&nbsp;{{video.data.created_at}}</h4>
+            <h4>{{video.view_count}}&nbsp;&nbsp;|&nbsp;&nbsp;{{video.published_at}}</h4>
             <ul class="ys-video-actions">
               <li>1</li>
               <li>2</li>
