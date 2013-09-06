@@ -498,11 +498,19 @@ select {
 	background: #fcc6d0;
 	position: fixed;
 	z-index: 100;
+	@include transition-property(height, opacity);
+	@include transition-duration(.1s);
 	.ys-loading-bar {
 		width: 0;
 		height: 100%;
 		background: $red;
 		@include transition-property(width);
+		@include transition-duration(.1s);
+	}
+	&:hover {
+		height: 40px;
+		opacity: 0.8;
+		@include transition-property(height, opacity);
 		@include transition-duration(.1s);
 	}
 }
