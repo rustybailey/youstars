@@ -3,6 +3,7 @@ class Suggest::VideosController < ApplicationController
   respond_to :json
 
   before_filter :authenticate_user!, :except => [:related, :trending, :popular, :featured]
+  before_filter :load_category, :only => [:trending, :popular, :featured]
 
 
   ###################################################################################################
@@ -62,8 +63,10 @@ class Suggest::VideosController < ApplicationController
   ###################################################################################################
 
 
-  # params[:youtube_id]
+  # Required = params[:youtube_id]
   def related
+    render_404 and return unless params[:youtube_id].present?
+
     url       = "https://gdata.youtube.com/feeds/api/videos/#{params[:youtube_id]}/related?v=2&alt=json"
     recs      = Rails.cache.fetch( url , :expires_in => 1.day ) do
       response  = YoutubeApi.v2_authorized_request( url, nil )
@@ -76,7 +79,8 @@ class Suggest::VideosController < ApplicationController
   end
 
   def trending
-    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/on_the_web"
+    cat_name  = @category.present? ? "_#{@category.title}" : ""
+    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/on_the_web#{cat_name}"
     recs      = Rails.cache.fetch( url , :expires_in => 1.day ) do
       response  = YoutubeApi.v2_authorized_request( url, nil )
       response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
@@ -89,7 +93,8 @@ class Suggest::VideosController < ApplicationController
 
 
   def popular
-    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/most_popular"
+    cat_name  = @category.present? ? "_#{@category.title}" : ""
+    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/most_popular#{cat_name}"
     recs = Rails.cache.fetch( url, :expires_in => 1.day ) do
       response  = YoutubeApi.v2_authorized_request( url, nil )
       response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
@@ -102,7 +107,8 @@ class Suggest::VideosController < ApplicationController
 
 
   def featured
-    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured"
+    cat_name  = @category.present? ? "_#{@category.title}" : ""
+    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured#{cat_name}"
     recs = Rails.cache.fetch( url, :expires_in => 1.day ) do
       response  = YoutubeApi.v2_authorized_request( url, nil )
       response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
@@ -115,6 +121,17 @@ class Suggest::VideosController < ApplicationController
 
 
   private
+
+  def load_category
+    @category = nil
+    return unless params[:category].present?
+
+    if is_a_number? params[:category]
+      @category = Category.find params[:category].to_i
+    else
+      @category = Category.find_by_title params[:category]
+    end
+  end
 
   def parse_v2_video_response(entry)
     {
