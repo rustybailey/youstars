@@ -26,6 +26,7 @@ module Pythia
     channels.sort { |a, b| Pythia.score(b, target_channel_data, description_space) <=> Pythia.score(a, target_channel_data, description_space) } # descending
   end
 
+
   def self.score(channel_data, target_data = nil, data_space = nil)
     # geometric mean of subscribers and views 
     score = (channel_data[:subscriber_count] * channel_data[:view_count]) ** 0.5
@@ -39,6 +40,7 @@ module Pythia
     
     score
   end
+
 
   def self.string_score(target_0, target_1, space)
     # a TF-IDF mutual relevancy algorithm
@@ -80,6 +82,7 @@ module Pythia
     sum
   end
 
+
   def self.channel_score_by_topics(channel_0, channel_1)
     target_0 = channel_0.topics
     target_1 = channel_1.topics
@@ -107,7 +110,7 @@ module Pythia
       sum += v
     end
 
-    sum      
+    sum
   end
   
 end
