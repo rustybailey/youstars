@@ -219,8 +219,8 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   replace: true
   link: (scope, element, attr) ->
     scope.enter = (e) ->
-      $('.ys-video-tile').removeClass('slideUp')
-      $(e.currentTarget).addClass('slideUp')
+      $('.ys-video-tile').removeClass('slideUp currentSelection')
+      $(e.currentTarget).addClass('slideUp currentSelection')
     scope.leave = (e) ->
       $(e.currentTarget).removeClass('slideUp')
     scope.videosArray = videosService.videos

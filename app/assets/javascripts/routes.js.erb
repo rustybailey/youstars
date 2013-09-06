@@ -8,12 +8,14 @@ var youstars = angular.module('youstars', [], function ($routeProvider, $locatio
       }
     }
     // Press left/right arrows and enter to select video from bottom list
-    var highlighted = $('.ys-video-tile.slideUp');
+    var highlighted = $('.ys-video-tile.currentSelection');
     if(e.keyCode === 39) {
+      clearTimeout(unslide);
       if(highlighted.length && highlighted.next().length) {
-        highlighted.removeClass('slideUp');
+        highlighted.removeClass('slideUp currentSelection');
         var next = highlighted.next();
-        next.addClass('slideUp');
+        next.addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {next.removeClass('slideUp')}, 3000);
         if(next.offset().left + next.width() > $(document).width()) {
           var diff = next.offset().left + next.width() - $(document).width();
           var diffdiff = next.width() - diff;
@@ -21,22 +23,26 @@ var youstars = angular.module('youstars', [], function ($routeProvider, $locatio
           $('#ys-videos').animate({scrollLeft: currScroll + $(document).width() - diffdiff - 7}, 500);
         }
       } else {
-        highlighted.removeClass('slideUp');
-        $('.ys-video-tile').eq(0).addClass('slideUp');
+        highlighted.removeClass('slideUp currentSelection');
+        $('.ys-video-tile').eq(0).addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {$('.ys-video-tile').eq(0).removeClass('slideUp')}, 3000);
         $('#ys-videos').animate({scrollLeft: 0}, 500);
       }
     } else if(e.keyCode === 37) {
+      clearTimeout(unslide);
       if(highlighted.length && highlighted.prev().length) {
-        highlighted.removeClass('slideUp');
+        highlighted.removeClass('slideUp currentSelection');
         var prev = highlighted.prev();
-        prev.addClass('slideUp');
+        prev.addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {prev.removeClass('slideUp')}, 3000);
         if(prev.offset().left < 0) {
           var currScroll = $('#ys-videos').scrollLeft();
           $('#ys-videos').animate({scrollLeft: currScroll - $(document).width() + 21}, 500);
         }
       } else {
-        highlighted.removeClass('slideUp');
-        $('.ys-video-tile:last').addClass('slideUp');
+        highlighted.removeClass('slideUp currentSelection');
+        $('.ys-video-tile:last').addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {$('.ys-video-tile:last').removeClass('slideUp')}, 3000);
         var left = $('#ys-videos .ys-video-tile').length * ($('#ys-videos .ys-video-tile:first').width() + 10);
         $('#ys-videos').animate({scrollLeft: left}, 500);
       }
