@@ -1,6 +1,20 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+
+  def after_sign_in_path_for( resource )
+    if resource.is_a?( User ) 
+      if resource.channel_name.present?
+        channel_path( resource.channel_name )
+      else
+        root_path
+      end
+    else
+      super
+    end
+  end
+
+
   rescue_from ActionController::RoutingError do |e|
     message = defined?( e.message ) ? e.message : "Unknown"
     respond_to do |format|

@@ -6,7 +6,7 @@ Youstars::Application.routes.draw do
   get  "login" => "home#login"
 
 
-  get '/:channel_name' => 'home#index'
+  get '/:channel_name' => 'home#index', :as => "channel"
   get '/channel/:channel',            :controller => 'channel', :action => 'show'
   get '/channel/:channel/videos',     :controller => 'channel', :action => 'videos'
   get '/channel/:channel/topics',     :controller => 'channel', :action => 'topics'
