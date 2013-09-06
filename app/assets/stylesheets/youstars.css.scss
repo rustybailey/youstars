@@ -1000,7 +1000,7 @@ $ys-profile-tile-large-size:	230px;
 	bottom: -125px;
 	overflow-x: scroll;
 	overflow-y: hidden;
-	z-index: 3;
+	z-index: 15;
 	background: transparent url("/assets/videos-background.png") repeat-x 0 0;
 	@include transition-property(bottom);
 	@include transition-duration(0.2s);
@@ -1143,8 +1143,8 @@ $ys-profile-tile-large-size:	230px;
 #ys-videos.ys-video-after {
 	bottom: -20px;
 }
-#ys-videos:hover {
-	z-index: 15;
+#ys-videos.ys-video-after:hover {
+	/*z-index: 15;*/
 }
 
 
