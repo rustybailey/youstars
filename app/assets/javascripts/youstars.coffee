@@ -335,7 +335,13 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
       hash.player.loadVideoById(videoId)
 
   hash.videoStateChange = (ev) ->
-    return unless ev.data == 0
+    if ev.data is 1
+      vidId = hash.player.getVideoData().video_id
+      $.ajax
+        url: "https://gdata.youtube.com/feeds/api/videos/" + vidId + "?v=2&alt=json"
+        success: (data) ->
+          $('.video-title').text(data.entry.title.$t)
+    return unless ev.data is 0
     hash.player.loadPlaylist
       listType: "user_uploads"
       list: hash.currentChannel

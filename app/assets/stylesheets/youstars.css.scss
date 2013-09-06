@@ -620,13 +620,25 @@ select {
 			opacity: 0.6;
 		}
 	}
-	.duration-container {
-		float: right;
+	.video-info-container {
 		clear: both;
 		color: white;
 		font-size: 10px;
+		width: 100%;
 		> * {
 			float: left;
+		}
+		.video-title {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			width: 210px;
+		}
+		.duration-container {
+			float: right;
+			> * {
+				float: left;
+			}
 		}
 	}
 }
