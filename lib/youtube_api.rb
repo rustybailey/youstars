@@ -71,7 +71,7 @@ module YoutubeApi
     v3_query = {
       key: ENV['YOUTUBE_API'],
       id: channel_id,
-      part: 'snippet'
+      part: 'snippet,statistics'
     }
 
     json = JSON.parse( HTTParty.get(v3_channel_url, query: v3_query).body )    
@@ -80,7 +80,9 @@ module YoutubeApi
       channel_id:   channel_id,
       published_at: json['items'][0]['snippet']['publishedAt'],      
       thumbnails:   json['items'][0]['snippet']['thumbnails'],
-      title:        json['items'][0]['snippet']['title']
+      title:        json['items'][0]['snippet']['title'],
+      view_count:   json['items'][0]['statistics']['viewCount'].to_i,
+      subscriber_count:   json['items'][0]['statistics']['subscriberCount'].to_i
     }
 
     v2_channel_url = "https://gdata.youtube.com/feeds/api/users/#{ channel_id }"

@@ -56,27 +56,34 @@ class Suggest::ChannelsController < ApiController
     # channels to which they belong
     load_channel_id
 
-    limit      = (params[:limit] || 20).to_i
+    Rails.cache.fetch("related_#{ @channel_id }") do
+      
+      limit      = (params[:limit] || 20).to_i
 
-    top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 15, 'viewCount')
+      top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 50, 'viewCount')
 
-    related_videos = top_videos.collect do |video|
-      YoutubeApi.related_videos_for_video_id( video[:video_id] )
+      related_videos = top_videos.collect do |video|
+        YoutubeApi.related_videos_for_video_id( video[:video_id] )
+      end
+      related_videos.flatten!
+      
+      channel_videos = Hash.new(0)
+      related_videos.each do |video|
+        channel_videos[video[:channel_id]] += 1 unless video[:channel_id] == @channel_id
+      end
+
+      channels = channel_videos.keys.sort { |a, b| channel_videos[b] <=> channel_videos[a] } # descending
+      channels = channels.first(limit * 3)
+
+      channels = channels.collect do |id|
+        YoutubeApi.channel_data_for_channel_id(id)
+      end
+      
+      channels.sort! { |a, b| b[:subscriber_count] <=> a[:subscriber_count] } # descending
+      channels = channels.first(limit)
+
+      render :json => channels
     end
-    related_videos.flatten!
-
-    channel_videos = Hash.new(0)
-    related_videos.each do |video|
-      channel_videos[video[:channel_id]] += 1 unless video[:channel_id] == @channel_id
-    end
-
-    channels = channel_videos.keys.sort { |a, b| channel_videos[a] <=> channel_videos[b] }
-    channels = channels.first(limit)
-    channels = channels.collect do |id|
-      YoutubeApi.channel_data_for_channel_id(id)
-    end
-
-    render :json => channels
   end
 
   def topics
