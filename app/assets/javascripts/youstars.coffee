@@ -387,6 +387,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
           player.loadPlaylist
             listType: "user_uploads"
             list: youtubeInit.currentChannel
+          youtubeInit.onPlayerReady.resolve()
         onStateChange: youtubeInit.videoStateChange
     )
 
