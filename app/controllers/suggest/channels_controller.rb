@@ -96,8 +96,4 @@ class Suggest::ChannelsController < ApiController
     # and/or tf-idf relevance of positively-rated channels
   end
 
-  def recently_watched
-    # return the most recently-watched channels with positive ratings
-  end
-
 end
