@@ -437,5 +437,14 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
 
+    $("#ys-player-bar").on "click", (e) ->
+      clickedPos = e.pageX
+      width = $(this).width()
+      percentOfWidth = clickedPos / width
+      duration = player.getDuration()
+      pointInVideo = Math.floor(duration * percentOfWidth)
+
+      player.seekTo(pointInVideo)
+
   )
 ])
