@@ -56,9 +56,9 @@ class Suggest::ChannelsController < ApiController
     # channels to which they belong
     load_channel_id
 
-    Rails.cache.fetch("related_#{ @channel_id }") do
+#    channels = Rails.cache.fetch("related_#{ @channel_id }", :expires_in => 1.day) do
       
-      limit      = (params[:limit] || 20).to_i
+      limit      = (params[:limit] || 5).to_i
 
       top_videos = YoutubeApi.video_search_for_channel_id(@channel_id, 50, 'viewCount')
 
@@ -75,15 +75,14 @@ class Suggest::ChannelsController < ApiController
       channels = channel_videos.keys.sort { |a, b| channel_videos[b] <=> channel_videos[a] } # descending
       channels = channels.first(limit * 3)
 
-      channels = channels.collect do |id|
-        YoutubeApi.channel_data_for_channel_id(id)
-      end
-      
-      channels.sort! { |a, b| b[:subscriber_count] <=> a[:subscriber_count] } # descending
-      channels = channels.first(limit)
+      channels = YoutubeApi.channel_data_for_channel_id(channels)
 
-      render :json => channels
-    end
+      channels.sort! { |a, b| b[:subscriber_count] <=> a[:subscriber_count] } # descending
+
+      channels = channels.first(limit).to_json
+#    end
+
+    render :json => channels
   end
 
   def topics

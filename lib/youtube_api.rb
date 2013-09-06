@@ -55,7 +55,7 @@ module YoutubeApi
       part: "snippet,statistics"
     }
 
-    json = JSON.parse( HTTParty.get(video_url, query: query).body )    
+    json = JSON.parse( HTTParty.get(video_url, query: query).body )
 
     {      
       video_id:     video_id,
@@ -67,6 +67,10 @@ module YoutubeApi
   end
 
   def self.channel_data_for_channel_id(channel_id)
+    if channel_id.is_a? Array
+      channel_id = channel_id.join(',')
+    end
+
     v3_channel_url = @@v3_URL + "/channels"
     v3_query = {
       key: ENV['YOUTUBE_API'],
@@ -75,23 +79,27 @@ module YoutubeApi
     }
 
     json = JSON.parse( HTTParty.get(v3_channel_url, query: v3_query).body )    
-
-    output = {      
-      channel_id:   channel_id,
-      published_at: json['items'][0]['snippet']['publishedAt'],      
-      thumbnails:   json['items'][0]['snippet']['thumbnails'],
-      title:        json['items'][0]['snippet']['title'],
-      view_count:   json['items'][0]['statistics']['viewCount'].to_i,
-      subscriber_count:   json['items'][0]['statistics']['subscriberCount'].to_i
-    }
-
-    v2_channel_url = "https://gdata.youtube.com/feeds/api/users/#{ channel_id }"
-    v2_query = {
-      v: 2,
-      alt: 'json'     
-    }
     
-    output[:name] = JSON.parse( HTTParty.get(v2_channel_url, query: v2_query).body ).dig('entry', 'author', 0, 'name', '$t')
+    output = json['items'].collect do |item|
+      {      
+        channel_id:       item['id'],
+        published_at:     item['snippet']['publishedAt'],      
+        thumbnails:       item['snippet']['thumbnails'],
+        title:            item['snippet']['title'],
+        view_count:       item['statistics']['viewCount'].to_i,
+        subscriber_count: item['statistics']['subscriberCount'].to_i
+      }
+    end
+
+    output.each_index do |i|
+      v2_channel_url = "https://gdata.youtube.com/feeds/api/users/#{ output[i][:channel_id] }"
+      v2_query = {
+        v: 2,
+        alt: 'json'     
+      }
+    
+      output[i][:name] = JSON.parse( HTTParty.get(v2_channel_url, query: v2_query).body ).dig('entry', 'author', 0, 'name', '$t')
+    end
     
     output
   end
