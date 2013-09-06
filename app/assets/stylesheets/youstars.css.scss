@@ -1093,6 +1093,7 @@ $ys-profile-tile-large-size:	230px;
 				h3 {
 					display: block;
 					width: 220px;
+					height: 125px;
 					padding: 5px 10px;
 					font-size: 10px;
 					position: absolute;
@@ -1106,7 +1107,8 @@ $ys-profile-tile-large-size:	230px;
 					@include text-shadow(0 1px 1px #000000);
 					@include transition-property(opacity);
 					@include transition-duration(0.33s);
-					@include opacity(0.75);
+					@include opacity(0.8);
+					@include background-image(linear-gradient(#000000, transparent 30%, transparent)); 
 				}
 				img {
 					display: block;
