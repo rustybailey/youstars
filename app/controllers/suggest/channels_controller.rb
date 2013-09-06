@@ -54,7 +54,7 @@ class Suggest::ChannelsController < ApiController
     # retrieve the most popular videos for the target channel
     # then retrieve the related videos for those and find the
     # channels to which they belong
-    load_channel_id params[:channel]
+    load_channel_id
 
     limit      = (params[:limit] || 10).to_i
 
@@ -67,7 +67,7 @@ class Suggest::ChannelsController < ApiController
 
     channel_videos = Hash.new(0)
     related_videos.each do |video|
-      channel_videos[video[:channel_id]] += 1 unless video[:channel_id] == channel_id
+      channel_videos[video[:channel_id]] += 1 unless video[:channel_id] == @channel_id
     end
 
     channels = channel_videos.keys.sort { |a, b| channel_videos[a] <=> channel_videos[b] }
