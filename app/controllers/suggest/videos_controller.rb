@@ -12,7 +12,9 @@ class Suggest::VideosController < ApplicationController
 
   def suggested
 
-
+    respond_to do |format|
+      format.json { render :json => current_user.custom_suggestions, :callback => params[:callback] }
+    end
 
   end
 
@@ -46,7 +48,7 @@ class Suggest::VideosController < ApplicationController
   def most_watched
 
     recs          = Rails.cache.fetch( auto_cache_key(:user => current_user.id ), :expires_in => 1.day ) do
-      youtube_ids   = current_user.views.order("unique_view_count desc, weight desc").includes(:video).limit(50).all.collect{ |view| view.video.youtube_id }
+      youtube_ids   = current_user.views.order("unique_view_count desc, weight desc").includes(:video).limit(50).collect{ |view| view.video.youtube_id }
       url           = "https://www.googleapis.com/youtube/v3/videos?part=id%2Csnippet%2CcontentDetails%2Cstatistics&id=#{youtube_ids.join(',')}"
 
       response      = YoutubeApi.v3_authorized_request( url, current_user.get_token )
@@ -141,10 +143,10 @@ class Suggest::VideosController < ApplicationController
       :channel_guid => entry.dig("author", 0, "yt$userId", "$t"),
       :category     => entry.dig("media$group", "media$category", 0, "$t"),
       :statistics   => {
-        :views    => entry.dig("yt$statistics", "viewCount"),
-        :likes    => entry.dig("yt$rating", "numLikes"),
-        :dislikes => entry.dig("yt$rating", "numDislikes"),
-        :comments => entry.dig("gd$comments", "gd$feedLink", "countHint")
+        :views    => entry.dig("yt$statistics", "viewCount").to_i,
+        :likes    => entry.dig("yt$rating", "numLikes").to_i,
+        :dislikes => entry.dig("yt$rating", "numDislikes").to_i,
+        :comments => entry.dig("gd$comments", "gd$feedLink", "countHint").to_i
       }
     }
   end
@@ -157,10 +159,10 @@ class Suggest::VideosController < ApplicationController
       :channel_guid => entry.dig("snippet", "channelId"),
       :category     => Category.find_by_youtube_id( entry.dig("snippet", "categoryId") ).title,
       :statistics   => {
-        :views    => entry.dig("statistics", "viewCount"),
-        :likes    => entry.dig("statistics", "likeCount"),
-        :dislikes => entry.dig("statistics", "dislikeCount"),
-        :comments => entry.dig("statistics", "commentCount")
+        :views    => entry.dig("statistics", "viewCount").to_i,
+        :likes    => entry.dig("statistics", "likeCount").to_i,
+        :dislikes => entry.dig("statistics", "dislikeCount").to_i,
+        :comments => entry.dig("statistics", "commentCount").to_i
       }
     }
   end

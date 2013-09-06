@@ -23,6 +23,7 @@ Youstars::Application.routes.draw do
 
 
     get '/videos',                    :controller => 'videos', :action => 'user'
+    get '/videos/suggested',          :controller => 'videos', :action => 'suggested'
     get '/videos/most_watched',       :controller => 'videos', :action => 'most_watched'
     get '/videos/recently_watched',   :controller => 'videos', :action => 'recently_watched'
 

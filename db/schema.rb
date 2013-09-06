@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130906142123) do
+ActiveRecord::Schema.define(version: 20130906184706) do
 
   create_table "categories", force: true do |t|
     t.integer  "youtube_id"
@@ -35,11 +35,11 @@ ActiveRecord::Schema.define(version: 20130906142123) do
     t.integer "topic_id"
   end
 
-  add_index "channels_topics", ["channel_id", "topic_id"], name: "index_channels_topics_on_channel_id_and_topic_id", unique: true
+  add_index "channels_topics", ["channel_id", "topic_id"], name: "index_channels_topics_on_channel_id_and_topic_id"
   add_index "channels_topics", ["topic_id"], name: "index_channels_topics_on_topic_id"
 
   create_table "ratings", force: true do |t|
-    t.integer "user_id"
+    t.integer "channel_id"
     t.integer "video_id"
     t.integer "score"
   end
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20130906142123) do
     t.string   "refresh_token"
     t.string   "guid"
     t.string   "channel_name"
+    t.text     "custom_suggestions"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
