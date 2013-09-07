@@ -93,7 +93,7 @@ class ChannelController < ApiController
     end
 
 
-    if stats_series.length < 3
+    if subs_series.length < 3 or views_series.length < 3
       render( :json => { view_count: views_series.last[:view_count], subscriber_count: subs_series.last[:subscriber_count] } ) and return 
     end
 
@@ -113,8 +113,8 @@ class ChannelController < ApiController
     }
 
     estimates = {
-      'view_count'       => stats_series.last['view_count']       + (moving_averages['view_count']       * views_delta_t1).to_i,
-      'subscriber_count' => stats_series.last['subscriber_count'] + (moving_averages['subscriber_count'] * subs_delta_t1).to_i
+      'view_count'       => views_series.last['view_count']       + (moving_averages['view_count']       * views_delta_t1).to_i,
+      'subscriber_count' => subs_series.last['subscriber_count']  + (moving_averages['subscriber_count'] * subs_delta_t1).to_i
     }
 
     render :json => estimates
