@@ -195,9 +195,46 @@ class Suggest::ChannelsController < ApiController
     render :json => channel_recs
   end
 
-  def topics
-    # return the top channels when sorted by topic overlap
+  # NOT YET WORKING
+  def trending_by_topic
+    # returns a list of channels with currently trending videos, ranked by topical relevance to the user's channel
     # tf-idf relevance
+
+    url       = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared'
+    params    = {
+      'max-results' => 50,
+      'fields'      => 'entry(media:group(yt:videoid,yt:uploaderId))'
+    }
+    response  = YoutubeApi.v2_authorized_request( url, current_user.get_token, params )
+    videos    = response.parsed_response['feed']['entry'].map do |entry|
+      {
+        :video_id   => entry.dig('media$group', 'yt$videoid', '$t')
+        :channel_id => entry.dig('media$group', 'yt$uploaderId', '$t')
+      }
+    end
+
+    next_url  = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared'
+    params['page'] = 2
+    response  = YoutubeApi.v2_authorized_request( next_url, current_user.get_token, params )
+    videos   << response.parsed_response['feed']['entry'].map do |entry|
+      {
+        :video_id   => entry.dig('media$group', 'yt$videoid', '$t')
+        :channel_id => entry.dig('media$group', 'yt$uploaderId', '$t')
+      }
+    end
+
+    videos = videos.reject do |entry|
+      entry[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
+    end
+
+    videos = videos.order_by do |entry|
+    end
+ 
+    channels = videos.map do |entry|
+      YoutubeApi.channel_data_for_channel_id( entry[:channel_id] )
+    end
+
+    render :json => channels
   end
 
   def ratings
