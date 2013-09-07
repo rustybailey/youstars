@@ -548,7 +548,8 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
 ])
 
 youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', 'videosService', ($window, $scope, $routeParams, userService, youtubeInit, videosService)->
-  $scope.showVideoRecommendations = false
+  $scope.showVideoRecommendations   = false
+  $scope.showChannelRecommendations = false
   if $routeParams.currentChannel
     #oof, too fast, too little knowledge of angular going around
     youtubeInit.currentChannel = $routeParams.currentChannel

@@ -19,6 +19,28 @@
 </div>
 <!-- #ys-overlay -->
 
+<div id="ys-channel-overlay" ng-show="showChannelRecommendations" ng-animate="'ys-overlay'" style="display: none">
+
+	<a class="ys-overlay-close" ng-click="showChannelRecommendations = !showChannelRecommendations">Close Overlay</a>
+
+	<h1>Channel Recommendations</h1>
+
+	<h2 ng-show="loggedIn">Reccomended because these videos are <strong>custom picked by YouStars</strong> for you.</h2>
+	<suggestedvideos ng-show="loggedIn"></suggestedvideos>
+
+	<h2 ng-show="loggedIn">Reccomended because <strong>you really love these videos</strong>.</h2>
+	<mostwatchedvideos ng-show="loggedIn"></mostwatchedvideos>
+
+	<h2>Recommended because these videos are <strong>currently trending</strong> across YouTube.</h2>
+	<trendingvideos></trendingvideos>
+
+	<h2>Recommended because these videos are <strong>unwatched YouTube Featured</strong> videos.</h2>
+	<featuredvideos></featuredvideos>
+
+</div>
+<!-- #ys-channel-overlay -->
+
+
 
 
 
@@ -86,7 +108,7 @@
 		</li>
 		<!-- .ys-menu-item -->
 		<li class="ys-menu-item">
-			<a href="#">
+			<a ng-click="showChannelRecommendations = !showChannelRecommendations">
 				<span class="ys-menu-item-icon ss-icon tv">Tv</span>
 				<span class="ys-menu-item-label">Recommended Channels</span>
 			</a>
