@@ -573,15 +573,16 @@ ul#ys-menu {
 		float: left;
 	}
 	#ys-seek-bar{
+		display: block; 
+		float: left;
 		width: 1px;
 		height: 100%;
-		background: #333;
-		@include transition-property(width);
-		@include transition-duration(.1s);	
-		display: block; 
-		float:left;
+		background: #000000;
 		position: absolute;
 		left: 0px;
+		@include opacity(0.5);
+		@include transition-property(width);
+		@include transition-duration(.1s);	
 	}
 	&:hover {
 		height: 40px;
