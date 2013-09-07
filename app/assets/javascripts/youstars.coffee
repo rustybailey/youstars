@@ -44,16 +44,34 @@ youstars.factory('suggestedchannelsService', ['$http', ($http) ->
   }
 ])
 
-youstars.factory('similarchannelsService', ['$http', 'userService', ($http, userService) ->
+youstars.factory('similarrecentchannelsService', ['$http', ($http) ->
   return {
-    fetchSimilarchannels: () ->
+    fetchSimilarrecentchannels: () ->
       if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/channels/' + userService.currentChannel + '.json').then (response) ->
+        $http.get('/suggest/channels/similar_to_recently_watched.json').then (response) ->
           response.data
       else
         $.Deferred().resolve([])
   }
 ])
+
+youstars.factory('mostsubscribedchannelsService', ['$http', ($http) ->
+  return {
+    fetchMostsubscribedchannels: () ->
+      $http.get('/suggest/channels/most_subscribed.json').then (response) ->
+        response.data
+  }
+])
+
+youstars.factory('similarchannelsService', ['$http', 'userService', ($http, userService) ->
+  return {
+    fetchSimilarchannels: () ->
+      $http.get('/suggest/channels/related/' + userService.currentChannel + '.json').then (response) ->
+        response.data
+  }
+])
+
+
 
 youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
   return {
@@ -78,6 +96,62 @@ youstars.directive('suggestedchannels', ['suggestedchannelsService', (suggestedc
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in suggestedChannelsArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+youstars.directive('similarrecentchannels', ['similarrecentchannelsService', (similarrecentchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      similarrecentchannelsService.fetchSimilarrecentchannels().then (data) ->
+        scope.similarrecentChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in similarrecentChannelsArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+youstars.directive('mostsubscribedchannels', ['mostsubscribedchannelsService', (mostsubscribedchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      mostsubscribedchannelsService.fetchMostsubscribedchannels().then (data) ->
+        scope.mostsubscribedChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in mostsubscribedChannelsArray">
             <a class="ys-recommendation-info" href="#">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -261,7 +335,7 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
         hash.channels = data
         return d
       else 
-        return $http.get("/suggest/channels/#{channel}").then (res) ->
+        return $http.get("/suggest/channels/related/#{channel}").then (res) ->
           sessionStorage.setItem(key, angular.toJson(res.data))
           hash.channels = res.data
 
@@ -334,41 +408,12 @@ youstars.factory('mastheadService', [ () ->
   }
 ])
 
-youstars.factory('statsService', ['$routeParams', '$filter', ($routeParams, $filter) ->
+youstars.factory('statsService', ['$routeParams', '$filter', '$http', ($routeParams, $filter, $http) ->
   return {
     getStats: () ->
       channel = $routeParams.currentChannel
-      $.ajax
-        url: "/channel/" + channel + "/stream"
-        success: (data) =>
-          stats =
-            views: Math.floor(data.view_count)
-            subs: Math.floor(data.subscriber_count)
-          $('#ys-views strong').data('stat', stats.views)
-          $('#ys-subs strong').data('stat', stats.subs)
-
-    animateStats: () ->
-      $('#ys-views strong, #ys-subs strong').each (index) ->
-        target = this
-        targetNum = parseInt($(target).data('stat'))
-        baseNum = 0
-        incrementBy = (if Math.abs(targetNum) < 50 then 1 else Math.abs(Math.round(targetNum / 50)))
-        interval = setInterval(->
-          if targetNum > 0
-            $(target).html $filter('number')(baseNum)
-            baseNum += incrementBy
-            if baseNum > targetNum
-              $(target).html $filter('number')(targetNum)
-              clearInterval interval
-          else if targetNum < 0
-            $(target).html $filter('number')(baseNum)
-            baseNum -= incrementBy
-            if baseNum < targetNum
-              $(target).html $filter('number')(targetNum)
-              clearInterval interval
-          else
-            $(target).html $filter('number')(targetNum)
-        , 10)
+      $http.get("/channel/#{channel}/stream").then (res) ->
+        res.data
   }
 ])
 
@@ -403,13 +448,69 @@ youstars.factory('mysubscribersService', [ () ->
   }
 ])
 
-youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeParams', (userService, statsService, $timeout, $routeParams) ->
+youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeParams', '$filter', (userService, statsService, $timeout, $routeParams, $filter) ->
   return {
     restrict: "E"
     replace: true
     link: (scope, element, attr) ->
-      $timeout( statsService.getStats, 0 )
-      $timeout( statsService.animateStats, 1000 )
+      # $timeout( , 1000 )
+      scope.views = 0
+      scope.subscribers = 0
+      statsService.getStats().then (data) ->
+        scope.real_views = data.view_count
+        scope.real_subscribers = data.subscriber_count
+        $timeout ->
+          element.find('span').addClass("visible")
+          ['views', 'subscribers'].forEach (val, index) ->
+            bg = element.find("#ys-#{val}-bg")
+            holder = element.find("#ys-#{val} span")
+            console.log 'holder', holder
+            targetNum = scope['real_' + val]
+            baseNum = scope[val]
+            incrementBy = (if Math.abs(targetNum) < 50 then 1 else Math.abs(Math.round(targetNum / 50)))
+            interval = setInterval(->
+              if targetNum > 0
+                scope[val] = $filter('number')(baseNum)
+                baseNum += incrementBy
+                if baseNum > targetNum
+                  scope[val] = $filter('number')(targetNum)
+                  clearInterval interval
+              else if targetNum < 0
+                scope[val] = $filter('number')(baseNum)
+                baseNum -= incrementBy
+                if baseNum < targetNum
+                  scope[val] = $filter('number')(targetNum)
+                  clearInterval interval
+              else
+                scope[val] = $filter('number')(targetNum)
+              scope.$apply()
+              bg.width(holder.width() + 30)
+            , 10)
+        , 2500
+
+    template: """
+    <div id="ys-stats">
+      <div id="ys-views">
+        <div id="ys-views-bg"></div>
+      <ul id="ys-social-links">
+        <li><a href="/test"><i class="ss-icon ss-social">Facebook</i></i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">Twitter</i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">Instagram</i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">Tumblr</i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">LinkedIn</i></a></li>
+      </ul>
+        <span><strong>{{views}}</strong> views</span>
+      </div>
+      <!-- #ys-views -->
+      <!-- #ys-social-links -->
+      <br />
+      <div id="ys-subscribers">
+        <div id="ys-subscribers-bg"></div>
+        <span><strong>{{subscribers}}</strong> subs</span>
+      </div>
+      <!-- #ys-subs -->
+    </div>
+    """
   }
 ])
 

@@ -1,6 +1,6 @@
 class Suggest::ChannelsController < ApiController
 
-  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
+#  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
 
   def related
     # retrieve the most popular videos for the target channel
@@ -42,16 +42,19 @@ class Suggest::ChannelsController < ApiController
   end
 
   def most_subscribed
-    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
+    params = {}
+    params[:user] = current_user.id if current_user.present?
+
+    recs = Rails.cache.fetch( auto_cache_key(params), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json"
-      response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+      response = YoutubeApi.v2_authorized_request( url, nil )
     
       recs = response.parsed_response["feed"]["entry"].map do |entry|
-        'UC' + entry.dig("author", 0, "yt$userID", "$t")
+        'UC' + entry.dig("author", 0, "yt$userId", "$t")
       end
 
-      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }
+      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) } if current_user.present?
       recs = YoutubeApi.channel_data_for_channel_id(recs)
 
     end
@@ -119,7 +122,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     video_recs = video_recs.reject do |e|
-      e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
+      e[:video_id].in?( current_user.disliked_videos.map(&:id) )
     end
 
     channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] } )
@@ -147,7 +150,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     videos = videos.reject do |e|
-      e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
+      e[:video_id].in?( current_user.disliked_videos.map(&:id) )
     end
 
     channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
@@ -181,7 +184,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     videos = videos.select do |e|
-      e[:video_id].in?( current_user.channel.liked_videos.map(&:id) )
+      e[:video_id].in?( current_user.liked_videos.map(&:id) )
     end
 
     channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
@@ -200,12 +203,8 @@ class Suggest::ChannelsController < ApiController
     # returns a list of channels with currently trending videos, ranked by topical relevance to the user's channel
     # tf-idf relevance
 
-    url       = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared'
-    params    = {
-      'max-results' => 50,
-      'fields'      => 'entry(media:group(yt:videoid,yt:uploaderId))'
-    }
-    response  = YoutubeApi.v2_authorized_request( url, current_user.get_token, params )
+    url       = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared?v=2&alt=json&max-results=50'
+    response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     videos    = response.parsed_response['feed']['entry'].map do |entry|
       {
         :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),
@@ -213,9 +212,8 @@ class Suggest::ChannelsController < ApiController
       }
     end
 
-    next_url  = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared'
-    params['page'] = 2
-    response  = YoutubeApi.v2_authorized_request( next_url, current_user.get_token, params )
+    url       = "#{url}&page=2"
+    response  = YoutubeApi.v2_authorized_request( next_url, current_user.get_token )
     videos   << response.parsed_response['feed']['entry'].map do |entry|
       {
         :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),
@@ -224,7 +222,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     videos = videos.reject do |entry|
-      entry[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
+      entry[:video_id].in?( current_user.disliked_videos.map(&:id) )
     end
 
     videos = videos.order_by do |entry|

@@ -57,21 +57,21 @@ class User < ActiveRecord::Base
   end
 
   def rated_videos(score = nil)
-    ratings_relation = video_ratings
+    ratings_relation = self.video_ratings
     ratings_relation = ratings_relation.where( ["score = ?", score] ) unless score.nil?
 
     Video.where(:id => ratings_relation.map(&:id))
   end
 
   def liked_videos(score = 4)
-    ratings_relation = video_ratings
+    ratings_relation = self.video_ratings
     ratings_relation = ratings_relation.where( ["score >= ?", score] ) unless score.nil?
     
     Video.where(:id => ratings_relation.map(&:id))
   end
   
   def disliked_videos(score = 2)
-    ratings_relation = video_ratings
+    ratings_relation = self.video_ratings
     ratings_relation = ratings_relation.where( ["score <= ?", score] ) unless score.nil?
     
     Video.where(:id => ratings_relation.map(&:id))
