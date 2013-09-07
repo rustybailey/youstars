@@ -6,12 +6,17 @@ class Suggest::ChannelsController < ApiController
     # retrieve the most popular videos for the target channel
     # then retrieve the related videos for those and find the
     # channels to which they belong
-    load_channel_id
+    recs = Rails.cache.fetch( auto_cache_key, :expires_in => 1.day ) do
 
-    channels       = Pythia.related(@channel_id, 15)
-    cheap_channels = Pythia.cheap_related(@channel_id, 45)
+      load_channel_id
 
-    render :json => [channels, cheap_channels].flatten!
+      channels       = Pythia.related(@channel_id, 15)
+      cheap_channels = Pythia.cheap_related(@channel_id, 45)
+
+      [channels, cheap_channels].flatten!
+    end
+
+    render :json => recs
   end
 
   def most_viewed
@@ -76,6 +81,20 @@ class Suggest::ChannelsController < ApiController
     end
 
     recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
+
+    render :json => recs
+  end
+
+  def similar_to_your_channel
+    recs = Rails.cache.fetch( auto_cache_key, :expires_in => 1.day ) do
+
+      channel_id = current_user.channel.youtube_id
+
+      channels       = Pythia.related(channel_id, 15)
+      cheap_channels = Pythia.cheap_related(channel_id, 45)
+
+      [channels, cheap_channels].flatten!
+    end
 
     render :json => recs
   end
