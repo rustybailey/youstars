@@ -200,12 +200,8 @@ class Suggest::ChannelsController < ApiController
     # returns a list of channels with currently trending videos, ranked by topical relevance to the user's channel
     # tf-idf relevance
 
-    url       = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared'
-    params    = {
-      'max-results' => 50,
-      'fields'      => 'entry(media:group(yt:videoid,yt:uploaderId))'
-    }
-    response  = YoutubeApi.v2_authorized_request( url, current_user.get_token, params )
+    url       = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared?v=2&alt=json&max-results=50'
+    response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     videos    = response.parsed_response['feed']['entry'].map do |entry|
       {
         :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),
@@ -213,9 +209,8 @@ class Suggest::ChannelsController < ApiController
       }
     end
 
-    next_url  = 'https://gdata.youtube.com/feeds/api/standardfeeds/most_shared'
-    params['page'] = 2
-    response  = YoutubeApi.v2_authorized_request( next_url, current_user.get_token, params )
+    url       = "#{url}&page=2"
+    response  = YoutubeApi.v2_authorized_request( next_url, current_user.get_token )
     videos   << response.parsed_response['feed']['entry'].map do |entry|
       {
         :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),

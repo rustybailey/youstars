@@ -1,5 +1,6 @@
 class Channel < ActiveRecord::Base
 
+  belongs_to              :user
   has_many                :videos
   has_and_belongs_to_many :topics,
                           :after_add    => :increment_topic_total,
