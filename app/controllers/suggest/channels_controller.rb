@@ -102,93 +102,31 @@ class Suggest::ChannelsController < ApiController
   def recently_watched
     url        = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
     response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    video_recs = response.parsed_response["feed"]["entry"].map do |entry| 
-      { 
-        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
-      }
+    channel_ids = response.parsed_response["feed"]["entry"].map do |entry| 
+      entry.dig("media$group", "yt$uploaderId", "$t")
     end
-
-    next_url    = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50&page=2"
-    response    = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    video_recs << response.parsed_response["feed"]["entry"].map do |entry| 
-      { 
-        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
-      }
-    end
-
-    video_recs = video_recs.reject do |e|
-      e[:video_id].in?( current_user.disliked_videos.map(&:id) )
-    end
-
-    channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] } )
+    
+    channel_ids.uniq!
+    
+    channel_recs = YoutubeApi.channel_data_for_channel_id( channel_ids )
 
     render :json => channel_recs
   end
 
   def similar_to_recently_watched
+    current_user = User.first
+
     url        = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
     response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    videos = response.parsed_response["feed"]["entry"].map do |entry| 
-      { 
-        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
-      }
+    channel_ids = response.parsed_response["feed"]["entry"].map do |entry| 
+      entry.dig("media$group", "yt$uploaderId", "$t")
     end
-
-    next_url    = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50&page=2"
-    response    = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    videos << response.parsed_response["feed"]["entry"].map do |entry| 
-      { 
-        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
-      }
-    end
-
-    videos = videos.reject do |e|
-      e[:video_id].in?( current_user.disliked_videos.map(&:id) )
-    end
-
-    channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
+    
+    channel_ids.flatten.uniq!
 
     channel_recs = []
-    channels.first(5).each do |c|
-      channel_recs << Pythia.related(c[:channel_id]).first(4)
-    end
-    channel_recs.flatten!
-
-    render :json => channel_recs
-  end
-
-  def similar_to_recently_liked
-    url        = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
-    response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    videos = response.parsed_response["feed"]["entry"].map do |entry| 
-      { 
-        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
-      }
-    end
-
-    next_url    = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50&page=2"
-    response    = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    videos << response.parsed_response["feed"]["entry"].map do |entry| 
-      { 
-        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
-      }
-    end
-
-    videos = videos.select do |e|
-      e[:video_id].in?( current_user.liked_videos.map(&:id) )
-    end
-
-    channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
-
-    channel_recs = []
-    channels.first(5).each do |c|
-      channel_recs << Pythia.related(c[:channel_id]).first(4)
+    channel_ids.first(5).each do |c_id|
+      channel_recs << Pythia.related(c_id).first(4)
     end
     channel_recs.flatten!
 
