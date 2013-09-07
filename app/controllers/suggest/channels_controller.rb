@@ -1,6 +1,6 @@
 class Suggest::ChannelsController < ApiController
 
-#  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
+  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
 
   def related
     # retrieve the most popular videos for the target channel
