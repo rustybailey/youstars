@@ -221,9 +221,10 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # $timeout( myvideosService.animateMyvideos, 0 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 200 )
-  controller: ($scope,$element,$attrs) ->
+  controller: ['$scope', '$element', '$attrs', ($scope,$element,$attrs) ->
     $scope.nameIsntPoop = (item) ->
       !item.name.match(/[ .]/)?
+  ]
   template:
     """
     <div id="ys-profiles">
