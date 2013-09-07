@@ -1,9 +1,47 @@
 youstars.factory('userService', ['$http', ($http) ->
   return {
-    userName: "devinsupertramp"		# STATIC PLACEHOLDER.
+    userName: "devinsupertramp"   # STATIC PLACEHOLDER.
     currentChannel: null
   }
 ])
+
+
+youstars.factory('trendingvideosService', ['$http', ($http) ->
+  return {
+    fetchTrendingvideos: () ->
+      $http.get('/suggest/videos/trending.json').then (response) ->
+        response.data
+  }
+])
+
+youstars.directive('trendingvideos', ['trendingvideosService', (trendingvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      trendingvideosService.fetchTrendingvideos().then (data) ->
+        scope.trendingVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in trendingVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.channel_name | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="/assets/placeholders/video-test.png" />
+              <h3>{{video.channel_name}}</h3>
+              <h4>{{video.title}}</h4>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
 
 
 
