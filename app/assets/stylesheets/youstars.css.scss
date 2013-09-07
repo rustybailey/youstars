@@ -427,6 +427,7 @@ select {
 	display: block;
 	float: left;
 	padding: 10px 0 0 0;
+	position: absolute;
 	#ys-subs,
 	#ys-views {
 		display: block;
@@ -490,13 +491,13 @@ select {
 ul#ys-menu {
 	display: block;
 	float: left;
-	width: 100%;
+	width: 225px;
 	padding: 5px 0 0 0;
 	li.ys-menu-item {
 		display: block;
 		float: left;
 		height: 35px;
-		width: 100%;
+		width: 225px;
 		margin: 0 0 5px 0;
 		a {
 			display: block;
@@ -507,14 +508,22 @@ ul#ys-menu {
 				display: block;
 				float: left;
 				height: 35px;
+				padding: 0 8px;
+				font-size: 18px;
+				line-height: 40px;
 			}
 			span.ys-menu-item-label {
 				display: block;
 				float: left;
+				width: 0;
 				height: 35px;
 				font-size: 14px;
 				font-weight: 300;
 				line-height: 34px;
+				overflow: hidden;
+				@include opacity(0);
+				@include transition-property(width, opacity, padding);
+				@include transition-duration(.15s);
 			}
 		}
 	}
@@ -524,6 +533,15 @@ ul#ys-menu {
 	li.ys-menu-item:nth-child(4) a { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:nth-child(5) a { background: $green url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:nth-child(6) a { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
+	li.ys-menu-item:hover {
+		a {
+			span.ys-menu-item-label {
+				width: auto;
+				padding: 0 25px 0 0;
+				@include opacity(1);
+			}
+		}
+	}
 }
 
 
@@ -652,13 +670,14 @@ ul#ys-menu {
 
 
 #ys-player-controls {
-	padding: 15px 0 0 0;
 	display: block;
 	float: right;
+	height: 109px;
+	width: 100%;
+	padding: 15px 0 0 0;
 	> * {
-		float: left;
-		margin-left: 5px;
-		margin-right: 5px;
+		float: right;
+		margin-left: 10px;
 	}
 	.ss-icon {
 		display: block;
