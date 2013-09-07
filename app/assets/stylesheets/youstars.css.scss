@@ -383,6 +383,10 @@ select {
 			@include opacity(0.1);
 			@include transition-property(opacity, rotate);
 			@include transition-duration(0.33s);
+      img {
+        width: 230px;
+        height: 230px;
+      }
 			a {
 				display: block;
 				float: left;

@@ -17,3 +17,5 @@
 
 .rvmrc
 .powrc
+*.swp
+*.swo

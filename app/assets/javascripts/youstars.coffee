@@ -11,6 +11,7 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
   ($http, userService, $location) ->
     hash =
       channels: []
+      popular_channels: []
 
     hash.fetch_channels = ->
       # storing results of this request in session storage, so back-and-
@@ -28,6 +29,10 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
         return $http.get("/suggest/channels/#{channel}").then (res) ->
           sessionStorage.setItem(key, angular.toJson(res.data))
           hash.channels = res.data
+
+    hash.fetch_popular = ->
+      $http.get('https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json&max-results=50').then (res) ->
+        res.data.feed.entry
 
     return hash
 ])
@@ -423,4 +428,19 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
 
   )
+])
+
+youstars.controller('homeController', ['$scope', 'channelsService', ($scope, channelsService) ->
+  $scope.channels = []
+  channelsService.fetch_popular().then (channels) ->
+    console.log 'chans', channels
+    channels.forEach (ele, ind, arr) ->
+      thumbs = ele.media$group.media$thumbnail
+      thumbs.forEach (thumb, ind) ->
+        if thumb.yt$name == 'hqdefault'
+          ele.starsImage = thumb.url
+      unless ele.starsImage?
+        ele.starsImage = thumbs[0].url 
+
+    $scope.channels = channels
 ])
