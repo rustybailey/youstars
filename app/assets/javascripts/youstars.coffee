@@ -255,41 +255,12 @@ youstars.factory('mastheadService', [ () ->
   }
 ])
 
-youstars.factory('statsService', ['$routeParams', '$filter', ($routeParams, $filter) ->
+youstars.factory('statsService', ['$routeParams', '$filter', '$http', ($routeParams, $filter, $http) ->
   return {
     getStats: () ->
       channel = $routeParams.currentChannel
-      $.ajax
-        url: "/channel/" + channel + "/stream"
-        success: (data) =>
-          stats =
-            views: Math.floor(data.view_count)
-            subs: Math.floor(data.subscriber_count)
-          $('#ys-views strong').data('stat', stats.views)
-          $('#ys-subs strong').data('stat', stats.subs)
-
-    animateStats: () ->
-      $('#ys-views strong, #ys-subs strong').each (index) ->
-        target = this
-        targetNum = parseInt($(target).data('stat'))
-        baseNum = 0
-        incrementBy = (if Math.abs(targetNum) < 50 then 1 else Math.abs(Math.round(targetNum / 50)))
-        interval = setInterval(->
-          if targetNum > 0
-            $(target).html $filter('number')(baseNum)
-            baseNum += incrementBy
-            if baseNum > targetNum
-              $(target).html $filter('number')(targetNum)
-              clearInterval interval
-          else if targetNum < 0
-            $(target).html $filter('number')(baseNum)
-            baseNum -= incrementBy
-            if baseNum < targetNum
-              $(target).html $filter('number')(targetNum)
-              clearInterval interval
-          else
-            $(target).html $filter('number')(targetNum)
-        , 10)
+      $http.get("/channel/#{channel}/stream").then (res) ->
+        res.data
   }
 ])
 
@@ -324,13 +295,62 @@ youstars.factory('mysubscribersService', [ () ->
   }
 ])
 
-youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeParams', (userService, statsService, $timeout, $routeParams) ->
+youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeParams', '$filter', (userService, statsService, $timeout, $routeParams, $filter) ->
   return {
     restrict: "E"
     replace: true
     link: (scope, element, attr) ->
-      $timeout( statsService.getStats, 0 )
-      $timeout( statsService.animateStats, 1000 )
+      # $timeout( , 1000 )
+      scope.views = 0
+      scope.subscribers = 0
+      statsService.getStats().then (data) ->
+        scope.real_views = data.view_count
+        scope.real_subscribers = data.subscriber_count
+        $timeout ->
+          ['views', 'subscribers'].forEach (val, index) ->
+            targetNum = scope['real_' + val]
+            baseNum = scope[val]
+            incrementBy = (if Math.abs(targetNum) < 6 then 1 else Math.abs(Math.round(targetNum / 6)))
+            interval = setInterval(->
+              if targetNum > 0
+                scope[val] = $filter('number')(baseNum)
+                baseNum += incrementBy
+                if baseNum > targetNum
+                  scope[val] = $filter('number')(targetNum)
+                  clearInterval interval
+              else if targetNum < 0
+                scope[val] = $filter('number')(baseNum)
+                baseNum -= incrementBy
+                if baseNum < targetNum
+                  scope[val] = $filter('number')(targetNum)
+                  clearInterval interval
+              else
+                scope[val] = $filter('number')(targetNum)
+              scope.$apply()
+            , 80)
+        , 1000
+
+    template: """
+    <div id="ys-stats">
+      <div id="ys-views">
+        <span ng-show="views"><strong>{{views}}</strong> views</span>
+      </div>
+      <!-- #ys-views -->
+      <ul id="ys-social-links">
+        <li><a href="/test"><i class="ss-icon ss-social">Facebook</i></i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">Twitter</i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">Instagram</i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">Tumblr</i></a></li>
+        <li><a href="/test"><i class="ss-icon ss-social">LinkedIn</i></a></li>
+      </ul>
+      <!-- #ys-social-links -->
+      <br />
+      <div id="ys-subs">
+        <span ng-show="subscribers"><strong>{{subscribers}}</strong> subs</span>
+      </div>
+      <!-- #ys-subs -->
+    </div>
+    """
   }
 ])
 
