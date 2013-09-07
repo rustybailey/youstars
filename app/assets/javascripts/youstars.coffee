@@ -96,7 +96,7 @@ youstars.directive('suggestedchannels', ['suggestedchannelsService', (suggestedc
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in suggestedChannelsArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
@@ -124,7 +124,7 @@ youstars.directive('similarrecentchannels', ['similarrecentchannelsService', (si
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in similarrecentChannelsArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
@@ -152,7 +152,7 @@ youstars.directive('mostsubscribedchannels', ['mostsubscribedchannelsService', (
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in mostsubscribedChannelsArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
@@ -180,7 +180,7 @@ youstars.directive('similarchannels', ['similarchannelsService', (similarchannel
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in similarChannelsArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
@@ -829,7 +829,10 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         videosService.fetch_videos(true).then () ->
           $scope.makingARequest = false
 
-
+    # stop the video on any menu click
+    $("#ys-menu a").on "click", (e) ->
+      player.pauseVideo()
+      $(".pause").text "Play"
   )
 
 
