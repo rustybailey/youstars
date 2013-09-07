@@ -56,6 +56,7 @@ GEM
     erubis (2.7.0)
     excon (0.25.3)
     execjs (2.0.1)
+    extlib (0.9.16)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
     fssm (0.2.10)
@@ -73,6 +74,10 @@ GEM
     json (1.8.0)
     jwt (0.1.8)
       multi_json (>= 1.5)
+    ken (0.2.1)
+      addressable
+      extlib
+      json
     kgio (2.8.0)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -250,6 +255,7 @@ DEPENDENCIES
   hirefire-resource
   httparty
   jquery-rails
+  ken
   omniauth (= 1.1.0)
   omniauth-google-oauth2 (= 0.1.17)
   omniauth-oauth2

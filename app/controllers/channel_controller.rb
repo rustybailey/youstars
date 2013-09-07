@@ -17,6 +17,7 @@ class ChannelController < ApiController
     end
 
     c.save
+    Resque.enqueue_in_with_queue(:immediate, 0, ChannelDataJob, @channel_id)
 
     render :json => c.attributes
   end
