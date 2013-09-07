@@ -6,6 +6,19 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
         $('#ys-profiles, #ys-stats, #ys-content, #ys-videos, #ys-player-controls').fadeToggle();
       }
     }
+
+    if($("#ys-overlay").is(":visible")) {
+      if(e.keyCode === 27) {
+        $("#ys-overlay .ys-overlay-close").trigger("click");
+      }
+    }
+
+    if($("#ys-channel-overlay").is(":visible")) {
+      if(e.keyCode === 27) {
+        $("#ys-channel-overlay .ys-overlay-close").trigger("click");
+      }
+    }
+
     // Press left/right arrows and enter to select video from bottom list
     var highlighted = $('.ys-video-tile.currentSelection');
     if(e.keyCode === 39) {
@@ -49,6 +62,8 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
       var vid = highlighted.data('video-id');
       angular.element('body').injector().get('$rootScope').$broadcast('playVideoMayne', vid);
     }
+
+
   });
   $routeProvider.when('', {
     templateUrl: '<%= asset_path("home.html") %>',
