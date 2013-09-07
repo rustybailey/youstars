@@ -28,10 +28,10 @@ youstars.directive('trendingvideos', ['trendingvideosService', (trendingvideosSe
           <li class="ys-recommendation" ng-repeat="video in trendingVideosArray">
             <a class="ys-recommendation-info" href="#">
               <h3>{{video.title}}</h3>
-              <h4>{{video.channel_name | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes}} likes</h4>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="/assets/placeholders/video-test.png" />
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
               <h3>{{video.channel_name}}</h3>
               <h4>{{video.title}}</h4>
             </a>
