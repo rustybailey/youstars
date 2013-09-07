@@ -29,7 +29,7 @@ module Pythia
 
   def self.score(channel_data, target_data = nil, data_space = nil)
 
-    # weighted geometric mean of subscribers and log-scaled views 
+    # weighted geometric mean of subscribers and log-scaled views
     score = channel_data[:subscriber_count] * Math.log( channel_data[:view_count] )
     score = score ** 0.2
 

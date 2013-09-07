@@ -22,7 +22,7 @@ class Suggest::ChannelsController < ApiController
       entry.dig("author", 0, "yt$userID", "$t")
     end
     
-    recs = recs.collect do |id|
+    recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r }.collect do |id|
       YoutubeApi.channel_data_for_channel_id(id)
     end
 
@@ -37,7 +37,7 @@ class Suggest::ChannelsController < ApiController
       entry.dig("author", 0, "yt$userID", "$t")
     end
     
-    recs = recs.collect do |id|
+    recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r }.collect do |id|
       YoutubeApi.channel_data_for_channel_id(id)
     end
 
@@ -55,7 +55,7 @@ class Suggest::ChannelsController < ApiController
       entry.dig("author", 0, "yt$userID", "$t")
     end
     
-    recs = recs.collect do |id|
+    recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r }.collect do |id|
       YoutubeApi.channel_data_for_channel_id(id)
     end
 
