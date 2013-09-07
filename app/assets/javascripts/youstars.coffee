@@ -350,6 +350,8 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     youtubeInit.currentChannel = $routeParams.currentChannel
     userService.currentChannel = $routeParams.currentChannel
   player = youtubeInit.player
+  
+  $scope.loggedIn = $("#ys-app").is(".ys-logged-in")
 
   # Load the IFrame Player API code asynchronously.
 
@@ -429,9 +431,6 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
   )
 
-  # Logged in logic.  Add an else if you want.
-  if $("#ys-app").is(".ys-logged-in")
-    $(".ys-hide-if-logged-in").hide()
 
 ])
 
