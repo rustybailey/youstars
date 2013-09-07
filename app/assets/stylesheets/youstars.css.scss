@@ -974,11 +974,18 @@ $ys-profile-tile-large-size:	230px;
 				width: 23px;
 				height: 23px;
 				margin: 2px 2px 0 0;
+				text-align: center;
+				color: #ffffff;
+				line-height: 26px;
 				background: $crimson;
 				position: relative;
 				z-index: 50;
+				@include opacity(1);
+				@include transition-property(opacity);
+				@include transition-duration(0.2s);
 			}
 			a.ys-profile-action:hover {
+				
 				@include opacity(0.75);
 			}
 			a.ys-profile-tile-content {

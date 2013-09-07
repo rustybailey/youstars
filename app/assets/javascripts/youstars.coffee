@@ -627,7 +627,7 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
             <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
             <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
-          <a class="ys-profile-action" href="#"></a>
+          <a class="ys-profile-action ss-icon ss-addheart"></a>
         </li>
       </ul>
     </div>
