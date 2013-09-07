@@ -70,7 +70,7 @@ youstars.factory('statsService', ['$routeParams', '$filter', ($routeParams, $fil
     getStats: () ->
       channel = $routeParams.currentChannel
       $.ajax
-        url: "http://youstars.dev/channel/" + channel + "/stream"
+        url: "/channel/" + channel + "/stream"
         success: (data) =>
           stats =
             views: Math.floor(data.view_count)
