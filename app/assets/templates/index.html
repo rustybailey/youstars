@@ -1,7 +1,7 @@
 <div id="ys-overlay" ng-show="showTutorial" ng-animate="'ys-overlay'" style="display: none">
 	<a class="ys-overlay-close" ng-click="showTutorial = !showTutorial">Close Overlay</a>
 	<h1>Helpful Hints</h1>
-	<img id="ys-keyboard" src="/assets/keyboard.png" />
+	<img id="ys-keyboard" src="/assets/keyboard.png" ng-click="showTutorial = !showTutorial" />
 </div>
 <!-- #ys-overlay -->
 

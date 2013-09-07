@@ -211,6 +211,7 @@ a {
 	img#ys-keyboard {
 		display: block;
 		margin: 100px auto;
+		cursor: pointer;
 		@include opacity(0.75);
 		@include transition-property(opacity);
 		@include transition-duration(0.2s);
