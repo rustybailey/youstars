@@ -155,6 +155,7 @@ select {
 
 #ys-overlay, #ys-video-overlay {
 	display: block;
+	/*display: none;*/
 	width: 100%;
 	height: 100%;
 	background: transparent url("/assets/background-black-88.png") repeat 0 0;
@@ -249,8 +250,7 @@ select {
 					h3 {
 						display: block;
 						width: 300px;
-						padding: 0 10px;
-						margin: 130px 0 0 0;
+						padding: 130px 10px 0 10px;
 						font-size: 18px;
 						position: absolute;
 						color: #ffffff;
@@ -267,8 +267,8 @@ select {
 					h4 {
 						display: block;
 						width: 300px;
-						padding: 0 10px;
-						margin: 150px 0 0 0;
+						height: 30px;
+						padding: 150px 10px 0 10px;
 						font-size: 12px;
 						position: absolute;
 						color: #ffffff;
@@ -280,7 +280,8 @@ select {
 						@include text-shadow(0 1px 1px #000000);
 						@include transition-property(opacity);
 						@include transition-duration(0.33s);
-						@include opacity(0.75);
+						@include opacity(0.66);
+						@include background-image(linear-gradient(transparent, transparent 70%, #000000)); 
 					}
 				}
 			}
