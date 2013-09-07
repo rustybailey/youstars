@@ -117,7 +117,7 @@ class Suggest::VideosController < ApiController
       response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
     end
 
-    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured#{cat_name}?max-results=50"
+    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured#{cat_name}?max-results=50&start-index=51"
     recs2 = Rails.cache.fetch( url, :expires_in => 1.day ) do
       response  = YoutubeApi.v2_authorized_request( url, nil )
       response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
