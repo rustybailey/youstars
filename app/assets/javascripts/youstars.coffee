@@ -462,17 +462,16 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
       scope.views = 0
       scope.subscribers = 0
       statsService.getStats().then (data) ->
-        scope.real_views = data.view_count
-        scope.real_subscribers = data.subscriber_count
         $timeout ->
+          scope.real_views = data.view_count
+          scope.real_subscribers = data.subscriber_count
           element.find('span').addClass("visible")
           ['views', 'subscribers'].forEach (val, index) ->
             bg = element.find("#ys-#{val}-bg")
             holder = element.find("#ys-#{val} span")
-            console.log 'holder', holder
             targetNum = scope['real_' + val]
             baseNum = scope[val]
-            incrementBy = (if Math.abs(targetNum) < 50 then 1 else Math.abs(Math.round(targetNum / 50)))
+            incrementBy = (if Math.abs(targetNum) < 10 then 1 else Math.abs(Math.round(targetNum / 10)))
             interval = setInterval(->
               if targetNum > 0
                 scope[val] = $filter('number')(baseNum)
@@ -489,14 +488,13 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
               else
                 scope[val] = $filter('number')(targetNum)
               scope.$apply()
-              bg.width(holder.width() + 30)
-            , 10)
+            , 50)
         , 2500
 
     template: """
-      <div id="ys-stats">
-        <div id="ys-views">
-          <div id="ys-views-bg"></div>
+    <div id="ys-stats">
+      <div id="ys-views">
+        <span><strong>{{views}}</strong> views</span>
           <ul id="ys-social-links">
             <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://youstars.herokuapp.com/#/{{currentChannel}}&p[images][0]=&p[title]=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}&p[summary]="><i class="ss-icon ss-social">Facebook</i></i></a></li>
             <li><a href="http://twitter.com/home?status=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20http://youstars.herokuapp.com/#/{{currentChannel}}"><i class="ss-icon ss-social">Twitter</i></a></li>
@@ -504,17 +502,17 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
             <li><a href="http://www.tumblr.com/share/link?url=http://youstars.herokuapp.com/#/{{currentChannel}}&name={{currentChannel}}&description=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">Tumblr</i></a></li>
             <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://youstars.herokuapp.com/#/{{currentChannel}}&title={{currentChannel}}&summary=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">LinkedIn</i></a></li>
           </ul>
-          <span><strong>{{views}}</strong> views</span>
-        </div>
-        <!-- #ys-views -->
-        <!-- #ys-social-links -->
-        <br />
-        <div id="ys-subscribers">
-          <div id="ys-subscribers-bg"></div>
-          <span><strong>{{subscribers}}</strong> subs</span>
-        </div>
-        <!-- #ys-subs -->
+        <div id="ys-views-bg" ng-class="{'adjusted': real_views}"><strong>{{real_views | number}}</strong> views</div>
       </div>
+      <!-- #ys-views -->
+      <!-- #ys-social-links -->
+      <br />
+      <div id="ys-subscribers">
+        <span><strong>{{subscribers}}</strong> subs</span>
+        <div id="ys-subscribers-bg" ng-class="{'adjusted': real_subscribers}"><strong>{{real_subscribers | number}}</strong> subs</div>
+      </div>
+      <!-- #ys-subs -->
+    </div>
     """
   }
 ])
