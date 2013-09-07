@@ -316,6 +316,25 @@ a {
 					}
 				}
 			}
+
+			li.ys-recommendation.ys-recommendation-channel{
+				width: 200px;
+				height: 200px;
+
+				a.ys-recommendation-info{
+					width: 170px;
+					h3{
+						height: 70px;
+					}
+				}
+
+				a.ys-recommendation-content img{
+					width: 200px;
+					height: 200px;
+				}
+			}
+
+			
 			li.ys-recommendation:hover {
 				a.ys-recommendation-content {
 					margin: 187px 0 0 0;

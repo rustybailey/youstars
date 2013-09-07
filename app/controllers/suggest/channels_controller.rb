@@ -208,7 +208,7 @@ class Suggest::ChannelsController < ApiController
     response  = YoutubeApi.v2_authorized_request( url, current_user.get_token, params )
     videos    = response.parsed_response['feed']['entry'].map do |entry|
       {
-        :video_id   => entry.dig('media$group', 'yt$videoid', '$t')
+        :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),
         :channel_id => entry.dig('media$group', 'yt$uploaderId', '$t')
       }
     end
@@ -218,7 +218,7 @@ class Suggest::ChannelsController < ApiController
     response  = YoutubeApi.v2_authorized_request( next_url, current_user.get_token, params )
     videos   << response.parsed_response['feed']['entry'].map do |entry|
       {
-        :video_id   => entry.dig('media$group', 'yt$videoid', '$t')
+        :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),
         :channel_id => entry.dig('media$group', 'yt$uploaderId', '$t')
       }
     end

@@ -33,6 +33,28 @@ youstars.factory('suggestedvideosService', ['$http', ($http) ->
   }
 ])
 
+youstars.factory('suggestedchannelsService', ['$http', ($http) ->
+  return {
+    fetchSuggestedchannels: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/channels.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
+youstars.factory('similarchannelsService', ['$http', 'userService', ($http, userService) ->
+  return {
+    fetchSimilarchannels: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/channels/' + userService.currentChannel + '.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
 youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
   return {
     fetchMostwatchedvideos: () ->
@@ -43,6 +65,63 @@ youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
         $.Deferred().resolve([])
   }
 ])
+
+youstars.directive('suggestedchannels', ['suggestedchannelsService', (suggestedchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      suggestedchannelsService.fetchSuggestedchannels().then (data) ->
+        scope.suggestedChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in suggestedChannelsArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+youstars.directive('similarchannels', ['similarchannelsService', (similarchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      similarchannelsService.fetchSimilarchannels().then (data) ->
+        scope.similarChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in similarChannelsArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
 
 
 youstars.directive('mostwatchedvideos', ['mostwatchedvideosService', (mostwatchedvideosService) ->
