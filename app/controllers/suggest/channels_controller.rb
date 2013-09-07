@@ -122,7 +122,7 @@ class Suggest::ChannelsController < ApiController
       e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
     end
 
-    channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] }
+    channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] } )
 
     render :json => channel_recs
   end
