@@ -828,7 +828,10 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         videosService.fetch_videos(true).then () ->
           $scope.makingARequest = false
 
-
+    # stop the video on any menu click
+    $("#ys-menu a").on "click", (e) ->
+      player.pauseVideo()
+      $(".pause").text "Play"
   )
 
 
