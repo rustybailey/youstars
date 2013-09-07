@@ -71,7 +71,7 @@ class ChannelController < ApiController
     subs_series ||= []
 
     if subs_series.length < 3 or Time.now.to_i > (subs_series.last['timestamp'] + 60.minutes.to_i)
-      new_stats = YoutubeApi.channel_subs_for_channel_id(@channel_id)
+      new_stats = YoutubeApi.channel_stats_for_channel_id(@channel_id)
 
       subs_series << { timestamp: Time.now.to_i }.merge( new_stats )
       subs_series  = subs_series.last(3)
@@ -84,7 +84,7 @@ class ChannelController < ApiController
     views_series ||= []
 
     if views_series.length < 3 or Time.now.to_i > (views_series.last['timestamp'] + 60.minutes.to_i)
-      new_stats = YoutubeApi.channel_views_for_channel_id(@channel_id) if new_stats.nil?
+      new_stats = YoutubeApi.channel_stats_for_channel_id(@channel_id) if new_stats.nil?
 
       views_series << { timestamp: Time.now.to_i }.merge( new_stats )
       views_series  = views_series.last(3)
