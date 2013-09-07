@@ -3,6 +3,15 @@ module YoutubeApi
   @@V3_URL = "https://www.googleapis.com/youtube/v3"
   @@V2_URL = "https://gdata.youtube.com/feeds/api"
 
+  def self.pull_in_channels(pages = 10)
+    (1..10).to_a.each do |i|
+      json = HTTParty.get("https://engine.fullscreen.net/public/channels?page=#{i}")
+      json["results"].each do |c|
+        Channel.create(:name => c["name"], :youtube_id => "UC#{c['youtube_id']}")
+      end
+    end
+  end
+
   def self.video_list(channel_id, limit, page_token = nil)
     playlist_id = uploads_playlist_id_for_channel(channel_id)
     video_list  = video_list_for_playlist(playlist_id, limit, page_token)
@@ -26,7 +35,7 @@ module YoutubeApi
   end
 
   def self.video_list_for_playlist(playlist_id, limit, page_token = nil)
-    url   = @@V3_URL + "/playlistItems"
+    url   = "#{@@V3_URL}/playlistItems"
     query = {
       key:        ENV['YOUTUBE_API'],
       playlistId: playlist_id,
@@ -55,9 +64,6 @@ module YoutubeApi
 
     json = JSON.parse( HTTParty.get(url, query: query).body )    
     data = []
-    20.times { |i| Rails.logger.warn('**********') }
-    Rails.logger.warn(JSON.pretty_generate(json))
-    20.times { |i| Rails.logger.warn('**********') }
 
     json['items'].each do |item|
       data << {
@@ -78,7 +84,7 @@ module YoutubeApi
       channel_id = channel_id.join(',')
     end
 
-    v3_channel_url = @@v3_URL + "/channels"
+    v3_channel_url = @@V3_URL + "/channels"
     v3_query = {
       key: ENV['YOUTUBE_API'],
       id: channel_id,
@@ -163,7 +169,7 @@ module YoutubeApi
   end
 
   def self.video_search_for_channel_id(channel_id, limit = 50, order = 'viewCount')
-    search_url = @@v3_URL + '/search'
+    search_url = @@V3_URL + '/search'
     query = {
       key: ENV['YOUTUBE_API'],
       channelId: channel_id,
@@ -184,11 +190,11 @@ module YoutubeApi
     end
   end
   
-  def self.V2_authorized_request( url, oauth2_token, params = {} )
-    V3_authorized_request( url, oauth2_token, {"v" => 2, "alt" => "json"} )
+  def self.v2_authorized_request( url, oauth2_token, params = {} )
+    v3_authorized_request( url, oauth2_token, {"v" => 2, "alt" => "json"} )
   end
 
-  def self.V3_authorized_request( url, oauth2_token, params = {})
+  def self.v3_authorized_request( url, oauth2_token, params = {})
     headers = { "X-GData-Key" => "key=#{ENV['YOUTUBE_API']}" }
     headers["Authorization"] = "Bearer #{oauth2_token}" if oauth2_token.present?
     HTTParty.get( url, :query => params, :headers => headers )

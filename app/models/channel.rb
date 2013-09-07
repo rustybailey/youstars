@@ -13,6 +13,12 @@ class Channel < ActiveRecord::Base
   validates :name, :uniqueness => true
   validates :youtube_id, :uniqueness => true
 
+  attr_accessible :name, :youtube_id
+
+  def all_topics
+    self.topics | self.calculated_topics
+  end
+
   def increment_topic_total(topic)
     topic.total ||= 0
     topic.total  += 1

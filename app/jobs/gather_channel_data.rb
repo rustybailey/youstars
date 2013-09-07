@@ -14,21 +14,24 @@ module GatherChannelData
     page_token = nil
     loop do
       video_list = YoutubeApi.video_list(channel.youtube_id, 50, page_token)
-      Rails.logger.warn(JSON.pretty_generate(video_list))
 
       video_list[:videos].each do |video|
-        topics += video[:topics]
-        video[:topics].inject(topic_freq) { |hash, topic| hash[topic] += 1; hash }
+        if video[:topics].present?
+          topics += video[:topics]
+          video[:topics].inject(topic_freq) { |hash, topic| hash[topic] += 1; hash }
+        end
       end
 
       page_token = video_list[:page_token]
       break if page_token.nil?
     end
 
-    return topics.uniq.sort_by { |n| topic_freq[n] }.reverse[0...32]
-    topics.uniq.sort_by { |n| topic_freq[n] }.reverse[0...32].each do |topic|
-      channel.calculated_topics.create(name: topic)
+    # Only use the top 32 most frequently used tags/topics for this channel
+    topics.uniq.sort_by { |n| topic_freq[n] }.reverse[0...32].each do |topic_name|
+      channel.calculated_topics << Topic.find_or_create_by(name: topic_name)
     end
+
+    #return { :topics => topics.uniq.sort_by { |n| topic_freq[n] }.reverse[0...32], :freq => topic_freq }
   end
 
 end

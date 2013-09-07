@@ -5,9 +5,9 @@ class Topic < ActiveRecord::Base
                           :class_name => 'Channel',
                           :join_table => 'channels_topics_calculated'
 
-  validates :name, :uniqueness => true
+  validates :mid, :uniqueness => true
 
-  attr_accessible :name
+  attr_accessible :mid, :name
 
   def name= (name)
     write_attribute(:name, name.downcase)
