@@ -460,10 +460,14 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
         scope.real_views = data.view_count
         scope.real_subscribers = data.subscriber_count
         $timeout ->
+          element.find('span').addClass("visible")
           ['views', 'subscribers'].forEach (val, index) ->
+            bg = element.find("#ys-#{val}-bg")
+            holder = element.find("#ys-#{val} span")
+            console.log 'holder', holder
             targetNum = scope['real_' + val]
             baseNum = scope[val]
-            incrementBy = (if Math.abs(targetNum) < 6 then 1 else Math.abs(Math.round(targetNum / 6)))
+            incrementBy = (if Math.abs(targetNum) < 50 then 1 else Math.abs(Math.round(targetNum / 50)))
             interval = setInterval(->
               if targetNum > 0
                 scope[val] = $filter('number')(baseNum)
@@ -480,15 +484,14 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
               else
                 scope[val] = $filter('number')(targetNum)
               scope.$apply()
-            , 80)
-        , 1000
+              bg.width(holder.width() + 30)
+            , 10)
+        , 2500
 
     template: """
     <div id="ys-stats">
       <div id="ys-views">
-        <span ng-show="views"><strong>{{views}}</strong> views</span>
-      </div>
-      <!-- #ys-views -->
+        <div id="ys-views-bg"></div>
       <ul id="ys-social-links">
         <li><a href="/test"><i class="ss-icon ss-social">Facebook</i></i></a></li>
         <li><a href="/test"><i class="ss-icon ss-social">Twitter</i></a></li>
@@ -496,10 +499,14 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
         <li><a href="/test"><i class="ss-icon ss-social">Tumblr</i></a></li>
         <li><a href="/test"><i class="ss-icon ss-social">LinkedIn</i></a></li>
       </ul>
+        <span><strong>{{views}}</strong> views</span>
+      </div>
+      <!-- #ys-views -->
       <!-- #ys-social-links -->
       <br />
-      <div id="ys-subs">
-        <span ng-show="subscribers"><strong>{{subscribers}}</strong> subs</span>
+      <div id="ys-subscribers">
+        <div id="ys-subscribers-bg"></div>
+        <span><strong>{{subscribers}}</strong> subs</span>
       </div>
       <!-- #ys-subs -->
     </div>
