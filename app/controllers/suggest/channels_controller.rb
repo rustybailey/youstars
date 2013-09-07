@@ -20,7 +20,7 @@ class Suggest::ChannelsController < ApiController
   end
 
   def most_viewed
-    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( {:current_user => current_user.guid} ), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
       response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
@@ -65,7 +65,7 @@ class Suggest::ChannelsController < ApiController
     # retrieve youtube's recommended videos for a user
     # and find the channels to which they belong
 
-    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( {:user => current_user.guid} ), :expires_in => 1.day ) do
     
       url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
       response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
