@@ -611,5 +611,8 @@ youstars.controller('homeController', ['$scope', 'channelsService', ($scope, cha
       unless ele.starsImage?
         ele.starsImage = thumbs[0].url 
 
+      if ele.author[0].name.$t.toLowerCase() != ele.author[0].uri.$t.substr(ele.author[0].uri.$t.lastIndexOf('/') + 1).toLowerCase()
+        ele.author[0].name.$t = ele.author[0].uri.$t.substr(ele.author[0].uri.$t.lastIndexOf('/') + 1)
+
     $scope.channels = channels
 ])
