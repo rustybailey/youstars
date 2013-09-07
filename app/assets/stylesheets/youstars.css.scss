@@ -798,9 +798,11 @@ ul#ys-menu {
 		color: white;
 		cursor: pointer;
 		font-size: 18px;
-		opacity: 0.8;
+		@include opacity(0.8);
+		@include transition-property(opacity);
+		@include transition-duration(0.2s);
 		&:hover {
-			opacity: 0.6;
+			@include opacity(0.6);
 		}
 	}
 	.video-info-container {
