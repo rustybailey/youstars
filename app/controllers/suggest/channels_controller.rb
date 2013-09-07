@@ -1,6 +1,6 @@
 class Suggest::ChannelsController < ApiController
 
-  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
+#  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
 
   def related
     # retrieve the most popular videos for the target channel
@@ -119,7 +119,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     video_recs = video_recs.reject do |e|
-      e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
+      e[:video_id].in?( current_user.disliked_videos.map(&:id) )
     end
 
     channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] } )
@@ -147,7 +147,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     videos = videos.reject do |e|
-      e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
+      e[:video_id].in?( current_user.disliked_videos.map(&:id) )
     end
 
     channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
@@ -181,7 +181,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     videos = videos.select do |e|
-      e[:video_id].in?( current_user.channel.liked_videos.map(&:id) )
+      e[:video_id].in?( current_user.liked_videos.map(&:id) )
     end
 
     channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
@@ -219,7 +219,7 @@ class Suggest::ChannelsController < ApiController
     end
 
     videos = videos.reject do |entry|
-      entry[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
+      entry[:video_id].in?( current_user.disliked_videos.map(&:id) )
     end
 
     videos = videos.order_by do |entry|
