@@ -642,7 +642,12 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
 ])
 
-youstars.controller('homeController', ['$scope', 'channelsService', ($scope, channelsService) ->
+youstars.controller('homeController', ['$scope', 'channelsService', '$location', ($scope, channelsService, $location) ->
+  $scope.goToChannel = (ev) ->
+    if ev.which == 13
+      chan = '/' + $(ev.target).val()
+      $location.path(chan)
+
   $scope.channels = []
   channelsService.fetch_popular().then (channels) ->
     channels.forEach (ele, ind, arr) ->
