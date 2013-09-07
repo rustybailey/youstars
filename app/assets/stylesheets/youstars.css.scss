@@ -187,6 +187,12 @@ a {
 		position: absolute;
 		text-transform: uppercase;
 		font-size: 11px;
+		@include opacity(.75);
+		@include transition-property(opacity);
+		@include transition-duration(0.25s);
+	}
+	a.ys-overlay-close:hover {
+		@include opacity(1);
 	}
 	h1 {
 		padding: 105px 0 100px 0;
@@ -701,13 +707,22 @@ ul#ys-menu {
 
 
 
-
+#ys-player-controls.ys-player-controls-before {
+	right: -250px;
+}
+#ys-player-controls.ys-player-controls-after {
+	right: 0;
+}
 #ys-player-controls {
 	display: block;
 	float: right;
 	height: 109px;
 	width: 100%;
 	padding: 15px 0 0 0;
+	position: relative;
+	right: -250px;
+	@include transition-property(right);
+	@include transition-duration(0.33s);
 	> * {
 		float: right;
 		margin-left: 10px;
@@ -809,17 +824,27 @@ $ys-profile-tile-medium-size:	150px;
 $ys-profile-tile-large-size:	230px;
 
 
+#ys-profiles.ys-profiles-after {
+	margin: 0 0 0 0;
+}
+#ys-profiles.ys-profiles-before,
+#ys-profiles.ys-profiles-after.ys-profiles-before {
+	margin: 0 -250px 0 0;
+}
 #ys-profiles {
 	display: block;
 	float: right;
 	width: 250px;
 	height: 100%;
 	padding: 132px 0 30px 0;
+	margin: 0 -250px 0 0;
 	top: -132px;
 	background: transparent url("/assets/background-black-33.png") repeat 0 0;
 	position: relative;
 	z-index: 15;
 	@include box-sizing(border-box);
+	@include transition-property(margin);
+	@include transition-duration(0.33s);
 	ul#ys-profiles-list {
 		display: block;
 		float: left;

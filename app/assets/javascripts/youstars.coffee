@@ -168,6 +168,12 @@ youstars.factory('mysubscribersService', [ () ->
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(8n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n)').toggleClass('ys-profile-tile-large', true).toggleClass('ys-profile-tile-small', false)
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(11n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+    positionMysubscribers: () ->
+      $('#ys-player-controls').addClass('ys-player-controls-before')
+      $('#ys-profiles').addClass('ys-profiles-before')
+    repositionMysubscribers: () ->
+      $('#ys-player-controls').addClass('ys-player-controls-after')
+      $('#ys-profiles').addClass('ys-profiles-after')
   }
 ])
 
@@ -258,12 +264,14 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
   replace: true
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
+    mysubscribersService.positionMysubscribers
     channelsService.fetch_channels().then (res) ->
       scope.channelsArray = res
       $timeout( mysubscribersService.sizeMysubscribers, 0 )
+      $timeout( mysubscribersService.repositionMysubscribers, 0 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
-    # $timeout( myvideosService.animateMyvideos, 0 )
-    # $timeout( myvideosService.removeDelayFromMyvideos, 200 )
+    # scope.hideMysubscribers = () ->
+    #   $timeout( mysubscribersService.repositionMysubscribers, 0 )
   controller: ['$scope', '$element', '$attrs', ($scope,$element,$attrs) ->
     $scope.nameIsntPoop = (item) ->
       !item.name.match(/[ .]/)?
