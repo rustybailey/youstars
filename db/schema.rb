@@ -35,11 +35,11 @@ ActiveRecord::Schema.define(version: 20130906184706) do
     t.integer "topic_id"
   end
 
-  add_index "channels_topics", ["channel_id", "topic_id"], name: "index_channels_topics_on_channel_id_and_topic_id", unique: true
+  add_index "channels_topics", ["channel_id", "topic_id"], name: "index_channels_topics_on_channel_id_and_topic_id"
   add_index "channels_topics", ["topic_id"], name: "index_channels_topics_on_topic_id"
 
   create_table "ratings", force: true do |t|
-    t.integer "user_id"
+    t.integer "channel_id"
     t.integer "video_id"
     t.integer "score"
   end
