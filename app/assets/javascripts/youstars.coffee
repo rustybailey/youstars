@@ -428,6 +428,11 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
 
   )
+
+  # Logged in logic.  Add an else if you want.
+  if $("#ys-app").is(".ys-logged-in")
+    $(".ys-hide-if-logged-in").hide()
+
 ])
 
 youstars.controller('homeController', ['$scope', 'channelsService', ($scope, channelsService) ->
