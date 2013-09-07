@@ -29,7 +29,7 @@ youstars.factory('suggestedvideosService', ['$http', ($http) ->
         $http.get('/suggest/videos/suggested.json').then (response) ->
           response.data
       else
-        []
+        $.Deferred().resolve([])
   }
 ])
 
@@ -40,7 +40,7 @@ youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
         $http.get('/suggest/videos/most_watched.json').then (response) ->
           response.data
       else
-        []
+        $.Deferred().resolve([])
   }
 ])
 
@@ -509,6 +509,11 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
   player = youtubeInit.player
   
   $scope.loggedIn = $("#ys-app").is(".ys-logged-in")
+
+  $scope.toggleVideo = ->
+    $scope.visibleVideo = !$scope.visibleVideo
+
+  $scope.visibleVideo = false
 
   # Load the IFrame Player API code asynchronously.
 
