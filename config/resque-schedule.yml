@@ -4,3 +4,9 @@ hourly_data:
   queue: immediate
   args: 
   description: "Queues up the initializers for all hourly data tasks."
+
+  cron: "30 0 * * *"
+  class: CacheWarmer
+  queue: immediate
+  args:
+  description: "Queues up cache-warming jobs."
