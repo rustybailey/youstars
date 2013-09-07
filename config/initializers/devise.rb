@@ -227,7 +227,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   require "omniauth-google-oauth2"
-  config.omniauth :google_oauth2, ENV['YOUTUBE_KEY'], ENV['YOUTUBE_SECRET'], { :access_type => 'offline', :scope => 'userinfo.email,userinfo.profile,plus.me,https://www.googleapis.com/auth/yt-analytics.readonly,https://www.googleapis.com/auth/youtube', :approval_prompt => 'auto', :client_id => '' }
+  config.omniauth :google_oauth2, ENV['YOUTUBE_KEY'], ENV['YOUTUBE_SECRET'], { :access_type => 'offline', :scope => 'userinfo.email,userinfo.profile,plus.me,https://www.googleapis.com/auth/yt-analytics.readonly,https://www.googleapis.com/auth/youtube', :approval_prompt => 'force', :client_id => '' }
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
