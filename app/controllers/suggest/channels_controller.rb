@@ -1,6 +1,6 @@
 class Suggest::ChannelsController < ApiController
 
-#  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
+  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
 
   def related
     # retrieve the most popular videos for the target channel
@@ -103,36 +103,42 @@ class Suggest::ChannelsController < ApiController
   end
 
   def recently_watched
-    url        = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
-    response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    channel_ids = response.parsed_response["feed"]["entry"].map do |entry| 
-      entry.dig("media$group", "yt$uploaderId", "$t")
+    channel_recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
+
+      url        = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
+      response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+      channel_ids = response.parsed_response["feed"]["entry"].map do |entry| 
+        entry.dig("media$group", "yt$uploaderId", "$t")
+      end
+      
+      channel_ids.uniq!
+      
+      channel_recs = YoutubeApi.channel_data_for_channel_id( channel_ids )
+
     end
-    
-    channel_ids.uniq!
-    
-    channel_recs = YoutubeApi.channel_data_for_channel_id( channel_ids )
 
     render :json => channel_recs
   end
 
   def similar_to_recently_watched
-    current_user = User.first
+    channel_recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
 
-    url        = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
-    response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-    channel_ids = response.parsed_response["feed"]["entry"].map do |entry| 
-      entry.dig("media$group", "yt$uploaderId", "$t")
-    end
+      url        = "https://gdata.youtube.com/feeds/api/users/default/watch_history?v=2&alt=json&max-results=50"
+      response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+      channel_ids = response.parsed_response["feed"]["entry"].map do |entry| 
+        entry.dig("media$group", "yt$uploaderId", "$t")
+      end
     
-    channel_ids.flatten.uniq!
+      channel_ids.flatten.uniq!
+      
+      channel_recs = []
+      channel_ids.first(5).each do |c_id|
+        channel_recs << Pythia.related(c_id).first(4)
+      end
+      channel_recs = channel_recs.flatten
 
-    channel_recs = []
-    channel_ids.first(5).each do |c_id|
-      channel_recs << Pythia.related(c_id).first(4)
     end
-    channel_recs.flatten!
-
+      
     render :json => channel_recs
   end
 
