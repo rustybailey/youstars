@@ -23,7 +23,7 @@ module Pythia
     target_channel_data = YoutubeApi.channel_data_for_channel_id(channel_id)[0]
     description_space   = channels.collect { |c| c[:description] }
 
-    channels.sort { |a, b| Pythia.score(b, target_channel_data, description_space) <=> Pythia.score(a, target_channel_data, description_space) } # descending
+    channels.sort { |a, b| Pythia.score(b, target_channel_data, description_space, stats_weighting) <=> Pythia.score(a, target_channel_data, description_space, stats_weighting) } # descending
   end
 
 
@@ -33,12 +33,8 @@ module Pythia
     score = channel_data[:subscriber_count] * Math.log( channel_data[:view_count] )
     score = score ** stats_weighting    
 
-    if target_data.dig(:description).present? and data_space.present?
-      score *= Pythia.string_score(channel_data[:description], target_data[:description], data_space)
-
-    else
-      score *= 0.5
-
+    if target_data.dig(:description).length > 0 and data_space.present?
+      score *= Pythia.string_score(channel_data[:description], target_data[:description], data_space)     
     end
     
     score
