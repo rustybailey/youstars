@@ -131,7 +131,7 @@ class Suggest::VideosController < ApplicationController
     if is_a_number? params[:category]
       @category = Category.find params[:category].to_i
     else
-      @category = Category.find_by_title params[:category]
+      @category = Category.find_by_title params[:category].downcase.humanize
     end
   end
 
