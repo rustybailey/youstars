@@ -67,36 +67,54 @@ class ChannelController < ApiController
   def stream
     redis = Resque.redis
 
-    stats_series   = JSON.parse( redis.get( "#{@channel_id}_stats_series" ) || '[]' )
-    stats_series ||= []
+    subs_series   = JSON.parse( redis.get( "#{@channel_id}_subs_series" ) || '[]' )
+    subs_series ||= []
 
-    if stats_series.length < 3 or Time.now.to_i > (stats_series.last['timestamp'] + 60.minutes.to_i)
-      new_stats = YoutubeApi.channel_stats_for_channel_id(@channel_id)
-      stats_series << { timestamp: Time.now.to_i }.merge( new_stats )
-      stats_series  = stats_series.last(3)
+    if subs_series.length < 3 or Time.now.to_i > (subs_series.last['timestamp'] + 60.minutes.to_i)
+      new_stats = YoutubeApi.channel_subs_for_channel_id(@channel_id)
 
-      redis.set( "#{@channel_id}_stats_series", stats_series.to_json )
+      subs_series << { timestamp: Time.now.to_i }.merge( new_stats )
+      subs_series  = subs_series.last(3)
+
+      redis.set( "#{@channel_id}_subs_series", subs_series.to_json )
     end
 
-    render( :json => stats_series.last ) and return if stats_series.length < 3
 
-    stats_series = JSON.parse( redis.get( "#{@channel_id}_stats_series" ) )
+    views_series   = JSON.parse( redis.get( "#{@channel_id}_views_series" ) || '[]' )
+    views_series ||= []
 
-    delta_t0 = stats_series.last['timestamp'] - stats_series.first['timestamp']
+    if views_series.length < 3 or Time.now.to_i > (views_series.last['timestamp'] + 60.minutes.to_i)
+      new_stats = YoutubeApi.channel_views_for_channel_id(@channel_id) if new_stats.nil?
+
+      views_series << { timestamp: Time.now.to_i }.merge( new_stats )
+      views_series  = views_series.last(3)
+
+      redis.set( "#{@channel_id}_views_series", views_series.to_json )
+    end
+
+
+    if stats_series.length < 3
+      render( :json => { view_count: views_series.last[:view_count], subscriber_count: subs_series.last[:subscriber_count] } ) and return 
+    end
+
+
+    views_series = JSON.parse( redis.get( "#{@channel_id}_views_series" ) )
+    subs_series  = JSON.parse( redis.get( "#{@channel_id}_subs_series"  ) )
+
+    views_delta_t0 = views_series.last['timestamp'] - views_series.first['timestamp']
+    subs_delta_t0  = subs_series.last['timestamp']  - subs_series.first['timestamp']
+
+    views_delta_t1 = Time.now.to_i - views_series.last['timestamp']    
+    subs_delta_t1  = Time.now.to_i - subs_series.last['timestamp']    
+
     moving_averages = {
-      'view_count'       => (stats_series.last['view_count'] - stats_series.first['view_count'])             / delta_t0.to_f,
-      'subscriber_count' => (stats_series.last['subscriber_count'] - stats_series.first['subscriber_count']) / delta_t0.to_f
-    }
-
-    delta_t1 = Time.now.to_i - stats_series.last['timestamp']    
-    estimated_deltas = {
-      'view_count'       => moving_averages['view_count']       * delta_t1,
-      'subscriber_count' => moving_averages['subscriber_count'] * delta_t1
+      'view_count'       => (views_series.last['view_count']      - views_series.first['view_count'])      / views_delta_t0.to_f,
+      'subscriber_count' => (subs_series.last['subscriber_count'] - subs_series.first['subscriber_count']) / subs_delta_t0.to_f
     }
 
     estimates = {
-      'view_count'       => stats_series.last['view_count']       + (moving_averages['view_count']       * delta_t1).to_i,
-      'subscriber_count' => stats_series.last['subscriber_count'] + (moving_averages['subscriber_count'] * delta_t1).to_i
+      'view_count'       => stats_series.last['view_count']       + (moving_averages['view_count']       * views_delta_t1).to_i,
+      'subscriber_count' => stats_series.last['subscriber_count'] + (moving_averages['subscriber_count'] * subs_delta_t1).to_i
     }
 
     render :json => estimates
