@@ -122,7 +122,7 @@ class Suggest::ChannelsController < ApiController
       e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
     end
 
-    channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] }
+    channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] } )
 
     render :json => channel_recs
   end
@@ -208,7 +208,7 @@ class Suggest::ChannelsController < ApiController
     response  = YoutubeApi.v2_authorized_request( url, current_user.get_token, params )
     videos    = response.parsed_response['feed']['entry'].map do |entry|
       {
-        :video_id   => entry.dig('media$group', 'yt$videoid', '$t')
+        :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),
         :channel_id => entry.dig('media$group', 'yt$uploaderId', '$t')
       }
     end
@@ -218,7 +218,7 @@ class Suggest::ChannelsController < ApiController
     response  = YoutubeApi.v2_authorized_request( next_url, current_user.get_token, params )
     videos   << response.parsed_response['feed']['entry'].map do |entry|
       {
-        :video_id   => entry.dig('media$group', 'yt$videoid', '$t')
+        :video_id   => entry.dig('media$group', 'yt$videoid', '$t'),
         :channel_id => entry.dig('media$group', 'yt$uploaderId', '$t')
       }
     end
