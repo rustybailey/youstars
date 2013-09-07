@@ -6,21 +6,21 @@ class Suggest::ChannelsController < ApiController
     # retrieve the most popular videos for the target channel
     # then retrieve the related videos for those and find the
     # channels to which they belong
-    recs = Rails.cache.fetch( auto_cache_key, :expires_in => 1.day ) do
+    load_channel_id    
 
-      load_channel_id
+#    recs = Rails.cache.fetch( auto_cache_key( channel: @channel_id ), :expires_in => 1.day ) do
 
-      channels       = Pythia.related(@channel_id, 15)
-      cheap_channels = Pythia.cheap_related(@channel_id, 45)
-
-      [channels, cheap_channels].flatten!
-    end
+      topical_channels = Pythia.related(@channel_id, 15, 0.2)
+      cheap_channels   = Pythia.cheap_related(@channel_id, 45)
+      
+      recs = [topical_channels, cheap_channels].flatten.uniq { |c| c[:channel_id] }
+#    end
 
     render :json => recs
   end
 
   def most_viewed
-    recs = Rails.cache.fetch( auto_cache_key( current_user.guid ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
       response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
@@ -41,7 +41,7 @@ class Suggest::ChannelsController < ApiController
   end
 
   def most_subscribed
-    recs = Rails.cache.fetch( auto_cache_key( current_user.guid ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json"
       response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
@@ -65,7 +65,7 @@ class Suggest::ChannelsController < ApiController
     # retrieve youtube's recommended videos for a user
     # and find the channels to which they belong
 
-    recs = Rails.cache.fetch( auto_cache_key( current_user.guid ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
     
       url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
       response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )

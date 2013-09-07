@@ -2,7 +2,7 @@ require 'youtube_api.rb'
 
 module Pythia
   
-  def self.related(channel_id, limit = 15, width = 15)
+  def self.related(channel_id, limit = 15, stats_weighting = 0.5, width = 15)
     top_videos = YoutubeApi.video_search_for_channel_id(channel_id, width, 'viewCount')
     
     related_videos = top_videos.collect do |video|
@@ -27,11 +27,11 @@ module Pythia
   end
 
 
-  def self.score(channel_data, target_data = nil, data_space = nil)
+  def self.score(channel_data, target_data = nil, data_space = nil, stats_weighting = 0.5)
 
     # weighted geometric mean of subscribers and log-scaled views
     score = channel_data[:subscriber_count] * Math.log( channel_data[:view_count] )
-    score = score ** 0.2
+    score = score ** stats_weighting
 
     if target_data.dig(:description).present? and data_space.present?
       score *= Pythia.string_score(channel_data[:description], target_data[:description], data_space)
