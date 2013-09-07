@@ -29,7 +29,7 @@ Youstars::Application.routes.draw do
     # no auth required
     get '/channels/:channel',         :controller => 'channels', :action => 'related'
     get '/channels/most_viewed',      :controller => 'channels', :action => 'most_viewed'
-    get '/channels/most_subscribed',  :controller => 'channels', :action => 'most_viewed'
+    get '/channels/most_subscribed',  :controller => 'channels', :action => 'most_subscribed'
 
 
     get '/videos',                    :controller => 'videos', :action => 'user'
