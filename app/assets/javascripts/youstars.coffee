@@ -808,12 +808,12 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $("#ys-menu a").on "click", (e) ->
       if player.getPlayerState() != 2
         player.pauseVideo()
+        $(".pause").text "Play"
 
     $(".ys-overlay-close, #ys-keyboard").on "click", (e) ->
       if player.getPlayerState() == 2
         player.playVideo()
-
-
+        $(".pause").text "Pause"
 
     $("#ys-player-controls").on "change", ".volume", ->
       newVolume = @valueAsNumber
