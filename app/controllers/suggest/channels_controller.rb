@@ -8,32 +8,33 @@ class Suggest::ChannelsController < ApiController
     # channels to which they belong
     load_channel_id    
 
-#    recs = Rails.cache.fetch( auto_cache_key( channel: @channel_id ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( channel: @channel_id ), :expires_in => 1.day ) do
 
       topical_channels = Pythia.related(@channel_id, 15, 0.2)
       cheap_channels   = Pythia.cheap_related(@channel_id, 45)
       
       recs = [topical_channels, cheap_channels].flatten.uniq { |c| c[:channel_id] }
-#    end
+
+    end
 
     render :json => recs
   end
 
   def most_viewed
-#    recs = Rails.cache.fetch( auto_cache_key( {:current_user => current_user.guid} ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid} ), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
       response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     
       recs = response.parsed_response["feed"]["entry"].map do |entry|
-        entry.dig("author", 0, "yt$userID", "$t")
+        'UC' + entry.dig("author", 0, "yt$userID", "$t")
       end
     
       recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r ) }.collect do |id|
         YoutubeApi.channel_data_for_channel_id(id)
       end
 
-#    end
+    end
 
     recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
 
@@ -41,20 +42,19 @@ class Suggest::ChannelsController < ApiController
   end
 
   def most_subscribed
-#    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json"
       response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     
       recs = response.parsed_response["feed"]["entry"].map do |entry|
-        entry.dig("author", 0, "yt$userID", "$t")
+        'UC' + entry.dig("author", 0, "yt$userID", "$t")
       end
 
-      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }.collect do |id|
-        YoutubeApi.channel_data_for_channel_id(id)
-      end
+      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }
+      recs = YoutubeApi.channel_data_for_channel_id(recs)
 
-#    end
+    end
 
     recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
     
@@ -70,29 +70,30 @@ class Suggest::ChannelsController < ApiController
       url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
       response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
 
-      recs = response.parsed_response["feed"]["entry"].map do |entry|
-        "UC" + entry["author"][0]["yt$userId"]["$t"]
+      recs = response.parsed_response["feed"]["entry"].map do |entry|nice
+        'UC' + entry.dig("author", 0, "yt$userId", "$t")
       end
     
-    recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }
-    recs = YoutubeApi.channel_data_for_channel_id(recs)
+      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }
+      recs = YoutubeApi.channel_data_for_channel_id(recs)
 
     end
-
+    
     recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
-
+    
     render :json => recs
   end
 
   def similar_to_your_channel
-    recs = Rails.cache.fetch( auto_cache_key, :expires_in => 1.day ) do
+    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
 
       channel_id = current_user.channel.youtube_id
 
       channels       = Pythia.related(channel_id, 15)
       cheap_channels = Pythia.cheap_related(channel_id, 45)
 
-      [channels, cheap_channels].flatten!
+      recs = [topical_channels, cheap_channels].flatten.uniq { |c| c[:channel_id] }
+
     end
 
     render :json => recs
@@ -103,8 +104,8 @@ class Suggest::ChannelsController < ApiController
     response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     video_recs = response.parsed_response["feed"]["entry"].map do |entry| 
       { 
-        :video_id => entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => entry.dig("author", 0, "yt$userId", "$t")
+        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
+        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
       }
     end
 
@@ -112,8 +113,8 @@ class Suggest::ChannelsController < ApiController
     response    = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     video_recs << response.parsed_response["feed"]["entry"].map do |entry| 
       { 
-        :video_id => entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => entry.dig("author", 0, "yt$userId", "$t")
+        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
+        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
       }
     end
 
@@ -121,9 +122,7 @@ class Suggest::ChannelsController < ApiController
       e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
     end
 
-    channel_recs = video_recs.collect do |e|
-      YoutubeApi.channel_data_for_channel_id( e[:channel_id] )
-    end
+    channel_recs = YoutubeApi.channel_data_for_channel_id( video_recs.collect { |v| v[:channel_id] }
 
     render :json => channel_recs
   end
@@ -133,8 +132,8 @@ class Suggest::ChannelsController < ApiController
     response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     videos = response.parsed_response["feed"]["entry"].map do |entry| 
       { 
-        :video_id => entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => entry.dig("author", 0, "yt$userId", "$t")
+        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
+        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
       }
     end
 
@@ -142,8 +141,8 @@ class Suggest::ChannelsController < ApiController
     response    = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     videos << response.parsed_response["feed"]["entry"].map do |entry| 
       { 
-        :video_id => entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => entry.dig("author", 0, "yt$userId", "$t")
+        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
+        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
       }
     end
 
@@ -151,9 +150,7 @@ class Suggest::ChannelsController < ApiController
       e[:video_id].in?( current_user.channel.disliked_videos.map(&:id) )
     end
 
-    channels = videos.collect do |e|
-      YoutubeApi.channel_data_for_channel_id( e[:channel_id] )
-    end
+    channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
 
     channel_recs = []
     channels.first(5).each do |c|
@@ -169,8 +166,8 @@ class Suggest::ChannelsController < ApiController
     response   = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     videos = response.parsed_response["feed"]["entry"].map do |entry| 
       { 
-        :video_id => entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => entry.dig("author", 0, "yt$userId", "$t")
+        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
+        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
       }
     end
 
@@ -178,8 +175,8 @@ class Suggest::ChannelsController < ApiController
     response    = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     videos << response.parsed_response["feed"]["entry"].map do |entry| 
       { 
-        :video_id => entry.dig("media$group", "yt$videoid", "$t"),
-        :channel_id => entry.dig("author", 0, "yt$userId", "$t")
+        :video_id   =>        entry.dig("media$group", "yt$videoid", "$t"),
+        :channel_id => 'UC' + entry.dig("author", 0, "yt$userId", "$t")
       }
     end
 
@@ -187,9 +184,7 @@ class Suggest::ChannelsController < ApiController
       e[:video_id].in?( current_user.channel.liked_videos.map(&:id) )
     end
 
-    channels = videos.collect do |e|
-      YoutubeApi.channel_data_for_channel_id( e[:channel_id] )
-    end
+    channels =  YoutubeApi.channel_data_for_channel_id( videos.collect { |v| v[:channel_id]  } )
 
     channel_recs = []
     channels.first(5).each do |c|

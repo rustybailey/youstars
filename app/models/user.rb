@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
     Video.where(:id => ratings_relation.map(&:id))
   end
 
-  def liked_videos(score = 3)
+  def liked_videos(score = 4)
     ratings_relation = video_ratings
     ratings_relation = ratings_relation.where( ["score >= ?", score] ) unless score.nil?
     
@@ -85,7 +85,7 @@ class User < ActiveRecord::Base
     Channel.where(:id => ratings_relation.map(&:id))
   end
 
-  def liked_channels(score = 3)
+  def liked_channels(score = 4)
     ratings_relation = channel_ratings
     ratings_relation = ratings_relation.where( ["score >= ?", score] ) unless score.nil?
     

@@ -22,7 +22,14 @@ Youstars::Application.routes.draw do
   namespace :suggest do
 
     get '/channels',                  :controller => 'channels', :action => 'user'
+    get '/channels/recently_watched', :controller => 'channels', :action => 'recently_watched'
+    get '/channels/my_channel',       :controller => 'channels', :action => 'similar_to_your_channel'
+    get '/channels/similar_to_recently_watched', :controller => 'channels', :action => 'similar_to_recently_watched'
+
+    # no auth required
     get '/channels/:channel',         :controller => 'channels', :action => 'related'
+    get '/channels/most_viewed',      :controller => 'channels', :action => 'most_viewed'
+    get '/channels/most_subscribed',  :controller => 'channels', :action => 'most_viewed'
 
 
     get '/videos',                    :controller => 'videos', :action => 'user'
