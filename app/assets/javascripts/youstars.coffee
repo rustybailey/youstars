@@ -804,6 +804,10 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         player.playVideo()
         $(this).text "Pause"
 
+    # stop the video on any menu click, play when overlay closed
+    $("#ys-menu a, .ys-overlay-close").on "click", (e) ->
+      $(".pause").trigger("click")
+
     $("#ys-player-controls").on "change", ".volume", ->
       newVolume = @valueAsNumber
       if newVolume > 0
@@ -835,10 +839,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         videosService.fetch_videos(true).then () ->
           $scope.makingARequest = false
 
-    # stop the video on any menu click
-    $("#ys-menu a").on "click", (e) ->
-      player.pauseVideo()
-      $(".pause").text "Play"
+
   )
 
 
