@@ -182,7 +182,7 @@ module YoutubeApi
   end
   
   def self.v2_authorized_request( url, oauth2_token, params = {} )
-    v3_authorized_request( url, oauth2_token, {"v" => 2, "alt" => "json"} )
+    v3_authorized_request( url, oauth2_token, params.merge({"v" => 2, "alt" => "json"}) )
   end
 
   def self.v3_authorized_request( url, oauth2_token, params = {})
