@@ -1,8 +1,10 @@
-module GatherChannelData
-  @queue = :high
+module ChannelDataJob
+
+  @queue = :medium
 
   def self.perform(channel_id)
     channel = Channel.find channel_id
+    return if channel.nil?
 
     calculate_topics_from_videos(channel)
   end
