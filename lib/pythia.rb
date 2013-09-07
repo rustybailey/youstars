@@ -102,15 +102,15 @@ module Pythia
 
 
   def self.channel_score_by_topics(channel_0, channel_1)
-    target_0 = channel_0.topics
-    target_1 = channel_1.topics
+    target_0 = channel_0.all_topics
+    target_1 = channel_1.all_topics
 
     common_terms = target_0 & target_1
 
     subscores = common_terms.inject({}) do |hash, term|
       
-      term_frequency_0 = Math.log( target_0.count )
-      term_frequency_1 = Math.log( target_1.count )
+      term_frequency_0 = 1 / Math.log( target_0.count )
+      term_frequency_1 = 1 / Math.log( target_1.count )
 
       inverse_document_frequency = Math.log( Channel.count.to_f / term.total )
 
