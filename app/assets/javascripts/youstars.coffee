@@ -2,6 +2,7 @@ youstars.factory('userService', ['$http', ($http) ->
   return {
     userName: "devinsupertramp"   # STATIC PLACEHOLDER.
     currentChannel: null
+    afterInit: $.Deferred()
   }
 ])
 
@@ -454,6 +455,10 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
     replace: true
     link: (scope, element, attr) ->
       # $timeout( , 1000 )
+      scope.currentChannel = null
+      userService.afterInit.then (currentChannel) ->
+        scope.currentChannel = userService.currentChannel
+
       scope.views = 0
       scope.subscribers = 0
       statsService.getStats().then (data) ->
@@ -489,27 +494,27 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
         , 2500
 
     template: """
-    <div id="ys-stats">
-      <div id="ys-views">
-        <div id="ys-views-bg"></div>
-      <ul id="ys-social-links">
-        <li><a href="/test"><i class="ss-icon ss-social">Facebook</i></i></a></li>
-        <li><a href="/test"><i class="ss-icon ss-social">Twitter</i></a></li>
-        <li><a href="/test"><i class="ss-icon ss-social">Instagram</i></a></li>
-        <li><a href="/test"><i class="ss-icon ss-social">Tumblr</i></a></li>
-        <li><a href="/test"><i class="ss-icon ss-social">LinkedIn</i></a></li>
-      </ul>
-        <span><strong>{{views}}</strong> views</span>
+      <div id="ys-stats">
+        <div id="ys-views">
+          <div id="ys-views-bg"></div>
+          <ul id="ys-social-links">
+            <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://youstars.herokuapp.com/#/{{currentChannel}}&p[images][0]=&p[title]=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}&p[summary]="><i class="ss-icon ss-social">Facebook</i></i></a></li>
+            <li><a href="http://twitter.com/home?status=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20http://youstars.herokuapp.com/#/{{currentChannel}}"><i class="ss-icon ss-social">Twitter</i></a></li>
+            <li><a href="https://plus.google.com/share?url=http://youstars.herokuapp.com/#/{{currentChannel}}"><i class="ss-icon ss-social">Instagram</i></a></li>
+            <li><a href="http://www.tumblr.com/share/link?url=http://youstars.herokuapp.com/#/{{currentChannel}}&name={{currentChannel}}&description=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">Tumblr</i></a></li>
+            <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://youstars.herokuapp.com/#/{{currentChannel}}&title={{currentChannel}}&summary=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">LinkedIn</i></a></li>
+          </ul>
+          <span><strong>{{views}}</strong> views</span>
+        </div>
+        <!-- #ys-views -->
+        <!-- #ys-social-links -->
+        <br />
+        <div id="ys-subscribers">
+          <div id="ys-subscribers-bg"></div>
+          <span><strong>{{subscribers}}</strong> subs</span>
+        </div>
+        <!-- #ys-subs -->
       </div>
-      <!-- #ys-views -->
-      <!-- #ys-social-links -->
-      <br />
-      <div id="ys-subscribers">
-        <div id="ys-subscribers-bg"></div>
-        <span><strong>{{subscribers}}</strong> subs</span>
-      </div>
-      <!-- #ys-subs -->
-    </div>
     """
   }
 ])
@@ -735,6 +740,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     #oof, too fast, too little knowledge of angular going around
     youtubeInit.currentChannel = $routeParams.currentChannel
     userService.currentChannel = $routeParams.currentChannel
+    userService.afterInit.resolve $routeParams.currentChannel
   player = youtubeInit.player
   
   $scope.loggedIn = $("#ys-app").is(".ys-logged-in")
