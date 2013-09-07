@@ -5,7 +5,7 @@
       <a href="#/{{channel.author[0].name.$t}}"><img src="{{ channel.starsImage }}" /></a>
     </li><!-- #ys-home-tile -->
     <li class="ys-home-tile" ng-repeat="channel in channels">
-      <a href="#/{{channel.author[0].name.$t}}"><img src="{{ channel.starsImage }}" /></a>
+      <a href="#/{{ channel.username }}"><img src="{{ channel.starsImage }}" /></a>
     </li><!-- #ys-home-tile -->
     <li class="ys-home-tile" ng-repeat="channel in channels">
       <a href="#/{{channel.author[0].name.$t}}"><img src="{{ channel.starsImage }}" /></a>
@@ -17,7 +17,8 @@
 	<div id="ys-home-search">
 		<h1>Find a YouTube Star</h1><br />
 		<h2>Start typing ...</h2><br />
-		<input type="text" autofocus />
+    <div class="input-like no-border" id="suggestion">{{suggestion}}</div>
+		<input autofocus type="text" ng-model="query" ng-keydown="goToChannel($event)"/>
 	</div><!-- #ys-home-search -->
 
 </div>

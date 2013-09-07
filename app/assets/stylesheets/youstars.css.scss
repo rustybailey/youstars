@@ -373,7 +373,7 @@ a {
 		position: relative;
 		z-index: 75;
 	}
-	input[type="text"] {
+	input[type="text"], .input-like {
 		display: inline-block;
 		width: 1200px;
 		padding: 0 0 10px 0;
@@ -381,10 +381,18 @@ a {
 		border-top: none;
 		border-right: none;
 		border-bottom: 2px dotted #ffffff;
+    &#suggestion {
+      border-bottom: none;
+      opacity: 0.5;
+      position: absolute;
+      bottom: inherit;
+    }
+    overflow: visible;
+    bottom: 12px;
 		border-left: none;
 		background: transparent;
 		font-size: 136px;
-		text-align: center;
+		text-align: left;
 		line-height: 1em;
 		color: #ffffff;
 		font-weight: 900;
@@ -1162,6 +1170,17 @@ $ys-profile-tile-large-size:	230px;
 	@include transition-property(bottom);
 	@include transition-duration(0.33s);
 	ul#ys-videos-list {
+		.video-spinner {
+			display: none;
+			width: 150px;
+			height: 135px;
+			color: white;
+			background: transparent url("/assets/ajax-loader.gif") no-repeat center center;
+			&.more-results {
+				display: inline-block;
+				top: -120px
+			}
+		}
 		display: block;
 		width: auto;
 		height: 125px;

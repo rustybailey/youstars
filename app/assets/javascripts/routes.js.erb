@@ -10,9 +10,9 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
     var highlighted = $('.ys-video-tile.currentSelection');
     if(e.keyCode === 39) {
       clearTimeout(unslide);
-      if(highlighted.length && highlighted.next().length) {
+      if(highlighted.length && highlighted.next(".ys-video-tile").length) {
         highlighted.removeClass('slideUp currentSelection');
-        var next = highlighted.next();
+        var next = highlighted.next(".ys-video-tile");
         next.addClass('slideUp currentSelection');
         var unslide = setTimeout(function() {next.removeClass('slideUp')}, 3000);
         if(next.offset().left + next.width() > $(document).width()) {
@@ -29,9 +29,9 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
       }
     } else if(e.keyCode === 37) {
       clearTimeout(unslide);
-      if(highlighted.length && highlighted.prev().length) {
+      if(highlighted.length && highlighted.prev(".ys-video-tile").length) {
         highlighted.removeClass('slideUp currentSelection');
-        var prev = highlighted.prev();
+        var prev = highlighted.prev(".ys-video-tile");
         prev.addClass('slideUp currentSelection');
         var unslide = setTimeout(function() {prev.removeClass('slideUp')}, 3000);
         if(prev.offset().left < 0) {
