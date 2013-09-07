@@ -8,7 +8,7 @@ class Suggest::ChannelsController < ApiController
     # channels to which they belong
     load_channel_id
     
-    limit      = (params[:limit] || 20).to_i
+    limit      = (params[:limit] || 40).to_i
     channels = Pythia.related(@channel_id).first(limit)
     
     render :json => channels
