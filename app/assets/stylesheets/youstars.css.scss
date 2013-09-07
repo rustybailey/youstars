@@ -465,6 +465,7 @@ a {
 	float: left;
 	padding: 10px 0 0 0;
 	position: absolute;
+	z-index: 60;
 	#ys-subs,
 	#ys-views {
 		display: block;
@@ -721,6 +722,7 @@ ul#ys-menu {
 	padding: 15px 0 0 0;
 	position: relative;
 	right: -250px;
+	z-index: 55;
 	@include transition-property(right);
 	@include transition-duration(0.33s);
 	> * {
