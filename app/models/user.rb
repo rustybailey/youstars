@@ -11,7 +11,8 @@ class User < ActiveRecord::Base
 
   has_one :channel
   has_many :views 
-  has_many :ratings
+  has_many :video_ratings
+  has_many :channel_ratings
 
   def yt_client
     YouTubeIt::OAuth2Client.new(
@@ -56,21 +57,46 @@ class User < ActiveRecord::Base
   end
 
   def rated_videos(score = nil)
+    ratings_relation = video_ratings
+    ratings_relation = ratings_relation.where( ["score = ?", score] ) unless score.nil?
+
     Video.where(:id => ratings_relation.map(&:id))
   end
 
   def liked_videos(score = 3)
-    ratings_relation = ratings
+    ratings_relation = video_ratings
     ratings_relation = ratings_relation.where( ["score >= ?", score] ) unless score.nil?
     
     Video.where(:id => ratings_relation.map(&:id))
   end
   
   def disliked_videos(score = 2)
-    ratings_relation = ratings
+    ratings_relation = video_ratings
     ratings_relation = ratings_relation.where( ["score <= ?", score] ) unless score.nil?
     
     Video.where(:id => ratings_relation.map(&:id))
+  end
+
+
+  def rated_channels(score = nil)
+    ratings_relation = channel_ratings
+    ratings_relation = ratings_relation.where( ["score = ?", score] ) unless score.nil?
+
+    Channel.where(:id => ratings_relation.map(&:id))
+  end
+
+  def liked_channels(score = 3)
+    ratings_relation = channel_ratings
+    ratings_relation = ratings_relation.where( ["score >= ?", score] ) unless score.nil?
+    
+    Channel.where(:id => ratings_relation.map(&:id))
+  end
+  
+  def disliked_channels(score = 2)
+    ratings_relation = channel_ratings
+    ratings_relation = ratings_relation.where( ["score <= ?", score] ) unless score.nil?
+    
+    Channel.where(:id => ratings_relation.map(&:id))
   end
 
 end
