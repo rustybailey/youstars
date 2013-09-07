@@ -5,7 +5,7 @@
   <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag    "application" %>
   <script>
-    function(){
+    (function(){
       var images = new Array()
       function preload() {
         for (i = 0; i < preload.arguments.length; i++) {
@@ -22,7 +22,7 @@
         "/assets/logo.png",
         "/assets/header-background.png"
       )
-    }();
+    })();
   </script>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
