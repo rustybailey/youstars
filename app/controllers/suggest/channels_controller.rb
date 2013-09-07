@@ -90,15 +90,13 @@ class Suggest::ChannelsController < ApiController
   def similar_to_your_channel
     recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
 
-      channel_id = current_user.channel.youtube_id
-
-      channels       = Pythia.related(channel_id, 15)
-      cheap_channels = Pythia.cheap_related(channel_id, 45)
-
+      topical_channels = Pythia.related(current_user.guid, 15, 0.2)
+      cheap_channels   = Pythia.cheap_related(current_user.guid, 45)
+      
       recs = [topical_channels, cheap_channels].flatten.uniq { |c| c[:channel_id] }
-
+      
     end
-
+    
     render :json => recs
   end
 
