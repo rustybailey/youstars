@@ -133,7 +133,7 @@ class Suggest::ChannelsController < ApiController
       channel_ids.first(5).each do |c_id|
         channel_recs << Pythia.related(c_id).first(4)
       end
-      channel_recs = channel_recs.flatten
+      channel_recs = channel_recs.flatten.uniq
 
     end
       
