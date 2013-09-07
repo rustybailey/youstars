@@ -702,16 +702,19 @@ ul#ys-menu {
 		> * {
 			float: left;
 		}
-		.video-title {
+		marquee.video-title {
+			float: right;
+			width: 205px;
+			margin: 0 10px 0 0;
 			white-space: nowrap;
 			overflow: hidden;
-			text-overflow: ellipsis;
-			width: 210px;
 		}
 		.duration-container {
 			float: right;
+			width: 60px;
+			text-align: right;
 			> * {
-				float: left;
+				float: right;
 			}
 		}
 	}
@@ -731,10 +734,11 @@ ul#ys-menu {
 }
 
 .volume-container {
-	border: 1px solid white;
-	border-radius: 10px;
 	width: 154px;
 	height: 12px;
+	margin: 0 10px 0 0;
+	border: 1px solid white;
+	border-radius: 10px;
 	cursor: pointer;
 }
 
