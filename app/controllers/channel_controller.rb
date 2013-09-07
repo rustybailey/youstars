@@ -65,7 +65,7 @@ class ChannelController < ApiController
   end
 
   def stream
-    redis = Redis.connect
+    redis = Resque.redis
 
     stats_series   = JSON.parse( redis.get( "#{@channel_id}_stats_series" ) || '[]' )
     stats_series ||= []
