@@ -14,6 +14,96 @@ youstars.factory('trendingvideosService', ['$http', ($http) ->
   }
 ])
 
+youstars.factory('featuredvideosService', ['$http', ($http) ->
+  return {
+    fetchFeaturedvideos: () ->
+      $http.get('/suggest/videos/featured.json').then (response) ->
+        response.data
+  }
+])
+
+youstars.factory('suggestedvideosService', ['$http', ($http) ->
+  return {
+    fetchSuggestedvideos: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/videos/suggested.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
+youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
+  return {
+    fetchMostwatchedvideos: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/videos/most_watched.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
+
+youstars.directive('mostwatchedvideos', ['mostwatchedvideosService', (mostwatchedvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      mostwatchedvideosService.fetchMostwatchedvideos().then (data) ->
+        scope.mostwatchedVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in mostwatchedVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <h3>{{video.channel_name}}</h3>
+              <h4>{{video.title}}</h4>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+
+
+youstars.directive('suggestedvideos', ['suggestedvideosService', (suggestedvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      suggestedvideosService.fetchSuggestedvideos().then (data) ->
+        scope.suggestedVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in suggestedVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <h3>{{video.channel_name}}</h3>
+              <h4>{{video.title}}</h4>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+
 youstars.directive('trendingvideos', ['trendingvideosService', (trendingvideosService) ->
   return {
     restrict: 'E'
@@ -42,6 +132,34 @@ youstars.directive('trendingvideos', ['trendingvideosService', (trendingvideosSe
   }
 ])
 
+
+youstars.directive('featuredvideos', ['featuredvideosService', (featuredvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      featuredvideosService.fetchFeaturedvideos().then (data) ->
+        scope.featuredVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in featuredVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <h3>{{video.channel_name}}</h3>
+              <h4>{{video.title}}</h4>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
 
 
 
@@ -400,6 +518,11 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
   
   $scope.loggedIn = $("#ys-app").is(".ys-logged-in")
 
+  $scope.toggleVideo = ->
+    $scope.visibleVideo = !$scope.visibleVideo
+
+  $scope.visibleVideo = false
+
   # Load the IFrame Player API code asynchronously.
 
   # Replace the 'ys-player' element with an <iframe> and
@@ -495,6 +618,9 @@ youstars.controller('homeController', ['$scope', 'channelsService', ($scope, cha
           ele.starsImage = thumb.url
       unless ele.starsImage?
         ele.starsImage = thumbs[0].url 
+
+      if ele.author[0].name.$t.toLowerCase() != ele.author[0].uri.$t.substr(ele.author[0].uri.$t.lastIndexOf('/') + 1).toLowerCase()
+        ele.author[0].name.$t = ele.author[0].uri.$t.substr(ele.author[0].uri.$t.lastIndexOf('/') + 1)
 
     $scope.channels = channels
 ])
