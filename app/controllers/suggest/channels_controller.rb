@@ -7,11 +7,11 @@ class Suggest::ChannelsController < ApiController
     # then retrieve the related videos for those and find the
     # channels to which they belong
     load_channel_id
-    
-    limit      = (params[:limit] || 40).to_i
-    channels = Pythia.related(@channel_id).first(limit)
-    
-    render :json => channels
+
+    channels       = Pythia.related(@channel_id, 15)
+    cheap_channels = Pythia.cheap_related(@channel_id, 45)
+
+    render :json => [channels, cheap_channels].flatten!
   end
 
   def most_viewed
