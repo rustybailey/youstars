@@ -208,6 +208,16 @@ a {
 		font-weight: 100;
 		line-height: 1em;
 	}
+	img#ys-keyboard {
+		display: block;
+		margin: 100px auto;
+		@include opacity(0.75);
+		@include transition-property(opacity);
+		@include transition-duration(0.2s);
+	}
+	img#ys-keyboard:hover {
+		@include opacity(1);
+	}
 	.ys-recommendations {
 		display: block;
 		float: left;
@@ -624,6 +634,7 @@ ul#ys-menu {
 	li.ys-menu-item:nth-child(5) a { background: $green url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:nth-child(6) a { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:nth-child(7) a { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
+	li.ys-menu-item:nth-child(8) a { background: $teal url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:hover {
 		a {
 			span.ys-menu-item-label {
