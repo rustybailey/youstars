@@ -128,6 +128,10 @@ select {
 	font-family: 'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
+a {
+	cursor: pointer;
+}
+
 
 /* Buttons */
 /************************************************/
@@ -151,11 +155,23 @@ select {
 
 
 
-
+.ys-overlay-show {
+	@include transition(0.25s ease-out all);
+	@include opacity(0.0);
+}
+.ys-overlay-show.ys-overlay-show-active {
+	@include opacity(1.0);
+}
+.ys-overlay-hide {
+	@include transition(0.25s ease-out all);
+	@include opacity(1.0);
+}
+.ys-overlay-hide.ys-overlay-hide-active {
+	@include opacity(0.0);
+}
 
 #ys-overlay, #ys-video-overlay {
 	display: block;
-	display: none;
 	width: 100%;
 	height: 100%;
 	background: transparent url("/assets/background-black-88.png") repeat 0 0;
@@ -163,6 +179,15 @@ select {
 	position: absolute;
 	z-index: 800;
 	overflow-y: scroll;
+	a.ys-overlay-close {
+		display: block;
+		float: right;
+		padding: 15px 20px;
+		right: 0;
+		position: absolute;
+		text-transform: uppercase;
+		font-size: 11px;
+	}
 	h1 {
 		padding: 105px 0 100px 0;
 		font-size: 72px;
