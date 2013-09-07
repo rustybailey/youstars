@@ -103,6 +103,7 @@
 		<div class="ss-icon pause">Pause</div>
 		<div class="ss-icon previous">Skipback</div>
 		<div class="volume-container">
+			<div class="volume-indicator"></div>
 			<input class="volume" type="range" name="volume" min="0" max="100" step="1" value="0">
 		</div>
 		<div class="mute-container">
@@ -120,7 +121,7 @@
 	<!-- #ys-player-controls -->
 
 	<ul id="ys-menu">
-		<li class="ys-menu-item">
+		<li class="ys-menu-item" ng-hide="loggedIn">
 			<a href="/users/auth/google_oauth2">
 				<span class="ys-menu-item-icon ss-icon pause">Pause</span>
 				<span class="ys-menu-item-label">Login to YouStars</span>
@@ -141,7 +142,7 @@
 			</a>
 		</li>
 		<!-- .ys-menu-item -->
-		<li class="ys-menu-item">
+		<li class="ys-menu-item" ng-hide="loggedIn">
 			<a href="/users/auth/google_oauth2">
 				<span class="ys-menu-item-icon ss-icon pause">Pause</span>
 				<span class="ys-menu-item-label">Claim This Channel</span>
@@ -159,6 +160,13 @@
 			<a href="#">
 				<span class="ys-menu-item-icon ss-icon pause">Pause</span>
 				<span class="ys-menu-item-label">Search YouTube</span>
+			</a>
+		</li>
+		<!-- .ys-menu-item -->
+		<li class="ys-menu-item" ng-show="loggedIn">
+			<a href="/users/sign_out">
+				<span class="ys-menu-item-icon ss-icon pause">Pause</span>
+				<span class="ys-menu-item-label">Log Out of YouStars</span>
 			</a>
 		</li>
 		<!-- .ys-menu-item -->

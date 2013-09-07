@@ -537,6 +537,7 @@ ul#ys-menu {
 	li.ys-menu-item:nth-child(4) a { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:nth-child(5) a { background: $green url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:nth-child(6) a { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
+	li.ys-menu-item:nth-child(7) a { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
 	li.ys-menu-item:hover {
 		a {
 			span.ys-menu-item-label {
@@ -741,16 +742,27 @@ ul#ys-menu {
 	border: 1px solid white;
 	border-radius: 10px;
 	cursor: pointer;
+	position: relative;
+	.volume-indicator {
+		-webkit-appearance: none;
+		width: 0px;
+		height: 8px;
+		background-color: rgba(white, 0.6);
+		border-radius: 10px;
+		position: absolute;
+		cursor: pointer;
+		top: 2px;
+		left: 2px;
+	}
 }
 
 input[type="range"].volume {
 	-webkit-appearance: none;
 	width: 150px;
 	height: 8px;
-	background-color: rgba(white, 0.8);
+	background: rgba(white, 0.5);
 	border-radius: 10px;
-	position: relative;
-	top: -4px;
+	position: absolute;
 	cursor: pointer;
 }
 
@@ -758,7 +770,7 @@ input[type="range"].volume::-webkit-slider-thumb {
 	-webkit-appearance: none;
 	width: 12px;
 	height: 12px;
-	background-color: rgba(white, 0.8);
+	background-color: white;
 	border-radius: 90px;
 }
 
