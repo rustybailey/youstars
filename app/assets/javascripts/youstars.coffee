@@ -386,10 +386,12 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         $(".volume").val 100
         player.unMute()
         $(this).find(".ss-ban").hide();
+        $(".volume-indicator").width("100%")
       else
         $(".volume").val 0
         player.mute()
         $(this).find(".ss-ban").show();
+        $(".volume-indicator").width(0)
 
     $(".previous").on "click", ->
       player.previousVideo()
@@ -412,6 +414,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
       else
         $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
+      $(".volume-indicator").width( (newVolume / 100) * 150 )
 
     $("#ys-player-bar").on "click", (e) ->
       clickedPos = e.pageX
