@@ -110,6 +110,7 @@ module YoutubeApi
   end
 
   def self.channel_id_for_username(channel_username)
+    p channel_username
     channel_url = "https://gdata.youtube.com/feeds/api/users/" + channel_username
     query = {
       v: 2,

@@ -493,25 +493,50 @@ a {
 	padding: 10px 0 0 0;
 	position: absolute;
 	z-index: 60;
-	#ys-subs,
+	#ys-subscribers,
 	#ys-views {
 		display: block;
 		float: left;
-		padding: 0 30px 0 10px;
-		margin: 0 10px 5px 0;
+		padding: 0;
 		font-size: 26px;
 		line-height: 44px;
 		color: #ffffff;
-		background: $teal url("/assets/white-glare.png") no-repeat top right;
+    min-width: 34px;
+    min-height: 44px;
 		font-weight: 100;
 		font-style: italic;
+    #ys-views-bg, #ys-subscribers-bg {
+      background: $teal url("/assets/white-glare.png") no-repeat top right;
+      @include transition-property(width);
+      @include transition-duration(.3s);
+      width: 34px;
+      height: 44px;
+      position: absolute;
+      z-index: -1;
+    }
 		strong {
 			font-style: normal;
 		}
+    span {
+      @include transition-property(opacity);
+      @include transition-duration(.8s);
+      @include transition-delay(.3s);
+      padding: 0 30px 0 10px;
+      margin: 0;
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+      display: inline-block;
+      white-space: nowrap;
+      &.visible {
+        opacity: 1;
+        width: auto;
+      }
+    }
 	}
 	ul#ys-social-links {
 		display: block;
-		float: left;
+		float: right;
 		margin: 0 0 5px 0;
 		li {
 			display: block;
@@ -884,37 +909,45 @@ $ys-profile-tile-large-size:	230px;
 		overflow-x: hidden;
 		overflow-y: scroll;
 		@include box-sizing(border-box);
-		li:nth-child(1n) {
+		li:nth-child(10n + 1) {
 			float: left;
 			a.ys-profile-tile-content { background: $orange url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(2n) {
+		li:nth-child(10n + 2) {
 			float: left;
 			a.ys-profile-tile-content { background: $green url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(3n) {
+		li:nth-child(10n + 3) {
 			float: left;	
 			a.ys-profile-tile-content { background: $marigold url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(4n) {
+		li:nth-child(10n + 4) {
 			float: left;
 			a.ys-profile-tile-content { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(5n) {
+		li:nth-child(10n + 5) {
 			float: left;
 			a.ys-profile-tile-content { background: $red url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(6n) {
+		li:nth-child(10n + 6) {
 			float: left;
 			a.ys-profile-tile-content { background: $blue url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(7n) {
+		li:nth-child(10n + 7) {
 			float: left;
 			a.ys-profile-tile-content { background: $purple url("/assets/white-glare.png") no-repeat top right; }
 		}
-		li:nth-child(8n) {
+		li:nth-child(10n + 8) {
 			float: right !important;
 			a.ys-profile-tile-content { background: $teal url("/assets/white-glare.png") no-repeat top right; }
+		}
+		li:nth-child(10n + 9) {
+			float: left;
+			a.ys-profile-tile-content { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
+		}
+		li:nth-child(10n + 0) {
+			float: left;
+			a.ys-profile-tile-content { background: $blue url("/assets/white-glare.png") no-repeat top right; }
 		}
 		li.ys-profile-tile-small,
 		li.ys-profile-tile-medium,
