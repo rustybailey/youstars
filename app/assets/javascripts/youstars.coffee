@@ -390,10 +390,10 @@ youstars.factory('myvideosService', ['$timeout', ($timeout) ->
 youstars.factory('mysubscribersService', [ () ->
   return {
     sizeMysubscribers: () ->
-      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(1)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
-      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(8n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
-      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n)').toggleClass('ys-profile-tile-large', true).toggleClass('ys-profile-tile-small', false)
-      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(11n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n + 1)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n + 8)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n + 0)').toggleClass('ys-profile-tile-large', true).toggleClass('ys-profile-tile-small', false)
+      # subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(11n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
     positionMysubscribers: () ->
       $('#ys-player-controls').addClass('ys-player-controls-before')
       $('#ys-profiles').addClass('ys-profiles-before')
