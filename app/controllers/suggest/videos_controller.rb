@@ -110,11 +110,20 @@ class Suggest::VideosController < ApiController
 
   def featured
     cat_name  = @category.present? ? "_#{@category.title}" : ""
+
     url       = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured#{cat_name}?max-results=50"
-    recs = Rails.cache.fetch( url, :expires_in => 1.day ) do
+    recs1 = Rails.cache.fetch( url, :expires_in => 1.day ) do
       response  = YoutubeApi.v2_authorized_request( url, nil )
       response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
     end
+
+    url       = "https://gdata.youtube.com/feeds/api/standardfeeds/recently_featured#{cat_name}?max-results=50"
+    recs2 = Rails.cache.fetch( url, :expires_in => 1.day ) do
+      response  = YoutubeApi.v2_authorized_request( url, nil )
+      response.parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+    end
+
+    recs = (recs1 + recs2).uniq.reject{ |v| Bragi.test_video(current_user, v[:id]) }
 
     respond_to do |format|
       format.json { render :json => recs, :callback => params[:callback] }
