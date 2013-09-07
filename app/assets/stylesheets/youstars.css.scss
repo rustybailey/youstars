@@ -1162,6 +1162,17 @@ $ys-profile-tile-large-size:	230px;
 	@include transition-property(bottom);
 	@include transition-duration(0.33s);
 	ul#ys-videos-list {
+		.video-spinner {
+			display: none;
+			width: 150px;
+			height: 135px;
+			color: white;
+			background: transparent url("/assets/ajax-loader.gif") no-repeat center center;
+			&.more-results {
+				display: inline-block;
+				top: -120px
+			}
+		}
 		display: block;
 		width: auto;
 		height: 125px;

@@ -195,26 +195,44 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
 
 
 
-youstars.factory('videosService', ['$http', 'userService', '$location', ($http, userService, $location) ->
+youstars.factory('videosService', ['$http', 'userService', '$location', 'myvideosService', '$timeout', ($http, userService, $location, myvideosService, $timeout) ->
   hash = 
     videos: []
+    responseData: {}
 
-  hash.fetch_videos = ->
+  hash.fetch_videos = (nextPage)->
     channel = userService.currentChannel
-    key = "fetch_videos:#{channel}"
+    key = "fetch_videos:#{channel}:#{nextPage}:#{hash.responseData.next_page_token}"
     cache = sessionStorage.getItem(key)
     if cache && !$location.search().skip_cache
       d = $.Deferred()
       data = angular.fromJson(cache) 
-      d.resolve(data.videos)
-      hash.videos = data.videos
       hash.responseData = data
+      d.resolve(hash.responseData)
+      if nextPage
+        hash.videos.push.apply(hash.videos, data.videos)
+        hash.responseData.next_page_token = data.next_page_token
+        hash.current_page_token = data.next_page_token
+      else
+        hash.videos = data.videos
       return d
     else 
-      return $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
+      pageToken = hash.responseData.next_page_token if nextPage
+      if nextPage and !pageToken? # return if we've reached the end of the line!
+        emptyDeferred = $.Deferred()
+        emptyDeferred.resolve(hash.responseData) # NOTHIN
+        console.log "You have reached the end of the video results, dear sir."
+        return emptyDeferred
+      return $http.get("/channel/#{userService.currentChannel}/videos?page_token=#{pageToken || ''}").then (res) ->
         sessionStorage.setItem(key, angular.toJson(res.data))
         hash.responseData = res.data
-        hash.videos = res.data.videos
+        if nextPage
+          hash.videos.push.apply(hash.videos, res.data.videos)
+          hash.responseData.next_page_token = res.data.next_page_token
+        else
+          hash.videos = res.data.videos
+        hash.current_page_token = res.data.next_page_token
+        hash.responseData
 
   return hash
 ])
@@ -339,11 +357,20 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     scope.videosArray = ({} for ignored in [1..20]) #need empty videos at bottom
     scope.$on '$destroy', ->
       scope.destroyed = true
-    videosService.fetch_videos().then (videos) ->
+    videosService.fetch_videos().then ->
       unless scope.destroyed # for if they click fast between channels
-        scope.videosArray = videos
+        scope.page_token = videosService.current_page_token
+        scope.$watch(->
+          videosService.current_page_token
+        , (newVal) ->
+          scope.page_token = newVal
+        )
+        scope.videosArray = videosService.videos
         scope.animatePromise = $timeout( myvideosService.animateMyvideos, 500 )
-        scope.removeDelayPromise = $timeout( myvideosService.removeDelayFromMyvideos, 1000 )
+        scope.removeDelayPromise = $timeout ->
+          myvideosService.removeDelayFromMyvideos()
+          scope.alreadyAnimated = true
+        , 1000
     # $timeout( myvideosService.animateMyvideos, 200 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
@@ -356,7 +383,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     """
     <div id="ys-videos">
       <ul id="ys-videos-list">
-        <li data-video-id="{{video.video_id}}" class="ys-video-tile" ng-mouseenter="enter($event); zIndexForwards();" ng-mouseleave="leave($event); zIndexBackwards();" ng-repeat="video in videosArray">
+        <li data-video-id="{{video.video_id}}" ng-class="{'ys-video-tile-after': alreadyAnimated}" class="ys-video-tile" ng-mouseenter="enter($event); zIndexForwards();" ng-mouseleave="leave($event); zIndexBackwards();" ng-repeat="video in videosArray">
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.view_count | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.published_at | date: 'mediumDate'}}</h4>
@@ -371,6 +398,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
             <img src="{{ video.thumbnails.medium.url || video.thumbnails.medium.url }}" />
           </a>
         </li>
+        <li class="video-spinner" ng-class="{'more-results': page_token}"></li>
       </ul>
     </div>
     """
@@ -508,7 +536,7 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
   return hash
 ])
 
-youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', ($window, $scope, $routeParams, userService, youtubeInit)->
+youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', 'videosService', ($window, $scope, $routeParams, userService, youtubeInit, videosService)->
   $scope.showVideoRecommendations = false
   if $routeParams.currentChannel
     #oof, too fast, too little knowledge of angular going around
@@ -601,6 +629,13 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $("#ys-player-bar").on "mouseleave", (e) ->
       $("#ys-seek-bar").css("left", "0px")
 
+    $("#ys-videos").on "scroll", (e) ->
+      if e.target.scrollLeft >= e.target.scrollWidth - (e.target.clientWidth * 2)
+        return if $scope.makingARequest
+        $scope.makingARequest = true
+        videosService.fetch_videos(true).then () ->
+          $scope.makingARequest = false
+
 
   )
 
@@ -610,7 +645,6 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 youstars.controller('homeController', ['$scope', 'channelsService', ($scope, channelsService) ->
   $scope.channels = []
   channelsService.fetch_popular().then (channels) ->
-    console.log 'chans', channels
     channels.forEach (ele, ind, arr) ->
       thumbs = ele.media$group.media$thumbnail
       thumbs.forEach (thumb, ind) ->
