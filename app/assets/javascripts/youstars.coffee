@@ -457,7 +457,7 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
       # $timeout( , 1000 )
       scope.currentChannel = null
       userService.afterInit.then (currentChannel) ->
-        scope.currentChannel = currentChannel
+        scope.currentChannel = userService.currentChannel
 
       scope.views = 0
       scope.subscribers = 0
