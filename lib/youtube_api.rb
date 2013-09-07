@@ -3,15 +3,6 @@ module YoutubeApi
   @@V3_URL = "https://www.googleapis.com/youtube/v3"
   @@V2_URL = "https://gdata.youtube.com/feeds/api"
 
-  def self.pull_in_channels(pages = 10)
-    (1..10).to_a.each do |i|
-      json = HTTParty.get("https://engine.fullscreen.net/public/channels?page=#{i}")
-      json["results"].each do |c|
-        Channel.create(:name => c["name"], :youtube_id => "UC#{c['youtube_id']}")
-      end
-    end
-  end
-
   def self.video_list(channel_id, limit, page_token = nil)
     playlist_id = uploads_playlist_id_for_channel(channel_id)
     video_list  = video_list_for_playlist(playlist_id, limit, page_token)
