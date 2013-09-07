@@ -373,7 +373,7 @@ a {
 		position: relative;
 		z-index: 75;
 	}
-	input[type="text"] {
+	input[type="text"], .input-like {
 		display: inline-block;
 		width: 1200px;
 		padding: 0 0 10px 0;
@@ -381,10 +381,18 @@ a {
 		border-top: none;
 		border-right: none;
 		border-bottom: 2px dotted #ffffff;
+    &#suggestion {
+      border-bottom: none;
+      opacity: 0.5;
+      position: absolute;
+      bottom: inherit;
+    }
+    overflow: visible;
+    bottom: 12px;
 		border-left: none;
 		background: transparent;
 		font-size: 136px;
-		text-align: center;
+		text-align: left;
 		line-height: 1em;
 		color: #ffffff;
 		font-weight: 900;

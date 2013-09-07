@@ -190,6 +190,17 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
       $http.get('https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json&max-results=50').then (res) ->
         res.data.feed.entry
 
+    hash.suggestChannel = (query) ->
+      $http.get("http://gdata.youtube.com/feeds/api/channels?q=#{query}&v=2&alt=json&max-results=50").then (res) ->
+        suggestion = null
+        resEntry = res.data.feed.entry
+        return null unless resEntry
+        resEntry.forEach (entry, ind, entries) ->
+          author = entry.author
+          name = author[0].uri.$t.match(/users\/(.*)$/)[1].toLowerCase()
+          suggestion ?= name if name.match(new RegExp('^' + query,'i'))
+        return suggestion
+
     return hash
 ])
 
@@ -642,15 +653,39 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
 ])
 
-youstars.controller('homeController', ['$scope', 'channelsService', '$location', ($scope, channelsService, $location) ->
+youstars.controller('homeController', ['$scope', 'channelsService', '$location', '$timeout', '$filter', ($scope, channelsService, $location, $timeout, $filter) ->
+  timeout = null
+  $scope.pendingSuggestion = null
   $scope.goToChannel = (ev) ->
+    targ = $(ev.target)
+    val = targ.val()
     if ev.which == 13
-      chan = '/' + $(ev.target).val()
+      chan = '/' + val
       $location.path(chan)
+    else if [9,39,40].indexOf(ev.which) >= 0 && $scope.suggestion
+      $scope.query = $scope.suggestion
+      ev.preventDefault()
+    # else
+    #   # REQUEST-BASED SUGGESTIONS
+    #   $timeout.cancel timeout
+    #   $scope.suggestion = null
+    #   timeout = $timeout ->
+    #     val = targ.val()
+    #     unless val
+    #       $scope.suggestion = null
+    #       return
+    #     channelsService.suggestChannel(val).then (suggestion) ->
+    #       return if targ.val() != val
+    #       $scope.suggestion = suggestion
+    #   , 350
+      
 
   $scope.channels = []
   channelsService.fetch_popular().then (channels) ->
+    names = []
     channels.forEach (ele, ind, arr) ->
+      ele.username = ele.author[0].uri.$t.match(/users\/(.*)$/)[1].toLowerCase()
+      names.push ele.username
       thumbs = ele.media$group.media$thumbnail
       thumbs.forEach (thumb, ind) ->
         if thumb.yt$name == 'hqdefault'
@@ -658,8 +693,15 @@ youstars.controller('homeController', ['$scope', 'channelsService', '$location',
       unless ele.starsImage?
         ele.starsImage = thumbs[0].url 
 
-      if ele.author[0].name.$t.toLowerCase() != ele.author[0].uri.$t.substr(ele.author[0].uri.$t.lastIndexOf('/') + 1).toLowerCase()
-        ele.author[0].name.$t = ele.author[0].uri.$t.substr(ele.author[0].uri.$t.lastIndexOf('/') + 1)
-
+    $scope.channelNames = names
     $scope.channels = channels
+  $scope.$watch 'query', ->
+    regex = new RegExp('^' + $scope.query, 'i')
+    filtered = $filter('filter')($scope.channelNames, (name) ->
+      name.match(regex)
+    )
+    if filtered
+      $scope.suggestion = filtered[0]
+    else
+      $scope.suggestion = null
 ])
