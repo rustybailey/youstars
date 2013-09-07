@@ -342,8 +342,8 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     videosService.fetch_videos().then (videos) ->
       unless scope.destroyed # for if they click fast between channels
         scope.videosArray = videos
-        scope.animatePromise = $timeout( myvideosService.animateMyvideos, 200 )
-        scope.removeDelayPromise = $timeout( myvideosService.removeDelayFromMyvideos, 500 )
+        scope.animatePromise = $timeout( myvideosService.animateMyvideos, 500 )
+        scope.removeDelayPromise = $timeout( myvideosService.removeDelayFromMyvideos, 1000 )
     # $timeout( myvideosService.animateMyvideos, 200 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
@@ -386,7 +386,7 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     channelsService.fetch_channels().then (res) ->
       scope.channelsArray = res
       $timeout( mysubscribersService.sizeMysubscribers, 0 )
-      $timeout( mysubscribersService.repositionMysubscribers, 0 )
+      $timeout( mysubscribersService.repositionMysubscribers, 1500 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # scope.hideMysubscribers = () ->
     #   $timeout( mysubscribersService.repositionMysubscribers, 0 )

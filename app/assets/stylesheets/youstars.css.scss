@@ -652,7 +652,7 @@ ul#ys-menu {
 		z-index: 50;
 		@include box-sizing(border-box);
 		@include transition-property(bottom);
-		@include transition-duration(0.2s);
+		@include transition-duration(0.33s);
 		a#ys-logo {
 			display: block;
 			float: left;
@@ -1158,7 +1158,7 @@ $ys-profile-tile-large-size:	230px;
 	/*z-index: 3;*/
 	background: transparent url("/assets/videos-background.png") repeat-x 0 0;
 	@include transition-property(bottom);
-	@include transition-duration(0.2s);
+	@include transition-duration(0.33s);
 	ul#ys-videos-list {
 		display: block;
 		width: auto;
