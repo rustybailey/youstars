@@ -1,7 +1,163 @@
 youstars.factory('userService', ['$http', ($http) ->
   return {
-    userName: "devinsupertramp"		# STATIC PLACEHOLDER.
+    userName: "devinsupertramp"   # STATIC PLACEHOLDER.
     currentChannel: null
+  }
+])
+
+
+youstars.factory('trendingvideosService', ['$http', ($http) ->
+  return {
+    fetchTrendingvideos: () ->
+      $http.get('/suggest/videos/trending.json').then (response) ->
+        response.data
+  }
+])
+
+youstars.factory('featuredvideosService', ['$http', ($http) ->
+  return {
+    fetchFeaturedvideos: () ->
+      $http.get('/suggest/videos/featured.json').then (response) ->
+        response.data
+  }
+])
+
+youstars.factory('suggestedvideosService', ['$http', ($http) ->
+  return {
+    fetchSuggestedvideos: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/videos/suggested.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
+youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
+  return {
+    fetchMostwatchedvideos: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/videos/most_watched.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
+
+youstars.directive('mostwatchedvideos', ['mostwatchedvideosService', (mostwatchedvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      mostwatchedvideosService.fetchMostwatchedvideos().then (data) ->
+        scope.mostwatchedVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in mostwatchedVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <h3>{{video.channel_name}}</h3>
+              <h4>{{video.title}}</h4>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+
+
+youstars.directive('suggestedvideos', ['suggestedvideosService', (suggestedvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      suggestedvideosService.fetchSuggestedvideos().then (data) ->
+        scope.suggestedVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in suggestedVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <h3>{{video.channel_name}}</h3>
+              <h4>{{video.title}}</h4>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+
+youstars.directive('trendingvideos', ['trendingvideosService', (trendingvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      trendingvideosService.fetchTrendingvideos().then (data) ->
+        scope.trendingVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in trendingVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <h4>{{video.title}}</h4>
+              <h3>{{video.channel_name}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+
+youstars.directive('featuredvideos', ['featuredvideosService', (featuredvideosService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      featuredvideosService.fetchFeaturedvideos().then (data) ->
+        scope.featuredVideosArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation" ng-repeat="video in featuredVideosArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{video.title}}</h3>
+              <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <h4>{{video.title}}</h4>
+              <h3>{{video.channel_name}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
   }
 ])
 
@@ -34,31 +190,60 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
       $http.get('https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json&max-results=50').then (res) ->
         res.data.feed.entry
 
+    hash.suggestChannel = (query) ->
+      $http.get("http://gdata.youtube.com/feeds/api/channels?q=#{query}&v=2&alt=json&max-results=50").then (res) ->
+        suggestion = null
+        resEntry = res.data.feed.entry
+        return null unless resEntry
+        resEntry.forEach (entry, ind, entries) ->
+          author = entry.author
+          name = author[0].uri.$t.match(/users\/(.*)$/)[1].toLowerCase()
+          suggestion ?= name if name.match(new RegExp('^' + query,'i'))
+        return suggestion
+
     return hash
 ])
 
 
 
-youstars.factory('videosService', ['$http', 'userService', '$location', ($http, userService, $location) ->
+youstars.factory('videosService', ['$http', 'userService', '$location', 'myvideosService', '$timeout', ($http, userService, $location, myvideosService, $timeout) ->
   hash = 
     videos: []
+    responseData: {}
 
-  hash.fetch_videos = ->
+  hash.fetch_videos = (nextPage)->
     channel = userService.currentChannel
-    key = "fetch_videos:#{channel}"
+    key = "fetch_videos:#{channel}:#{nextPage}:#{hash.responseData.next_page_token}"
     cache = sessionStorage.getItem(key)
     if cache && !$location.search().skip_cache
       d = $.Deferred()
       data = angular.fromJson(cache) 
-      d.resolve(data.videos)
-      hash.videos = data.videos
       hash.responseData = data
+      d.resolve(hash.responseData)
+      if nextPage
+        hash.videos.push.apply(hash.videos, data.videos)
+        hash.responseData.next_page_token = data.next_page_token
+        hash.current_page_token = data.next_page_token
+      else
+        hash.videos = data.videos
       return d
     else 
-      return $http.get("/channel/#{userService.currentChannel}/videos").then (res) ->
+      pageToken = hash.responseData.next_page_token if nextPage
+      if nextPage and !pageToken? # return if we've reached the end of the line!
+        emptyDeferred = $.Deferred()
+        emptyDeferred.resolve(hash.responseData) # NOTHIN
+        console.log "You have reached the end of the video results, dear sir."
+        return emptyDeferred
+      return $http.get("/channel/#{userService.currentChannel}/videos?page_token=#{pageToken || ''}").then (res) ->
         sessionStorage.setItem(key, angular.toJson(res.data))
         hash.responseData = res.data
-        hash.videos = res.data.videos
+        if nextPage
+          hash.videos.push.apply(hash.videos, res.data.videos)
+          hash.responseData.next_page_token = res.data.next_page_token
+        else
+          hash.videos = res.data.videos
+        hash.current_page_token = res.data.next_page_token
+        hash.responseData
 
   return hash
 ])
@@ -130,6 +315,12 @@ youstars.factory('mysubscribersService', [ () ->
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(8n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n)').toggleClass('ys-profile-tile-large', true).toggleClass('ys-profile-tile-small', false)
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(11n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+    positionMysubscribers: () ->
+      $('#ys-player-controls').addClass('ys-player-controls-before')
+      $('#ys-profiles').addClass('ys-profiles-before')
+    repositionMysubscribers: () ->
+      $('#ys-player-controls').addClass('ys-player-controls-after')
+      $('#ys-profiles').addClass('ys-profiles-after')
   }
 ])
 
@@ -177,11 +368,20 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     scope.videosArray = ({} for ignored in [1..20]) #need empty videos at bottom
     scope.$on '$destroy', ->
       scope.destroyed = true
-    videosService.fetch_videos().then (videos) ->
+    videosService.fetch_videos().then ->
       unless scope.destroyed # for if they click fast between channels
-        scope.videosArray = videos
-        scope.animatePromise = $timeout( myvideosService.animateMyvideos, 200 )
-        scope.removeDelayPromise = $timeout( myvideosService.removeDelayFromMyvideos, 500 )
+        scope.page_token = videosService.current_page_token
+        scope.$watch(->
+          videosService.current_page_token
+        , (newVal) ->
+          scope.page_token = newVal
+        )
+        scope.videosArray = videosService.videos
+        scope.animatePromise = $timeout( myvideosService.animateMyvideos, 500 )
+        scope.removeDelayPromise = $timeout ->
+          myvideosService.removeDelayFromMyvideos()
+          scope.alreadyAnimated = true
+        , 1000
     # $timeout( myvideosService.animateMyvideos, 200 )
     # $timeout( myvideosService.removeDelayFromMyvideos, 500 )
   controller: ['$scope', ($scope) ->
@@ -194,7 +394,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
     """
     <div id="ys-videos">
       <ul id="ys-videos-list">
-        <li data-video-id="{{video.video_id}}" class="ys-video-tile" ng-mouseenter="enter($event); zIndexForwards();" ng-mouseleave="leave($event); zIndexBackwards();" ng-repeat="video in videosArray">
+        <li data-video-id="{{video.video_id}}" ng-class="{'ys-video-tile-after': alreadyAnimated}" class="ys-video-tile" ng-mouseenter="enter($event); zIndexForwards();" ng-mouseleave="leave($event); zIndexBackwards();" ng-repeat="video in videosArray">
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-info">
             <h3>{{video.title}}</h3>
             <h4>{{video.view_count | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.published_at | date: 'mediumDate'}}</h4>
@@ -209,6 +409,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
             <img src="{{ video.thumbnails.medium.url || video.thumbnails.medium.url }}" />
           </a>
         </li>
+        <li class="video-spinner" ng-class="{'more-results': page_token}"></li>
       </ul>
     </div>
     """
@@ -220,12 +421,14 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
   replace: true
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
+    mysubscribersService.positionMysubscribers
     channelsService.fetch_channels().then (res) ->
       scope.channelsArray = res
       $timeout( mysubscribersService.sizeMysubscribers, 0 )
+      $timeout( mysubscribersService.repositionMysubscribers, 1500 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
-    # $timeout( myvideosService.animateMyvideos, 0 )
-    # $timeout( myvideosService.removeDelayFromMyvideos, 200 )
+    # scope.hideMysubscribers = () ->
+    #   $timeout( mysubscribersService.repositionMysubscribers, 0 )
   controller: ['$scope', '$element', '$attrs', ($scope,$element,$attrs) ->
     $scope.nameIsntPoop = (item) ->
       !item.name.match(/[ .]/)?
@@ -344,7 +547,8 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
   return hash
 ])
 
-youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', ($window, $scope, $routeParams, userService, youtubeInit)->
+youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', 'videosService', ($window, $scope, $routeParams, userService, youtubeInit, videosService)->
+  $scope.showVideoRecommendations = false
   if $routeParams.currentChannel
     #oof, too fast, too little knowledge of angular going around
     youtubeInit.currentChannel = $routeParams.currentChannel
@@ -352,6 +556,11 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
   player = youtubeInit.player
   
   $scope.loggedIn = $("#ys-app").is(".ys-logged-in")
+
+  $scope.toggleVideo = ->
+    $scope.visibleVideo = !$scope.visibleVideo
+
+  $scope.visibleVideo = false
 
   # Load the IFrame Player API code asynchronously.
 
@@ -431,17 +640,52 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $("#ys-player-bar").on "mouseleave", (e) ->
       $("#ys-seek-bar").css("left", "0px")
 
+    $("#ys-videos").on "scroll", (e) ->
+      if e.target.scrollLeft >= e.target.scrollWidth - (e.target.clientWidth * 2)
+        return if $scope.makingARequest
+        $scope.makingARequest = true
+        videosService.fetch_videos(true).then () ->
+          $scope.makingARequest = false
+
 
   )
 
 
 ])
 
-youstars.controller('homeController', ['$scope', 'channelsService', ($scope, channelsService) ->
+youstars.controller('homeController', ['$scope', 'channelsService', '$location', '$timeout', '$filter', ($scope, channelsService, $location, $timeout, $filter) ->
+  timeout = null
+  $scope.pendingSuggestion = null
+  $scope.goToChannel = (ev) ->
+    targ = $(ev.target)
+    val = targ.val()
+    if ev.which == 13
+      chan = '/' + val
+      $location.path(chan)
+    else if [9,39,40].indexOf(ev.which) >= 0 && $scope.suggestion
+      $scope.query = $scope.suggestion
+      ev.preventDefault()
+    # else
+    #   # REQUEST-BASED SUGGESTIONS
+    #   $timeout.cancel timeout
+    #   $scope.suggestion = null
+    #   timeout = $timeout ->
+    #     val = targ.val()
+    #     unless val
+    #       $scope.suggestion = null
+    #       return
+    #     channelsService.suggestChannel(val).then (suggestion) ->
+    #       return if targ.val() != val
+    #       $scope.suggestion = suggestion
+    #   , 350
+      
+
   $scope.channels = []
   channelsService.fetch_popular().then (channels) ->
-    console.log 'chans', channels
+    names = []
     channels.forEach (ele, ind, arr) ->
+      ele.username = ele.author[0].uri.$t.match(/users\/(.*)$/)[1].toLowerCase()
+      names.push ele.username
       thumbs = ele.media$group.media$thumbnail
       thumbs.forEach (thumb, ind) ->
         if thumb.yt$name == 'hqdefault'
@@ -449,5 +693,15 @@ youstars.controller('homeController', ['$scope', 'channelsService', ($scope, cha
       unless ele.starsImage?
         ele.starsImage = thumbs[0].url 
 
+    $scope.channelNames = names
     $scope.channels = channels
+  $scope.$watch 'query', ->
+    regex = new RegExp('^' + $scope.query, 'i')
+    filtered = $filter('filter')($scope.channelNames, (name) ->
+      name.match(regex)
+    )
+    if filtered
+      $scope.suggestion = filtered[0]
+    else
+      $scope.suggestion = null
 ])

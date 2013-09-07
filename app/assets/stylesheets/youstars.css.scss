@@ -128,6 +128,10 @@ select {
 	font-family: 'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
+a {
+	cursor: pointer;
+}
+
 
 /* Buttons */
 /************************************************/
@@ -151,11 +155,23 @@ select {
 
 
 
-
+.ys-overlay-show {
+	@include transition(0.25s ease-out all);
+	@include opacity(0.0);
+}
+.ys-overlay-show.ys-overlay-show-active {
+	@include opacity(1.0);
+}
+.ys-overlay-hide {
+	@include transition(0.25s ease-out all);
+	@include opacity(1.0);
+}
+.ys-overlay-hide.ys-overlay-hide-active {
+	@include opacity(0.0);
+}
 
 #ys-overlay, #ys-video-overlay {
 	display: block;
-	display: none;
 	width: 100%;
 	height: 100%;
 	background: transparent url("/assets/background-black-88.png") repeat 0 0;
@@ -163,6 +179,21 @@ select {
 	position: absolute;
 	z-index: 800;
 	overflow-y: scroll;
+	a.ys-overlay-close {
+		display: block;
+		float: right;
+		padding: 15px 20px;
+		right: 0;
+		position: absolute;
+		text-transform: uppercase;
+		font-size: 11px;
+		@include opacity(.75);
+		@include transition-property(opacity);
+		@include transition-duration(0.25s);
+	}
+	a.ys-overlay-close:hover {
+		@include opacity(1);
+	}
 	h1 {
 		padding: 105px 0 100px 0;
 		font-size: 72px;
@@ -212,6 +243,8 @@ select {
 						display: block;
 						float: left;
 						width: 100%;
+						height: 90px;
+						overflow: hidden;
 						margin: 0 0 15px 0;
 						font-size: 24px;
 						line-height: 30px;
@@ -224,7 +257,7 @@ select {
 						width: 100%;
 						font-size: 12px;
 						line-height: 20px;
-						font-weight: 900;
+						font-weight: 700;
 						line-height: auto;
 						text-transform: uppercase;
 						white-space: normal;
@@ -248,8 +281,7 @@ select {
 					h3 {
 						display: block;
 						width: 300px;
-						padding: 0 10px;
-						margin: 130px 0 0 0;
+						padding: 130px 10px 0 10px;
 						font-size: 18px;
 						position: absolute;
 						color: #ffffff;
@@ -266,8 +298,8 @@ select {
 					h4 {
 						display: block;
 						width: 300px;
-						padding: 0 10px;
-						margin: 150px 0 0 0;
+						height: 30px;
+						padding: 150px 10px 0 10px;
 						font-size: 12px;
 						position: absolute;
 						color: #ffffff;
@@ -279,7 +311,8 @@ select {
 						@include text-shadow(0 1px 1px #000000);
 						@include transition-property(opacity);
 						@include transition-duration(0.33s);
-						@include opacity(0.75);
+						@include opacity(0.66);
+						@include background-image(linear-gradient(transparent, transparent 70%, #000000)); 
 					}
 				}
 			}
@@ -340,7 +373,7 @@ select {
 		position: relative;
 		z-index: 75;
 	}
-	input[type="text"] {
+	input[type="text"], .input-like {
 		display: inline-block;
 		width: 1200px;
 		padding: 0 0 10px 0;
@@ -348,10 +381,18 @@ select {
 		border-top: none;
 		border-right: none;
 		border-bottom: 2px dotted #ffffff;
+    &#suggestion {
+      border-bottom: none;
+      opacity: 0.5;
+      position: absolute;
+      bottom: inherit;
+    }
+    overflow: visible;
+    bottom: 12px;
 		border-left: none;
 		background: transparent;
 		font-size: 136px;
-		text-align: center;
+		text-align: left;
 		line-height: 1em;
 		color: #ffffff;
 		font-weight: 900;
@@ -432,6 +473,7 @@ select {
 	float: left;
 	padding: 10px 0 0 0;
 	position: absolute;
+	z-index: 60;
 	#ys-subs,
 	#ys-views {
 		display: block;
@@ -619,7 +661,7 @@ ul#ys-menu {
 		z-index: 50;
 		@include box-sizing(border-box);
 		@include transition-property(bottom);
-		@include transition-duration(0.2s);
+		@include transition-duration(0.33s);
 		a#ys-logo {
 			display: block;
 			float: left;
@@ -674,13 +716,23 @@ ul#ys-menu {
 
 
 
-
+#ys-player-controls.ys-player-controls-before {
+	right: -250px;
+}
+#ys-player-controls.ys-player-controls-after {
+	right: 0;
+}
 #ys-player-controls {
 	display: block;
 	float: right;
 	height: 109px;
 	width: 100%;
 	padding: 15px 0 0 0;
+	position: relative;
+	right: -250px;
+	z-index: 55;
+	@include transition-property(right);
+	@include transition-duration(0.33s);
 	> * {
 		float: right;
 		margin-left: 10px;
@@ -782,17 +834,27 @@ $ys-profile-tile-medium-size:	150px;
 $ys-profile-tile-large-size:	230px;
 
 
+#ys-profiles.ys-profiles-after {
+	margin: 0 0 0 0;
+}
+#ys-profiles.ys-profiles-before,
+#ys-profiles.ys-profiles-after.ys-profiles-before {
+	margin: 0 -250px 0 0;
+}
 #ys-profiles {
 	display: block;
 	float: right;
 	width: 250px;
 	height: 100%;
 	padding: 132px 0 30px 0;
+	margin: 0 -250px 0 0;
 	top: -132px;
 	background: transparent url("/assets/background-black-33.png") repeat 0 0;
 	position: relative;
 	z-index: 15;
 	@include box-sizing(border-box);
+	@include transition-property(margin);
+	@include transition-duration(0.33s);
 	ul#ys-profiles-list {
 		display: block;
 		float: left;
@@ -1106,8 +1168,19 @@ $ys-profile-tile-large-size:	230px;
 	/*z-index: 3;*/
 	background: transparent url("/assets/videos-background.png") repeat-x 0 0;
 	@include transition-property(bottom);
-	@include transition-duration(0.2s);
+	@include transition-duration(0.33s);
 	ul#ys-videos-list {
+		.video-spinner {
+			display: none;
+			width: 150px;
+			height: 135px;
+			color: white;
+			background: transparent url("/assets/ajax-loader.gif") no-repeat center center;
+			&.more-results {
+				display: inline-block;
+				top: -120px
+			}
+		}
 		display: block;
 		width: auto;
 		height: 125px;

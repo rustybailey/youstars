@@ -54,7 +54,7 @@ class UserDataJob
       recs += Rails.cache.fetch( url , :expires_in => 1.day ){ YoutubeApi.v2_authorized_request( url, nil ).parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) } }
     end
 
-    recs.select!{ |v| !Bragi.test_video(u, v[:id]) }
+    recs = recs.uniq.reject{ |v| Bragi.test_video(u, v[:id]) }
 
     recs.sort!{|a,b| b[:statistics][:views].to_i <=> a[:statistics][:views].to_i }
 
