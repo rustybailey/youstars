@@ -30,9 +30,9 @@ Youstars::Application.routes.draw do
 
     # No Auth required
     get '/videos/related/:youtube_id',:controller => 'videos', :action => 'related'
-    get '/videos/trending/:category', :controller => 'videos', :action => 'trending'
-    get '/videos/popular/:category',  :controller => 'videos', :action => 'popular'
-    get '/videos/featured/:category', :controller => 'videos', :action => 'featured'
+    get '/videos/trending(/:category)', :controller => 'videos', :action => 'trending'
+    get '/videos/popular(/:category)',  :controller => 'videos', :action => 'popular'
+    get '/videos/featured(/:category)', :controller => 'videos', :action => 'featured'
 
   end
 
