@@ -44,16 +44,34 @@ youstars.factory('suggestedchannelsService', ['$http', ($http) ->
   }
 ])
 
-youstars.factory('similarchannelsService', ['$http', 'userService', ($http, userService) ->
+youstars.factory('similarrecentchannelsService', ['$http', ($http) ->
   return {
-    fetchSimilarchannels: () ->
+    fetchSimilarrecentchannels: () ->
       if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/channels/' + userService.currentChannel + '.json').then (response) ->
+        $http.get('/suggest/channels/similar_to_recently_watched.json').then (response) ->
           response.data
       else
         $.Deferred().resolve([])
   }
 ])
+
+youstars.factory('mostsubscribedchannelsService', ['$http', ($http) ->
+  return {
+    fetchMostsubscribedchannels: () ->
+      $http.get('/suggest/channels/most_subscribed.json').then (response) ->
+        response.data
+  }
+])
+
+youstars.factory('similarchannelsService', ['$http', 'userService', ($http, userService) ->
+  return {
+    fetchSimilarchannels: () ->
+      $http.get('/suggest/channels/related/' + userService.currentChannel + '.json').then (response) ->
+        response.data
+  }
+])
+
+
 
 youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
   return {
@@ -78,6 +96,62 @@ youstars.directive('suggestedchannels', ['suggestedchannelsService', (suggestedc
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in suggestedChannelsArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+youstars.directive('similarrecentchannels', ['similarrecentchannelsService', (similarrecentchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      similarrecentchannelsService.fetchSimilarrecentchannels().then (data) ->
+        scope.similarrecentChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in similarrecentChannelsArray">
+            <a class="ys-recommendation-info" href="#">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+youstars.directive('mostsubscribedchannels', ['mostsubscribedchannelsService', (mostsubscribedchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      mostsubscribedchannelsService.fetchMostsubscribedchannels().then (data) ->
+        scope.mostsubscribedChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in mostsubscribedChannelsArray">
             <a class="ys-recommendation-info" href="#">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -261,7 +335,7 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
         hash.channels = data
         return d
       else 
-        return $http.get("/suggest/channels/#{channel}").then (res) ->
+        return $http.get("/suggest/channels/related/#{channel}").then (res) ->
           sessionStorage.setItem(key, angular.toJson(res.data))
           hash.channels = res.data
 
