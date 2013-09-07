@@ -15,32 +15,44 @@ class Suggest::ChannelsController < ApiController
   end
 
   def most_viewed
-    url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
-    response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+    recs = Rails.cache.fetch( auto_cache_key( current_user.guid ), :expires_in => 1.day ) do
+
+      url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
+      response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     
-    recs = response.parsed_response["feed"]["entry"].map do |entry|
-      entry.dig("author", 0, "yt$userID", "$t")
-    end
+      recs = response.parsed_response["feed"]["entry"].map do |entry|
+        entry.dig("author", 0, "yt$userID", "$t")
+      end
     
-    recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r ) }.collect do |id|
-      YoutubeApi.channel_data_for_channel_id(id)
+      recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r ) }.collect do |id|
+        YoutubeApi.channel_data_for_channel_id(id)
+      end
+
     end
+
+    recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
 
     render :json => recs
   end
 
   def most_subscribed
-    url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json"
-    response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+    recs = Rails.cache.fetch( auto_cache_key( current_user.guid ), :expires_in => 1.day ) do
+
+      url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json"
+      response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
     
-    recs = response.parsed_response["feed"]["entry"].map do |entry|
-      entry.dig("author", 0, "yt$userID", "$t")
-    end
-    
-    recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }.collect do |id|
-      YoutubeApi.channel_data_for_channel_id(id)
+      recs = response.parsed_response["feed"]["entry"].map do |entry|
+        entry.dig("author", 0, "yt$userID", "$t")
+      end
+
+      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }.collect do |id|
+        YoutubeApi.channel_data_for_channel_id(id)
+      end
+
     end
 
+    recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
+    
     render :json => recs
   end
 
@@ -48,16 +60,22 @@ class Suggest::ChannelsController < ApiController
     # retrieve youtube's recommended videos for a user
     # and find the channels to which they belong
 
-    url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
-    response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
-
-    recs = response.parsed_response["feed"]["entry"].map do |entry|
-      entry.dig("author", 0, "yt$userID", "$t")
-    end
+    recs = Rails.cache.fetch( auto_cache_key( current_user.guid ), :expires_in => 1.day ) do
     
-    recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }.collect do |id|
-      YoutubeApi.channel_data_for_channel_id(id)
+      url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
+      response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+
+      recs = response.parsed_response["feed"]["entry"].map do |entry|
+        entry.dig("author", 0, "yt$userID", "$t")
+      end
+    
+      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }.collect do |id|
+        YoutubeApi.channel_data_for_channel_id(id)
+      end
+
     end
+
+    recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
 
     render :json => recs
   end
