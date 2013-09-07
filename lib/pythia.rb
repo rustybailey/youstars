@@ -31,10 +31,14 @@ module Pythia
 
     # weighted geometric mean of subscribers and log-scaled views
     score = channel_data[:subscriber_count] * Math.log( channel_data[:view_count] )
-    score = score ** stats_weighting
+    score = score ** stats_weighting    
 
     if target_data.dig(:description).present? and data_space.present?
       score *= Pythia.string_score(channel_data[:description], target_data[:description], data_space)
+
+    else
+      score *= 0.5
+
     end
     
     score
