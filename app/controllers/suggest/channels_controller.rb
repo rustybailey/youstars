@@ -1,6 +1,6 @@
 class Suggest::ChannelsController < ApiController
 
-  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
+#  before_filter :authenticate_user!, :except => [:related, :most_viewed, :most_subscribed]
 
   def related
     # retrieve the most popular videos for the target channel
@@ -73,8 +73,8 @@ class Suggest::ChannelsController < ApiController
       url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
       response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
 
-      recs = response.parsed_response["feed"]["entry"].map do |entry|nice
-        'UC' + entry.dig("author", 0, "yt$userId", "$t")
+      recs = response.parsed_response["feed"]["entry"].map do |entry|
+        entry.dig("media$group", "yt$uploaderId", "$t")
       end
     
       recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) }
@@ -175,12 +175,6 @@ class Suggest::ChannelsController < ApiController
     end
 
     render :json => channels
-  end
-
-  def ratings
-    # return the top channels sorted by ratings given by similar users
-    # define similarity with distance metric on vector space of ratings
-    # and/or tf-idf relevance of positively-rated channels
   end
 
 end
