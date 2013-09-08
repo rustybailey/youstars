@@ -3,6 +3,21 @@ youstars.factory('userService', ['$http', ($http) ->
     userName: "devinsupertramp"   # STATIC PLACEHOLDER.
     currentChannel: null
     afterInit: $.Deferred()
+    volumeSettings:
+      muted: (newValue)->
+        if newValue?
+          localStorage.setItem('youstars:muted', angular.toJson(newValue))
+          return newValue
+        stored = angular.fromJson(localStorage.getItem('youstars:muted')) 
+        return stored if stored?
+        true
+      volume: (newValue)->
+        if newValue?
+          localStorage.setItem('youstars:volume', angular.toJson(newValue))
+          return newValue
+        stored = angular.fromJson(localStorage.getItem('youstars:volume'))
+        return stored if stored?
+        100
   }
 ])
 
@@ -747,12 +762,14 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $scope.visibleVideo = !$scope.visibleVideo
 
   $scope.visibleVideo = false
+  $scope.muted = userService.volumeSettings.muted()
 
   # Load the IFrame Player API code asynchronously.
 
   # Replace the 'ys-player' element with an <iframe> and
   # YouTube player after the API code downloads.
   youtubeInit.afterPlayerAPIReady.then(->    
+    settings = userService.volumeSettings
     player = youtubeInit.player = new YT.Player("ys-player",
       playerVars:
         enablejsapi: 1
@@ -766,7 +783,14 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         onReady: ->
           player = youtubeInit.player
           youtubeInit.resize()
-          player.mute()
+          if settings.muted()
+            player.mute()
+            $scope.muted = true
+          else
+            player.setVolume settings.volume()
+            $scope.volume = settings.volume()
+            $(".volume-indicator").width(settings.volume() * 1.5)
+            $('.volume').val(settings.volume())
           player.loadPlaylist
             listType: "user_uploads"
             list: youtubeInit.currentChannel
@@ -778,13 +802,17 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $(window).on "resize", youtubeInit.resize
     $(".mute-container").on "click", (e) ->
       if player.isMuted()
-        $(".volume").val 100
         player.unMute()
+        settings.muted(false)
+        $scope.muted = false
         $(this).find(".ss-ban").hide();
-        $(".volume-indicator").width("100%")
+        $(".volume-indicator").width(settings.volume() * 1.5)
+        $(".volume").val settings.volume()
       else
         $(".volume").val 0
         player.mute()
+        settings.muted(true)
+        $scope.muted = true
         $(this).find(".ss-ban").show();
         $(".volume-indicator").width(0)
 
@@ -820,6 +848,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
       else
         $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
+      settings.volume(newVolume)
       $(".volume-indicator").width( (newVolume / 100) * 150 )
 
     $("#ys-player-bar").on "click", (e) ->
