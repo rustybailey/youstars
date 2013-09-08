@@ -763,7 +763,7 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     </div>
     """
 ])
-youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService', '$location', ($window, $q, $routeParams, userService, $location) ->
+youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService', '$location', '$rootScope', ($window, $q, $routeParams, userService, $location, $rootScope) ->
   tag = document.createElement("script")
   tag.src = "https://www.youtube.com/player_api"
   firstScriptTag = document.getElementsByTagName("script")[0]
@@ -809,6 +809,7 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
     if ev.data is 1
       vidId = hash.player.getVideoData().video_id
       $location.search('currentVideo', vidId).replace()
+      $rootScope.$apply()
       $.ajax
         url: "https://gdata.youtube.com/feeds/api/videos/" + vidId + "?v=2&alt=json"
         success: (data) ->
