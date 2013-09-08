@@ -800,10 +800,21 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
     resize: resize
     currentChannel: userService.currentChannel
 
-  hash.playVideo = (videoId) ->
+  hash.playVideo = (currentVideo) ->
     hash.onPlayerReady.then ->
-      hash.interruptedIndex = hash.player.getPlaylistIndex()
-      hash.player.loadVideoById(videoId)
+      playlist = hash.player.getPlaylist()
+      playerState = hash.player.getPlayerState()
+      currentIndex = hash.player.getPlaylistIndex()
+      index = playlist.indexOf(currentVideo)
+      # make video first to play only if playlist is cued.
+      #   playlist gets cued when ?currentVideo= parameter exists, and page
+      #   first loads. "cue" means load playlist but don't play it yet.
+      currentIndex++ unless playerState == YT.PlayerState.CUED
+      if index >= 0
+        # found video in playlist, cut it out, and insert to play
+        playlist.splice(index,1)
+      playlist.splice(currentIndex,0,currentVideo)
+      hash.player.loadPlaylist(playlist, currentIndex)
 
   hash.videoStateChange = (ev) ->
     if ev.data is 1
@@ -814,11 +825,10 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
         url: "https://gdata.youtube.com/feeds/api/videos/" + vidId + "?v=2&alt=json"
         success: (data) ->
           $('.video-title').text(data.entry.title.$t)
-    return unless ev.data is 0
-    hash.player.loadPlaylist
-      listType: "user_uploads"
-      list: hash.currentChannel
-      index: hash.interruptedIndex
+    # playlist loaded and ready, but not playing
+    # (for trying to determine index of ?currentVideo=... URLS
+    else if ev.data is 5
+      hash.playVideo $location.search().currentVideo # should exist
 
   formatTime = (num) ->
     sec_num = parseInt(num, 10)
@@ -906,8 +916,9 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
             $(".volume-indicator").width(settings.volume() * 1.5)
             $('.volume').val(settings.volume())
           if $routeParams.currentVideo
-            youtubeInit.interruptedIndex = 0
-            player.loadVideoById($routeParams.currentVideo)
+            player.cuePlaylist
+              listType: "user_uploads"
+              list: youtubeInit.currentChannel
           else
             player.loadPlaylist
               listType: "user_uploads"
