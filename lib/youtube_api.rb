@@ -11,6 +11,22 @@ module YoutubeApi
     { videos: video_data, next_page_token: video_list[:next_page_token] }
   end
 
+  def self.subscribe_current_user_to_channel(channel_id)
+    url   = "#{@@V3_URL}/subscriptions?part=snippet"
+    body  = {
+      snippet: {
+        resourceId: {
+          kind: 'youtube#channel',
+          channelId: channel_id
+        }
+      }
+    }
+
+    HTTParty.post( url, :body => body)
+
+    JSON.parse( HTTParty.get(url, query: query).body )
+  end
+
   def self.uploads_playlist_id_for_channel(channel_id)
     url   = "#{@@V3_URL}/channels"
     query = {

@@ -69,6 +69,15 @@ class ChannelController < ApiController
     render :json => topics
   end
 
+
+  def subscribe
+    authenticate_user!
+
+    response = YoutubeApi.subscribe_current_user_to_channel( @channel_id )
+
+    render :json => response
+  end
+
   def stream
     redis = Resque.redis
 
