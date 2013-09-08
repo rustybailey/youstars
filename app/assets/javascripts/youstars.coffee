@@ -37,11 +37,18 @@ youstars.directive('suggestedchannels', ['channelsService', (channelsService) ->
           channelsService.fetchSuggestedchannels().then (data) ->
             $scope.suggestedChannelsArray = data
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="channel in suggestedChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in suggestedChannelsArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -68,11 +75,18 @@ youstars.directive('similarrecentchannels', ['channelsService', (channelsService
           channelsService.fetchSimilarrecentchannels().then (data) ->
             $scope.similarrecentChannelsArray = data
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="channel in similarrecentChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in similarrecentChannelsArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -98,6 +112,13 @@ youstars.directive('mostsubscribedchannels', ['channelsService', (channelsServic
         channelsService.fetchMostsubscribedchannels().then (data) ->
           $scope.mostsubscribedChannelsArray = data
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -128,11 +149,18 @@ youstars.directive('mostviewedchannels', ['channelsService', (channelsService) -
         channelsService.fetchMostviewedchannels().then (data) ->
           $scope.mostviewedChannelsArray = data
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="channel in mostviewedChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in mostviewedChannelsArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -159,11 +187,18 @@ youstars.directive('recentchannels', ['channelsService', (channelsService) ->
           channelsService.fetchRecentchannels().then (data) ->
             $scope.recentChannelsArray = data
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="channel in recentChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in recentChannelsArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -189,11 +224,18 @@ youstars.directive('similarchannels', ['channelsService', (channelsService) ->
         channelsService.fetchSimilarchannels().then (data) ->
           $scope.similarChannelsArray = data
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="channel in similarChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in similarChannelsArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -220,11 +262,18 @@ youstars.directive('mychannel', ['channelsService', (channelsService) ->
           channelsService.fetchSimilarmychannel().then (data) ->
             $scope.similarMyChannelsArray = data
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="channel in MyChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in MyChannelsArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -253,11 +302,18 @@ youstars.directive('mostwatchedvideos', ['videosService', (videosService) ->
             # no spaces please
             $scope.mostwatchedVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="video in mostwatchedVideosArray">
+          <li class="ys-recommendation" ng-repeat="video in mostwatchedVideosArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
@@ -287,11 +343,18 @@ youstars.directive('suggestedvideos', ['videosService', (videosService) ->
             # only want ones that don't contain spaces. spaces can suck a dick.
             $scope.suggestedVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="video in suggestedVideosArray">
+          <li class="ys-recommendation" ng-repeat="video in suggestedVideosArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
@@ -319,11 +382,18 @@ youstars.directive('trendingvideos', ['videosService', (videosService) ->
           # no spaces please
           $scope.trendingVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="video in trendingVideosArray">
+          <li class="ys-recommendation" ng-repeat="video in trendingVideosArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
@@ -351,11 +421,18 @@ youstars.directive('featuredvideos', ['videosService', (videosService) ->
           # no spaces please
           $scope.featuredVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
     ]
+    link: (scope, element, attr) ->
+      scope.enter = (e) ->
+        currClass = $(e.currentTarget).attr("class").split(" ")[0]
+        $('.' + currClass).removeClass('slideUp currentSelection')
+        $(e.currentTarget).addClass('slideUp currentSelection')
+      scope.leave = (e) ->
+        $(e.currentTarget).removeClass('slideUp')
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation" ng-repeat="video in featuredVideosArray">
+          <li class="ys-recommendation" ng-repeat="video in featuredVideosArray" ng-mouseenter="enter($event);" ng-mouseleave="leave($event);">
             <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
@@ -634,7 +711,8 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
   replace: true
   link: (scope, element, attr) ->
     scope.enter = (e) ->
-      $('.ys-video-tile').removeClass('slideUp currentSelection')
+      currClass = $(e.currentTarget).attr("class").split(" ")[0]
+      $('.' + currClass).removeClass('slideUp currentSelection')
       $(e.currentTarget).addClass('slideUp currentSelection')
     scope.leave = (e) ->
       $(e.currentTarget).removeClass('slideUp')

@@ -7,56 +7,65 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
       }
     }
 
-    if($("#ys-overlay").is(":visible")) {
+    if($("#ys-video-overlay").is(":visible")) {
+      var tilePlusParent = "#ys-video-overlay .ys-recommendation";
+      var tile = ".ys-recommendation";
+      var tileContainer = "#ys-video-overlay .ys-recommendations";
       if(e.keyCode === 27) {
-        $("#ys-overlay .ys-overlay-close").trigger("click");
+        $("#ys-video-overlay .ys-overlay-close").trigger("click");
       }
-    }
-
-    if($("#ys-channel-overlay").is(":visible")) {
+    } else if($("#ys-channel-overlay").is(":visible")) {
+      var tilePlusParent = "#ys-channel-overlay .ys-recommendation";
+      var tile = ".ys-recommendation";
+      var tileContainer = "#ys-channel-overlay .ys-recommendations";
       if(e.keyCode === 27) {
         $("#ys-channel-overlay .ys-overlay-close").trigger("click");
       }
+    } else {
+      var tilePlusParent = ".ys-video-tile";
+      var tile = ".ys-video-tile";
+      var tileContainer = "#ys-videos";
     }
 
     // Press left/right arrows and enter to select video from bottom list
-    var highlighted = $('.ys-video-tile.currentSelection');
+    var highlighted = $(tilePlusParent + '.currentSelection');
     if(e.keyCode === 39) {
       clearTimeout(unslide);
-      if(highlighted.length && highlighted.next(".ys-video-tile").length) {
+      if(highlighted.length && highlighted.next(tilePlusParent).length) {
         highlighted.removeClass('slideUp currentSelection');
-        var next = highlighted.next(".ys-video-tile");
+        var next = highlighted.next(tilePlusParent);
         next.addClass('slideUp currentSelection');
         var unslide = setTimeout(function() {next.removeClass('slideUp')}, 3000);
         if(next.offset().left + next.width() > $(document).width()) {
           var diff = next.offset().left + next.width() - $(document).width();
           var diffdiff = next.width() - diff;
-          var currScroll = $('#ys-videos').scrollLeft();
-          $('#ys-videos').animate({scrollLeft: currScroll + $(document).width() - diffdiff - 7}, 500);
+          var currScroll = $(tilePlusParent).closest(tileContainer).scrollLeft();
+          $(tileContainer).animate({scrollLeft: currScroll + $(document).width() - diffdiff - 7}, 500);
         }
       } else {
         highlighted.removeClass('slideUp currentSelection');
-        $('.ys-video-tile').eq(0).addClass('slideUp currentSelection');
-        var unslide = setTimeout(function() {$('.ys-video-tile').eq(0).removeClass('slideUp')}, 3000);
-        $('#ys-videos').animate({scrollLeft: 0}, 500);
+        $(tilePlusParent).eq(0).addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {$(tilePlusParent).eq(0).removeClass('slideUp')}, 3000);
+        $(tileContainer).animate({scrollLeft: 0}, 500);
       }
     } else if(e.keyCode === 37) {
       clearTimeout(unslide);
-      if(highlighted.length && highlighted.prev(".ys-video-tile").length) {
+      if(highlighted.length && highlighted.prev(tilePlusParent).length) {
         highlighted.removeClass('slideUp currentSelection');
-        var prev = highlighted.prev(".ys-video-tile");
+        var prev = highlighted.prev(tilePlusParent);
         prev.addClass('slideUp currentSelection');
         var unslide = setTimeout(function() {prev.removeClass('slideUp')}, 3000);
         if(prev.offset().left < 0) {
-          var currScroll = $('#ys-videos').scrollLeft();
-          $('#ys-videos').animate({scrollLeft: currScroll - $(document).width() + 21}, 500);
+          var currScroll = $(tilePlusParent).closest(tileContainer).scrollLeft();
+          $(tileContainer).animate({scrollLeft: currScroll - $(document).width() + 21}, 500);
         }
       } else {
         highlighted.removeClass('slideUp currentSelection');
-        $('.ys-video-tile:last').addClass('slideUp currentSelection');
-        var unslide = setTimeout(function() {$('.ys-video-tile:last').removeClass('slideUp')}, 3000);
-        var left = $('#ys-videos .ys-video-tile').length * ($('#ys-videos .ys-video-tile:first').width() + 10);
-        $('#ys-videos').animate({scrollLeft: left}, 500);
+        $(tilePlusParent + ':last').addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {$(tilePlusParent + ':last').removeClass('slideUp')}, 3000);
+        var left = $(tileContainer + " " + tile).length * ($(tileContainer + " " + tile + ':first').width() + 10);
+        console.log(left)
+        $(tileContainer).animate({scrollLeft: left}, 500);
       }
     } else if(e.keyCode === 13 && highlighted.length) {
       var vid = highlighted.data('video-id');
