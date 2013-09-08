@@ -27,82 +27,16 @@ youstars.factory('userService', ['$http', ($http) ->
   }
 ])
 
-
-youstars.factory('suggestedchannelsService', ['$http', ($http) ->
-  return {
-    fetchSuggestedchannels: () ->
-      if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/channels.json').then (response) ->
-          response.data
-      else
-        $.Deferred().resolve([])
-  }
-])
-
-youstars.factory('recentchannelsService', ['$http', ($http) ->
-  return {
-    fetchRecentchannels: () ->
-      if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/channels/recently_watched.json').then (response) ->
-          response.data
-      else
-        $.Deferred().resolve([])
-  }
-])
-
-youstars.factory('mychannelService', ['$http', ($http) ->
-  return {
-    fetchSimilarmychannel: () ->
-      if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/channels/my_channel.json').then (response) ->
-          response.data
-      else
-        $.Deferred().resolve([])
-  }
-])
-
-youstars.factory('similarrecentchannelsService', ['$http', ($http) ->
-  return {
-    fetchSimilarrecentchannels: () ->
-      if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/channels/similar_to_recently_watched.json').then (response) ->
-          response.data
-      else
-        $.Deferred().resolve([])
-  }
-])
-
-youstars.factory('mostsubscribedchannelsService', ['$http', ($http) ->
-  return {
-    fetchMostsubscribedchannels: () ->
-      $http.get('/suggest/channels/most_subscribed.json').then (response) ->
-        response.data
-  }
-])
-
-youstars.factory('mostviewedchannelsService', ['$http', ($http) ->
-  return {
-    fetchMostviewedchannels: () ->
-      $http.get('/suggest/channels/most_viewed.json').then (response) ->
-        response.data
-  }
-])
-
-youstars.factory('similarchannelsService', ['$http', 'userService', ($http, userService) ->
-  return {
-    fetchSimilarchannels: () ->
-      $http.get('/suggest/channels/related/' + userService.currentChannel + '.json').then (response) ->
-        response.data
-  }
-])
-
-youstars.directive('suggestedchannels', ['suggestedchannelsService', (suggestedchannelsService) ->
+youstars.directive('suggestedchannels', ['channelsService', (channelsService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      suggestedchannelsService.fetchSuggestedchannels().then (data) ->
-        scope.suggestedChannelsArray = data
+    controller: ['$scope', ($scope) ->
+      channelsService.channelModalFirstShown.then ->
+        if $scope.loggedIn
+          channelsService.fetchSuggestedchannels().then (data) ->
+            $scope.suggestedChannelsArray = data
+    ]
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -124,13 +58,16 @@ youstars.directive('suggestedchannels', ['suggestedchannelsService', (suggestedc
   }
 ])
 
-youstars.directive('similarrecentchannels', ['similarrecentchannelsService', (similarrecentchannelsService) ->
+youstars.directive('similarrecentchannels', ['channelsService', (channelsService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      similarrecentchannelsService.fetchSimilarrecentchannels().then (data) ->
-        scope.similarrecentChannelsArray = data
+    controller: ['$scope', ($scope) ->
+      channelsService.channelModalFirstShown.then ->
+        if $scope.loggedIn
+          channelsService.fetchSimilarrecentchannels().then (data) ->
+            $scope.similarrecentChannelsArray = data
+    ]
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -152,13 +89,15 @@ youstars.directive('similarrecentchannels', ['similarrecentchannelsService', (si
   }
 ])
 
-youstars.directive('mostsubscribedchannels', ['mostsubscribedchannelsService', (mostsubscribedchannelsService) ->
+youstars.directive('mostsubscribedchannels', ['channelsService', (channelsService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      mostsubscribedchannelsService.fetchMostsubscribedchannels().then (data) ->
-        scope.mostsubscribedChannelsArray = data
+    controller: ['$scope', ($scope) ->
+      channelsService.channelModalFirstShown.then ->
+        channelsService.fetchMostsubscribedchannels().then (data) ->
+          $scope.mostsubscribedChannelsArray = data
+    ]
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -180,13 +119,15 @@ youstars.directive('mostsubscribedchannels', ['mostsubscribedchannelsService', (
   }
 ])
 
-youstars.directive('mostviewedchannels', ['mostviewedchannelsService', (mostviewedchannelsService) ->
+youstars.directive('mostviewedchannels', ['channelsService', (channelsService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      mostviewedchannelsService.fetchMostviewedchannels().then (data) ->
-        scope.mostviewedChannelsArray = data
+    controller: ['$scope', ($scope) ->
+      channelsService.channelModalFirstShown.then ->
+        channelsService.fetchMostviewedchannels().then (data) ->
+          $scope.mostviewedChannelsArray = data
+    ]
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -208,13 +149,16 @@ youstars.directive('mostviewedchannels', ['mostviewedchannelsService', (mostview
   }
 ])
 
-youstars.directive('recentchannels', ['recentchannelsService', (recentchannelsService) ->
+youstars.directive('recentchannels', ['channelsService', (channelsService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      recentchannelsService.fetchRecentchannels().then (data) ->
-        scope.recentChannelsArray = data
+    controller: ['$scope', ($scope) ->
+      channelsService.channelModalFirstShown.then ->
+        if $scope.loggedIn
+          channelsService.fetchRecentchannels().then (data) ->
+            $scope.recentChannelsArray = data
+    ]
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -236,13 +180,15 @@ youstars.directive('recentchannels', ['recentchannelsService', (recentchannelsSe
   }
 ])
 
-youstars.directive('similarchannels', ['similarchannelsService', (similarchannelsService) ->
+youstars.directive('similarchannels', ['channelsService', (channelsService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      similarchannelsService.fetchSimilarchannels().then (data) ->
-        scope.similarChannelsArray = data
+    controller: ['$scope', ($scope) ->
+      channelsService.channelModalFirstShown.then ->
+        channelsService.fetchSimilarchannels().then (data) ->
+          $scope.similarChannelsArray = data
+    ]
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -264,13 +210,16 @@ youstars.directive('similarchannels', ['similarchannelsService', (similarchannel
   }
 ])
 
-youstars.directive('mychannel', ['mychannelService', (mychannelService) ->
+youstars.directive('mychannel', ['channelsService', (channelsService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      mychannelService.fetchSimilarmychannel().then (data) ->
-        scope.similarMyChannelsArray = data
+    controller: ['$scope', ($scope) ->
+      channelsService.channelModalFirstShown.then ->
+        if $scope.loggedIn
+          channelsService.fetchSimilarmychannel().then (data) ->
+            $scope.similarMyChannelsArray = data
+    ]
     template:
       """
       <div class="ys-recommendations ys-recommendations-channel">
@@ -431,6 +380,28 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
       channels: []
       popular_channels: []
       channelModalFirstShown: $.Deferred()
+      fetchSuggestedchannels: () ->
+        $http.get('/suggest/channels.json').then (response) ->
+          response.data
+      fetchRecentchannels: () ->
+        $http.get('/suggest/channels/recently_watched.json').then (response) ->
+          response.data
+      fetchSimilarmychannel: () ->
+        $http.get('/suggest/channels/my_channel.json').then (response) ->
+          response.data
+      fetchSimilarrecentchannels: () ->
+        $http.get('/suggest/channels/similar_to_recently_watched.json').then (response) ->
+          response.data
+      fetchMostsubscribedchannels: () ->
+        $http.get('/suggest/channels/most_subscribed.json').then (response) ->
+          response.data
+      fetchMostviewedchannels: () ->
+        $http.get('/suggest/channels/most_viewed.json').then (response) ->
+          response.data
+      fetchSimilarchannels: () ->
+        $http.get('/suggest/channels/related/' + userService.currentChannel + '.json').then (response) ->
+          response.data
+
 
     hash.fetch_channels = ->
       # storing results of this request in session storage, so back-and-
