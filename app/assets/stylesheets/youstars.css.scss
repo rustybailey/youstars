@@ -76,6 +76,23 @@ $purple: #5c3ef1;
 @media (min-width: 480px) and (max-width: 767px) {}		/* Phone Viewport */
 @media (max-width: 480px) {}							/* Small Viewport */
 
+/* List of Good/Bad Breakpoints for Home Page. */
+/************************************************/
+
+@media (min-width: 2199px) {} // Good.
+@media (min-width: 2083px) and (max-width: 2198px) {} // Bad.
+@media (min-width: 1968px) and (max-width: 2082px) {} // Good.
+@media (min-width: 1852px) and (max-width: 1967px) {} // Bad.
+@media (min-width: 1736px) and (max-width: 1851px) {} // Good.
+@media (min-width: 1620px) and (max-width: 1735px) {} // Bad.
+@media (min-width: 1505px) and (max-width: 1619px) {} // Good.
+@media (min-width: 1389px) and (max-width: 1504px) {} // Bad.
+@media (min-width: 1273px) and (max-width: 1388px) {} // Good.
+@media (min-width: 1158px) and (max-width: 1272px) {} // Bad.
+@media (min-width: 1042px) and (max-width: 1157px) {} // Good.
+@media (max-width: 1041px) {} // Good.
+
+
 
 /* Icon Font Names */
 /************************************************/
@@ -435,10 +452,39 @@ a {
 		outline: 0;
 	}
 
+	/*@media (min-width: 2083px) and (max-width: 2198px) {
+		ul.ys-home-tiles {
+			width: 2199px;
+		}
+	}
+	@media (min-width: 1852px) and (max-width: 1967px) {
+		ul.ys-home-tiles {
+			width: 1968px !important;
+		}
+	}
+	@media (min-width: 1620px) and (max-width: 1735px) {
+		ul.ys-home-tiles {
+			width: 1736px !important;
+		}
+	}
+	@media (min-width: 1389px) and (max-width: 1504px) {
+		ul.ys-home-tiles {
+			width: 1505px !important;
+		}
+	}
+	@media (min-width: 1158px) and (max-width: 1272px) {
+		ul.ys-home-tiles {
+			width: 1273px !important;
+		}
+	}*/
+
+	@media (min-width: 1736px) { ul.ys-home-tiles { width: 2754px !important; } }
+
 	ul.ys-home-tiles {
 		display: block;
 		float: left;
 		width: 140%;
+		width: 2199px;
 		height: 140%;
 		margin: -100px 0 0 -100px;
 		position: absolute;
@@ -898,6 +944,20 @@ $ys-profile-tile-large-size:	230px;
 #ys-profiles.ys-profiles-before,
 #ys-profiles.ys-profiles-after.ys-profiles-before {
 	margin: 0 -250px 0 0;
+}
+#ys-profiles:after {
+	display: block;
+	width: 100%;
+	position: relative;
+	top: 5px;
+	content: "Scroll Down to See More";
+	color: #ffffff;
+	text-transform: uppercase;
+	font-weight: 300;
+	font-size: 11px;
+	text-align: center;
+	@include text-shadow(0 1px 1px #000000);
+	@include opacity(0.85);
 }
 #ys-profiles {
 	display: block;
