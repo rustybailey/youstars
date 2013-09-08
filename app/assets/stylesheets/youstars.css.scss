@@ -627,8 +627,31 @@ a {
 		li {
 			display: block;
 			float: left;
-			width: 45px;
 			height: 45px;
+			a.ys-claim {
+				display: block;
+				float: left;
+				height: 43px;
+				padding: 0 15px;
+				margin: 0 0 0 5px;
+				border: 1px solid rgba(255, 255, 255, 0.5);
+				font-size: 14px;
+				font-weight: 900;
+				text-transform: uppercase;
+				font-style: normal;
+				line-height: 46px;
+				background: transparent url("/assets/claim-button-background.png") no-repeat top right;
+				@include box-shadow(0 1px 3px #707070);
+				@include transition-property(opacity);
+				@include transition-duration(.2s);
+				@include opacity(.75);
+			}
+			a.ys-claim:hover {
+				@include opacity(1);
+			}
+		}
+		li.ys-social-link {
+			width: 45px;
 			margin: 0 5px 0 0;
 			a {
 				display: block;
@@ -651,15 +674,15 @@ a {
 				@include opacity(0.75);
 			}
 		}
-		li:nth-child(1) { background: $orange url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(2) { background: $green url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(3) { background: $marigold url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(4) { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(5) { background: $red url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(6) { background: $blue url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(7) { background: $purple url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(8) { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
-		li:nth-child(9) { background: $teal url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(1) { background: $orange url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(2) { background: $green url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(3) { background: $marigold url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(4) { background: $aqua url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(5) { background: $red url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(6) { background: $blue url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(7) { background: $purple url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(8) { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
+		li.ys-social-link:nth-child(9) { background: $teal url("/assets/white-glare.png") no-repeat top right; }
 	}
 }
 
