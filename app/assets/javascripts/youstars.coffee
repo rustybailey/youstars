@@ -62,7 +62,7 @@ youstars.factory('suggestedchannelsService', ['$http', ($http) ->
 
 youstars.factory('recentchannelsService', ['$http', ($http) ->
   return {
-    fetchSimilarrecentchannels: () ->
+    fetchRecentchannels: () ->
       if $("#ys-app").is(".ys-logged-in")
         $http.get('/suggest/channels/recently_watched.json').then (response) ->
           response.data
@@ -73,7 +73,7 @@ youstars.factory('recentchannelsService', ['$http', ($http) ->
 
 youstars.factory('mychannelService', ['$http', ($http) ->
   return {
-    fetchSimilarrecentchannels: () ->
+    fetchSimilarmychannel: () ->
       if $("#ys-app").is(".ys-logged-in")
         $http.get('/suggest/channels/my_channel.json').then (response) ->
           response.data
@@ -103,7 +103,7 @@ youstars.factory('mostsubscribedchannelsService', ['$http', ($http) ->
 
 youstars.factory('mostviewedchannelsService', ['$http', ($http) ->
   return {
-    fetchMostsubscribedchannels: () ->
+    fetchMostviewedchannels: () ->
       $http.get('/suggest/channels/most_viewed.json').then (response) ->
         response.data
   }
