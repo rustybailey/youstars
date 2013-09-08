@@ -666,11 +666,11 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
       <div id="ys-views">
         <span><strong>{{views}}</strong> views</span>
           <ul id="ys-social-links">
-            <li class="ys-social-link"><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://youstars.herokuapp.com/#/{{currentChannel}}&p[images][0]=&p[title]=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}&p[summary]="><i class="ss-icon ss-social">Facebook</i></i></a></li>
-            <li class="ys-social-link"><a href="http://twitter.com/home?status=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20http://youstars.herokuapp.com/#/{{currentChannel}}"><i class="ss-icon ss-social">Twitter</i></a></li>
-            <li class="ys-social-link"><a href="https://plus.google.com/share?url=http://youstars.herokuapp.com/#/{{currentChannel}}"><i class="ss-icon ss-social">Google+</i></a></li>
-            <li class="ys-social-link"><a href="http://www.tumblr.com/share/link?url=http://youstars.herokuapp.com/#/{{currentChannel}}&name={{currentChannel}}&description=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">Tumblr</i></a></li>
-            <li class="ys-social-link"><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://youstars.herokuapp.com/#/{{currentChannel}}&title={{currentChannel}}&summary=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">LinkedIn</i></a></li>
+            <li class="ys-social-link"><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://youstars.herokuapp.com/{{currentChannel}}&p[images][0]=&p[title]=YouStars%20-%20{{currentChannel}}&p[summary]=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!"><i class="ss-icon ss-social">Facebook</i></i></a></li>
+            <li class="ys-social-link"><a href="http://twitter.com/home?status=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!%20http://youstars.herokuapp.com/{{currentChannel}}"><i class="ss-icon ss-social">Twitter</i></a></li>
+            <li class="ys-social-link"><a href="https://plus.google.com/share?url=http://youstars.herokuapp.com/{{currentChannel}}"><i class="ss-icon ss-social">Google+</i></a></li>
+            <li class="ys-social-link"><a href="http://www.tumblr.com/share/link?url=http://youstars.herokuapp.com/{{currentChannel}}&name={{currentChannel}}&description=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!"><i class="ss-icon ss-social">Tumblr</i></a></li>
+            <li class="ys-social-link"><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://youstars.herokuapp.com/{{currentChannel}}&title=YouStars%20-%20{{currentChannel}}&summary=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!"><i class="ss-icon ss-social">LinkedIn</i></a></li>
             <li><a class="ys-claim">Claim This Channel</a></li>
           </ul>
         <div id="ys-views-bg" ng-class="{'adjusted': real_views}"><strong>{{real_views | number}}</strong> views</div>
