@@ -70,6 +70,7 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
     controller: 'homeController'
   }).when('/:currentChannel', {
     templateUrl: '<%= asset_path("index.html") %>',
-    controller: 'indexController'
+    controller: 'indexController',
+    reloadOnSearch: false
   })
 }])

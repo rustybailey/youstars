@@ -732,16 +732,16 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
   link: (scope, element, attr) ->
     scope.channelsArray = channelsService.channels
     mysubscribersService.positionMysubscribers
-    channelsService.fetch_channels().then (res) ->
-      scope.channelsArray = res
-      $timeout( mysubscribersService.sizeMysubscribers, 0 )
-      $timeout( mysubscribersService.repositionMysubscribers, 1500 )
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # scope.hideMysubscribers = () ->
     #   $timeout( mysubscribersService.repositionMysubscribers, 0 )
   controller: ['$scope', '$element', '$attrs', ($scope,$element,$attrs) ->
     $scope.nameIsntPoop = (item) ->
       !item.name.match(/[ .]/)?
+    channelsService.fetch_channels().then (res) ->
+      $scope.channelsArray = res
+      $timeout( mysubscribersService.sizeMysubscribers, 0 )
+      $timeout( mysubscribersService.repositionMysubscribers, 1500 )
   ]
   template:
     """
@@ -763,7 +763,7 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     </div>
     """
 ])
-youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService', ($window, $q, $routeParams, userService) ->
+youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService', '$location', ($window, $q, $routeParams, userService, $location) ->
   tag = document.createElement("script")
   tag.src = "https://www.youtube.com/player_api"
   firstScriptTag = document.getElementsByTagName("script")[0]
@@ -808,6 +808,7 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
   hash.videoStateChange = (ev) ->
     if ev.data is 1
       vidId = hash.player.getVideoData().video_id
+      $location.search('currentVideo', vidId).replace()
       $.ajax
         url: "https://gdata.youtube.com/feeds/api/videos/" + vidId + "?v=2&alt=json"
         success: (data) ->
@@ -903,9 +904,13 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
             $scope.volume = settings.volume()
             $(".volume-indicator").width(settings.volume() * 1.5)
             $('.volume').val(settings.volume())
-          player.loadPlaylist
-            listType: "user_uploads"
-            list: youtubeInit.currentChannel
+          if $routeParams.currentVideo
+            youtubeInit.interruptedIndex = 0
+            player.loadVideoById($routeParams.currentVideo)
+          else
+            player.loadPlaylist
+              listType: "user_uploads"
+              list: youtubeInit.currentChannel
           youtubeInit.onPlayerReady.resolve()
           player.setLoop(true)
         onStateChange: youtubeInit.videoStateChange
@@ -984,6 +989,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         $scope.makingARequest = true
         videosService.fetch_videos(true).then () ->
           $scope.makingARequest = false
+          $scope.$apply()
 
 
   )
