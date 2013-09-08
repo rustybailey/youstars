@@ -245,7 +245,7 @@ youstars.directive('recentchannels', ['recentchannelsService', (recentchannelsSe
     restrict: 'E'
     replace: true
     link: (scope, element, attr) ->
-        recentchannelsService.fetchRecentchannels().then (data) ->
+      recentchannelsService.fetchRecentchannels().then (data) ->
         scope.recentChannelsArray = data
     template:
       """
