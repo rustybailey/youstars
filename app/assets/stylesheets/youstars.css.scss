@@ -982,7 +982,6 @@ $ys-profile-tile-large-size:	230px;
 	@include transition-duration(0.33s);
 	ul#ys-profiles-list {
 		display: block;
-		float: left;
 		width: 250px;
 		height: 100%;
 		position: relative;
@@ -1036,7 +1035,7 @@ $ys-profile-tile-large-size:	230px;
 			display: block;
 			width: $ys-profile-tile-large-size;
 			height: $ys-profile-tile-large-size;
-			margin: 0 10px 10px 0;
+			padding: 0 10px 10px 0;
 			a.ys-profile-action {
 				display: block;
 				float: right;
