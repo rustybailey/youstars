@@ -32,14 +32,26 @@
 
 	<h1>Channel Recommendations</h1>
 
-	<h2 ng-show="loggedIn">Reccomended because these channels are <strong>custom picked by YouStars</strong> for you.</h2>
+	<h2 ng-show="loggedIn">Recommended because these channels are <strong>custom picked by YouStars</strong> for you.</h2>
 	<suggestedchannels ng-show="loggedIn"></suggestedchannels>
+
+	<h2 ng-show="loggedIn">Recommended because these channels are <strong>similar to your channel</strong>.</h2>
+	<mychannel ng-show="loggedIn"></mychannel>
+
+	<h2 ng-show="loggedIn">Recommended because these channels are <strong>similar to channels you have recently watched</strong>.</h2>
+	<similarrecentchannels ng-show="loggedIn"></similarrecentchannels>
+
+	<h2 ng-show="loggedIn">Recommended because <strong>you have recently watched</strong> these channels.</h2>
+	<recentchannels ng-show="loggedIn"></recentchannels>
 
 	<h2>Recommended because these channels are similar to <strong>the current channel</strong> you're watching.</h2>
 	<similarchannels></similarchannels>
 
 	<h2>Recommended because these channels are the <strong>most subscribed channels</strong> on YouTube.</h2>
 	<mostsubscribedchannels></mostsubscribedchannels>
+
+	<h2>Recommended because these channels are the <strong>most viewed channels</strong> on YouTube.</h2>
+	<mostviewedchannels></mostviewedchannels>
 
 
 </div>
