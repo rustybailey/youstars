@@ -67,11 +67,11 @@
 		<div class="ss-icon previous">Skipback</div>
 		<div class="volume-container">
 			<div class="volume-indicator"></div>
-			<input class="volume" type="range" name="volume" min="0" max="100" step="1" value="0">
+      <input class="volume" type="range" name="volume" min="0" max="100" step="1" value="0">
 		</div>
 		<div class="mute-container">
 			<div class="ss-icon ss-volume"></div>
-			<div class="ss-icon ss-ban"></div>
+			<div ng-show="muted" class="ss-icon ss-ban"></div>
 		</div>
 		<div class="video-info-container">
 			<div class="duration-container">
