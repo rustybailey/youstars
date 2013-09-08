@@ -26,9 +26,29 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
       var tile = ".ys-video-tile";
       var tileContainer = "#ys-videos";
     }
+    var highlighted = $(tilePlusParent + '.currentSelection');
+
+    // Press up/down to go between rows on overlays
+
+    if($("#ys-video-overlay").is(":visible") || $("#ys-channel-overlay").is(":visible")) {
+      var height = $(tileContainer).height();
+      highlighted.removeClass('slideUp currentSelection');
+      if(e.keyCode === 40) {
+        next = highlighted.closest(tileContainer).next().next().find(".ys-recommendation").eq(0);
+        next.addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {next.removeClass('slideUp')}, 3000);
+        next.closest(tileContainer).animate({scrollLeft: 0}, 500);
+        next.closest(tileContainer).parent().animate({scrollTop: height + 20}, 500);
+      } else if(e.keyCode == 38) {
+        prev = highlighted.closest(tileContainer).prev().prev().find(".ys-recommendation").eq(0);
+        prev.addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {prev.removeClass('slideUp')}, 3000);
+        prev.closest(tileContainer).animate({scrollLeft: 0}, 500);
+        prev.closest(tileContainer).parent().animate({scrollTop: -height - 20}, 500);
+      }
+    }
 
     // Press left/right arrows and enter to select video from bottom list
-    var highlighted = $(tilePlusParent + '.currentSelection');
     if(e.keyCode === 39) {
       clearTimeout(unslide);
       if(highlighted.length && highlighted.next(tilePlusParent).length) {
@@ -39,14 +59,19 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
         if(next.offset().left + next.width() > $(document).width()) {
           var diff = next.offset().left + next.width() - $(document).width();
           var diffdiff = next.width() - diff;
-          var currScroll = $(tilePlusParent).closest(tileContainer).scrollLeft();
-          $(tileContainer).animate({scrollLeft: currScroll + $(document).width() - diffdiff - 7}, 500);
+          var currScroll = next.closest(tileContainer).scrollLeft();
+          next.closest(tileContainer).animate({scrollLeft: currScroll + $(document).width() - diffdiff - 7}, 500);
         }
       } else {
-        highlighted.removeClass('slideUp currentSelection');
-        $(tilePlusParent).eq(0).addClass('slideUp currentSelection');
-        var unslide = setTimeout(function() {$(tilePlusParent).eq(0).removeClass('slideUp')}, 3000);
-        $(tileContainer).animate({scrollLeft: 0}, 500);
+        if(!highlighted.length) {
+          var first = $(tilePlusParent).first();
+        } else {
+          highlighted.removeClass('slideUp currentSelection');
+          var first = highlighted.closest(tileContainer).find(tile).first();
+        }
+        first.addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {first.removeClass('slideUp')}, 3000);
+        first.closest(tileContainer).animate({scrollLeft: 0}, 500);
       }
     } else if(e.keyCode === 37) {
       clearTimeout(unslide);
@@ -56,16 +81,16 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
         prev.addClass('slideUp currentSelection');
         var unslide = setTimeout(function() {prev.removeClass('slideUp')}, 3000);
         if(prev.offset().left < 0) {
-          var currScroll = $(tilePlusParent).closest(tileContainer).scrollLeft();
-          $(tileContainer).animate({scrollLeft: currScroll - $(document).width() + 21}, 500);
+          var currScroll = prev.closest(tileContainer).scrollLeft();
+          prev.closest(tileContainer).animate({scrollLeft: currScroll - $(document).width() + 21}, 500);
         }
       } else {
         highlighted.removeClass('slideUp currentSelection');
-        $(tilePlusParent + ':last').addClass('slideUp currentSelection');
-        var unslide = setTimeout(function() {$(tilePlusParent + ':last').removeClass('slideUp')}, 3000);
+        var last = highlighted.closest(tileContainer).find(tile).last();
+        last.addClass('slideUp currentSelection');
+        var unslide = setTimeout(function() {last.removeClass('slideUp')}, 3000);
         var left = $(tileContainer + " " + tile).length * ($(tileContainer + " " + tile + ':first').width() + 10);
-        console.log(left)
-        $(tileContainer).animate({scrollLeft: left}, 500);
+        last.closest(tileContainer).animate({scrollLeft: left}, 500);
       }
     } else if(e.keyCode === 13 && highlighted.length) {
       var vid = highlighted.data('video-id');
