@@ -344,24 +344,6 @@ a {
 					}
 				}
 			}
-
-			li.ys-recommendation.ys-recommendation-channel{
-				width: 200px;
-				height: 200px;
-
-				a.ys-recommendation-info{
-					width: 170px;
-					h3{
-						height: 70px;
-					}
-				}
-
-				a.ys-recommendation-content img{
-					width: 200px;
-					height: 200px;
-				}
-			}
-
 			
 			li.ys-recommendation:hover {
 				a.ys-recommendation-content {
@@ -380,6 +362,24 @@ a {
 			li.ys-recommendation:nth-child(7n) a.ys-recommendation-info { background: $purple url("/assets/white-glare.png") no-repeat top right; }
 			li.ys-recommendation:nth-child(8n) a.ys-recommendation-info { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
 			li.ys-recommendation:nth-child(9n) a.ys-recommendation-info { background: $teal url("/assets/white-glare.png") no-repeat top right; }
+		}
+	}
+	.ys-recommendations.ys-recommendations-channel {
+		ul.ys-recommendations-list {
+			li.ys-recommendation {
+				a.ys-recommendation-info {
+					h3 {}
+					h4 {}
+				}
+				a.ys-recommendation-content {
+					h3 {}
+					h4 {}
+					img {
+						width: 240px;
+						height: 240px;
+					}
+				}
+			}
 		}
 	}
 }

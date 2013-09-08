@@ -137,9 +137,9 @@ youstars.directive('suggestedchannels', ['suggestedchannelsService', (suggestedc
         scope.suggestedChannelsArray = data
     template:
       """
-      <div class="ys-recommendations">
+      <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in suggestedChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in suggestedChannelsArray">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -165,9 +165,9 @@ youstars.directive('similarrecentchannels', ['similarrecentchannelsService', (si
         scope.similarrecentChannelsArray = data
     template:
       """
-      <div class="ys-recommendations">
+      <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in similarrecentChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in similarrecentChannelsArray">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -193,9 +193,9 @@ youstars.directive('mostsubscribedchannels', ['mostsubscribedchannelsService', (
         scope.mostsubscribedChannelsArray = data
     template:
       """
-      <div class="ys-recommendations">
+      <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in mostsubscribedChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in mostsubscribedChannelsArray">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -221,9 +221,9 @@ youstars.directive('mostviewedchannels', ['mostviewedchannelsService', (mostview
         scope.mostviewedChannelsArray = data
     template:
       """
-      <div class="ys-recommendations">
+      <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in mostviewedChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in mostviewedChannelsArray">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -249,9 +249,9 @@ youstars.directive('recentchannels', ['recentchannelsService', (recentchannelsSe
         scope.recentChannelsArray = data
     template:
       """
-      <div class="ys-recommendations">
+      <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in recentChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in recentChannelsArray">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -277,9 +277,9 @@ youstars.directive('similarchannels', ['similarchannelsService', (similarchannel
         scope.similarChannelsArray = data
     template:
       """
-      <div class="ys-recommendations">
+      <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in similarChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in similarChannelsArray">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
@@ -305,9 +305,9 @@ youstars.directive('mychannel', ['mychannelService', (mychannelService) ->
         scope.similarMyChannelsArray = data
     template:
       """
-      <div class="ys-recommendations">
+      <div class="ys-recommendations ys-recommendations-channel">
         <ul class="ys-recommendations-list">
-          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in MyChannelsArray">
+          <li class="ys-recommendation" ng-repeat="channel in MyChannelsArray">
             <a class="ys-recommendation-info" href="#/{{channel.name}}">
               <h3>{{channel.title}}</h3>
               <h4>{{channel.view_count | number: 0}} views</h4>
