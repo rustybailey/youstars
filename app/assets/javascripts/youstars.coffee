@@ -889,7 +889,6 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
             $scope.volume = settings.volume()
             $(".volume-indicator").width(settings.volume() * 1.5)
             $('.volume').val(settings.volume())
-          return
           if $routeParams.currentVideo
             player.cuePlaylist
               listType: "user_uploads"
