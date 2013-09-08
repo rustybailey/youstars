@@ -7,6 +7,10 @@ var youstars = angular.module('youstars', [], ['$routeProvider', '$locationProvi
       }
     }
 
+    if($("#ys-overlay").is(":visible") && e.keyCode === 27) {
+      $("#ys-overlay .ys-overlay-close").trigger("click");
+    }
+
     if($("#ys-video-overlay").is(":visible")) {
       var tilePlusParent = "#ys-video-overlay .ys-recommendation";
       var tile = ".ys-recommendation";
