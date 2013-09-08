@@ -1,8 +1,8 @@
 youstars.factory('userService', ['$http', ($http) ->
   return {
-    userName: "devinsupertramp"   # STATIC PLACEHOLDER.
-    currentChannel: null
+    currentChannel: null # to be populated
     afterInit: $.Deferred()
+    loggedIn: $("#ys-app").is(".ys-logged-in")
     # user's remembered volume settings
     volumeSettings:
       muted: (newValue)->
@@ -27,33 +27,6 @@ youstars.factory('userService', ['$http', ($http) ->
   }
 ])
 
-
-youstars.factory('trendingvideosService', ['$http', ($http) ->
-  return {
-    fetchTrendingvideos: () ->
-      $http.get('/suggest/videos/trending.json').then (response) ->
-        response.data
-  }
-])
-
-youstars.factory('featuredvideosService', ['$http', ($http) ->
-  return {
-    fetchFeaturedvideos: () ->
-      $http.get('/suggest/videos/featured.json').then (response) ->
-        response.data
-  }
-])
-
-youstars.factory('suggestedvideosService', ['$http', ($http) ->
-  return {
-    fetchSuggestedvideos: () ->
-      if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/videos/suggested.json').then (response) ->
-          response.data
-      else
-        $.Deferred().resolve([])
-  }
-])
 
 youstars.factory('suggestedchannelsService', ['$http', ($http) ->
   return {
@@ -120,17 +93,6 @@ youstars.factory('similarchannelsService', ['$http', 'userService', ($http, user
     fetchSimilarchannels: () ->
       $http.get('/suggest/channels/related/' + userService.currentChannel + '.json').then (response) ->
         response.data
-  }
-])
-
-youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
-  return {
-    fetchMostwatchedvideos: () ->
-      if $("#ys-app").is(".ys-logged-in")
-        $http.get('/suggest/videos/most_watched.json').then (response) ->
-          response.data
-      else
-        $.Deferred().resolve([])
   }
 ])
 
@@ -331,19 +293,23 @@ youstars.directive('mychannel', ['mychannelService', (mychannelService) ->
 ])
 
 
-youstars.directive('mostwatchedvideos', ['mostwatchedvideosService', (mostwatchedvideosService) ->
+youstars.directive('mostwatchedvideos', ['videosService', (videosService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      mostwatchedvideosService.fetchMostwatchedvideos().then (data) ->
-        scope.mostwatchedVideosArray = data
+    controller: ['$scope', 'videosService', ($scope, videosService) ->
+      videosService.videoModalFirstShown.then ->
+        if $scope.loggedIn
+          videosService.fetchMostwatchedvideos().then (data) ->
+            # no spaces please
+            $scope.mostwatchedVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
+    ]
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation" ng-repeat="video in mostwatchedVideosArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
@@ -361,19 +327,23 @@ youstars.directive('mostwatchedvideos', ['mostwatchedvideosService', (mostwatche
 
 
 
-youstars.directive('suggestedvideos', ['suggestedvideosService', (suggestedvideosService) ->
+youstars.directive('suggestedvideos', ['videosService', (videosService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      suggestedvideosService.fetchSuggestedvideos().then (data) ->
-        scope.suggestedVideosArray = data
+    controller: ['$scope', 'videosService', ($scope, videosService) ->
+      videosService.videoModalFirstShown.then ->
+        if $scope.loggedIn
+          videosService.fetchSuggestedvideos().then (data) ->
+            # only want ones that don't contain spaces. spaces can suck a dick.
+            $scope.suggestedVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
+    ]
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation" ng-repeat="video in suggestedVideosArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
@@ -390,19 +360,22 @@ youstars.directive('suggestedvideos', ['suggestedvideosService', (suggestedvideo
 ])
 
 
-youstars.directive('trendingvideos', ['trendingvideosService', (trendingvideosService) ->
+youstars.directive('trendingvideos', ['videosService', (videosService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      trendingvideosService.fetchTrendingvideos().then (data) ->
-        scope.trendingVideosArray = data
+    controller: ['$scope', 'videosService', ($scope, videosService) ->
+      videosService.videoModalFirstShown.then ->
+        videosService.fetchTrendingvideos().then (data) ->
+          # no spaces please
+          $scope.trendingVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
+    ]
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation" ng-repeat="video in trendingVideosArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
@@ -419,19 +392,22 @@ youstars.directive('trendingvideos', ['trendingvideosService', (trendingvideosSe
 ])
 
 
-youstars.directive('featuredvideos', ['featuredvideosService', (featuredvideosService) ->
+youstars.directive('featuredvideos', ['videosService', (videosService) ->
   return {
     restrict: 'E'
     replace: true
-    link: (scope, element, attr) ->
-      featuredvideosService.fetchFeaturedvideos().then (data) ->
-        scope.featuredVideosArray = data
+    controller: ['$scope', 'videosService', ($scope, videosService) ->
+      videosService.videoModalFirstShown.then ->
+        videosService.fetchFeaturedvideos().then (data) ->
+          # no spaces please
+          $scope.featuredVideosArray = (piece for piece in data when piece.channel_name.indexOf(' ') < 0)
+    ]
     template:
       """
       <div class="ys-recommendations">
         <ul class="ys-recommendations-list">
           <li class="ys-recommendation" ng-repeat="video in featuredVideosArray">
-            <a class="ys-recommendation-info" href="#">
+            <a class="ys-recommendation-info" href="#/{{video.channel_name}}?currentVideo={{video.id}}">
               <h3>{{video.title}}</h3>
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
@@ -454,6 +430,7 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
     hash =
       channels: []
       popular_channels: []
+      channelModalFirstShown: $.Deferred()
 
     hash.fetch_channels = ->
       # storing results of this request in session storage, so back-and-
@@ -496,6 +473,19 @@ youstars.factory('videosService', ['$http', 'userService', '$location', 'myvideo
   hash = 
     videos: []
     responseData: {}
+    videoModalFirstShown: $.Deferred()
+    fetchTrendingvideos: () ->
+      $http.get('/suggest/videos/trending.json').then (response) ->
+        response.data
+    fetchFeaturedvideos: () ->
+      $http.get('/suggest/videos/featured.json').then (response) ->
+        response.data
+    fetchSuggestedvideos: () ->
+        $http.get('/suggest/videos/suggested.json').then (response) ->
+          response.data
+    fetchMostwatchedvideos: () ->
+        $http.get('/suggest/videos/most_watched.json').then (response) ->
+          response.data
 
   hash.fetch_videos = (nextPage)->
     channel = userService.currentChannel
@@ -875,9 +865,16 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
   return hash
 ])
 
-youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', 'videosService', ($window, $scope, $routeParams, userService, youtubeInit, videosService)->
+youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'userService', 'youtubeInit', 'videosService', 'channelsService', ($window, $scope, $routeParams, userService, youtubeInit, videosService, channelsService)->
   $scope.showVideoRecommendations   = false
+  $scope.showVideoModal = ->
+    $scope.showVideoRecommendations = true
+    videosService.videoModalFirstShown.resolve()
   $scope.showChannelRecommendations = false
+  $scope.showChannelModal = ->
+    $scope.showChannelRecommendations = true
+    channelsService.channelModalFirstShown.resolve()
+
   $scope.showTutorial               = false
   if $routeParams.currentChannel
     #oof, too fast, too little knowledge of angular going around
@@ -886,7 +883,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     userService.afterInit.resolve $routeParams.currentChannel
   player = youtubeInit.player
   
-  $scope.loggedIn = $("#ys-app").is(".ys-logged-in")
+  $scope.loggedIn = userService.loggedIn
 
   $scope.toggleVideo = ->
     $scope.visibleVideo = !$scope.visibleVideo
@@ -921,6 +918,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
             $scope.volume = settings.volume()
             $(".volume-indicator").width(settings.volume() * 1.5)
             $('.volume').val(settings.volume())
+          return
           if $routeParams.currentVideo
             player.cuePlaylist
               listType: "user_uploads"
