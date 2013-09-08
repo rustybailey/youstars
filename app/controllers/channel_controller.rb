@@ -73,7 +73,7 @@ class ChannelController < ApiController
   def subscribe
     authenticate_user!
 
-    response = YoutubeApi.subscribe_current_user_to_channel(@channel_id)
+    response = YoutubeApi.subscribe_current_user_to_channel(@channel_id, current_user.get_token)
 
     render :json => response
   end
