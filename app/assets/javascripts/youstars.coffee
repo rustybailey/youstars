@@ -1033,12 +1033,12 @@ youstars.controller('homeController', ['$scope', 'channelsService', '$location',
     $scope.channelNames = names
     $scope.channels = channels
   $scope.$watch 'query', ->
-    regex = new RegExp('^' + $scope.query, 'i')
-    filtered = $filter('filter')($scope.channelNames, (name) ->
-      name.match(regex)
-    )
-    if filtered
-      $scope.suggestion = filtered[0]
-    else
-      $scope.suggestion = null
+    return unless $scope.channelNames?
+    newSuggestion = null
+    if $scope.query && $scope.channelNames
+      regex = new RegExp('^' + $scope.query, 'i')
+      for name in $scope.channelNames when name.match(regex)
+        newSuggestion = name
+        break
+    $scope.suggestion = newSuggestion
 ])
