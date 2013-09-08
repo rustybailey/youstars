@@ -2,7 +2,7 @@ require 'youtube_api.rb'
 
 module Pythia
   
-  def self.related(channel_id, limit = 15, stats_weighting = 0.5, width = 15)
+  def self.related(channel_id, limit = 40, stats_weighting = 0.5, width = 15)
     top_videos = YoutubeApi.video_search_for_channel_id(channel_id, width, 'viewCount')
     
     related_videos = top_videos.collect do |video|
