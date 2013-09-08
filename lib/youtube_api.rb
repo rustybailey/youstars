@@ -22,9 +22,7 @@ module YoutubeApi
       }
     }
 
-    HTTParty.post( url, :body => body)
-
-    JSON.parse( HTTParty.get(url, query: query).body )
+    JSON.parse( HTTParty.post( url, :body => body) )    
   end
 
   def self.uploads_playlist_id_for_channel(channel_id)
