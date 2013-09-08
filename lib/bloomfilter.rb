@@ -1,7 +1,7 @@
 class Bloomfilter
   attr_accessor :name, :block_width, :block_count, :k, :base_filter
 
-  def initialize(name, block_width, block_count, k, base_filter = nil, redis = Redis.connect)    
+  def initialize(name, block_width, block_count, k, base_filter = nil, redis = Resque.redis)
     @name = name
 
     # filters can be compressed by storing them as deltas against the base filter

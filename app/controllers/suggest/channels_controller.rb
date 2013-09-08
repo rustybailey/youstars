@@ -21,22 +21,24 @@ class Suggest::ChannelsController < ApiController
   end
   
   def most_viewed
-    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
+    params = {}
+    params[:user] = current_user.id if current_user.present?
+
+    recs = Rails.cache.fetch( auto_cache_key(params), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
-      response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+      response = YoutubeApi.v2_authorized_request( url, '' )
     
       recs = response.parsed_response["feed"]["entry"].map do |entry|
-        'UC' + entry.dig("author", 0, "yt$userID", "$t")
+        entry.dig( "yt$channelId", "$t" )
       end
     
-      recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r ) }.collect do |id|
-        YoutubeApi.channel_data_for_channel_id(id)
-      end
+      recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r ) } unless current_user.nil?
+      recs = YoutubeApi.channel_data_for_channel_id(recs)
 
     end
 
-    recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
+    recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) } unless current_user.nil?
 
     render :json => recs
   end
@@ -48,18 +50,18 @@ class Suggest::ChannelsController < ApiController
     recs = Rails.cache.fetch( auto_cache_key(params), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json"
-      response = YoutubeApi.v2_authorized_request( url, nil )
-    
+      response = YoutubeApi.v2_authorized_request( url, '' )    
+
       recs = response.parsed_response["feed"]["entry"].map do |entry|
-        'UC' + entry.dig("author", 0, "yt$userId", "$t")
+        entry.dig( "yt$channelId", "$t" )
       end
 
-      recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) } if current_user.present?
+      recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r) } unless current_user.nil?
       recs = YoutubeApi.channel_data_for_channel_id(recs)
 
     end
 
-    recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) }
+    recs = recs.reject { |r| Bragi.test_channel( current_user.guid, r[:channel_id] ) } unless current_user.nil?
     
     render :json => recs
   end

@@ -33,7 +33,7 @@ module Pythia
     score = channel_data[:subscriber_count] * Math.log( channel_data[:view_count] )
     score = score ** stats_weighting    
 
-    if target_data.dig(:description).length > 0 and data_space.present?
+    if target_data.present? and data_space.present? and target_data.dig(:description).length > 0
       score *= Pythia.string_score(channel_data[:description], target_data[:description], data_space)     
     end
     

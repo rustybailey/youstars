@@ -3,6 +3,21 @@ youstars.factory('userService', ['$http', ($http) ->
     userName: "devinsupertramp"   # STATIC PLACEHOLDER.
     currentChannel: null
     afterInit: $.Deferred()
+    volumeSettings:
+      muted: (newValue)->
+        if newValue?
+          localStorage.setItem('youstars:muted', angular.toJson(newValue))
+          return newValue
+        stored = angular.fromJson(localStorage.getItem('youstars:muted')) 
+        return stored if stored?
+        true
+      volume: (newValue)->
+        if newValue?
+          localStorage.setItem('youstars:volume', angular.toJson(newValue))
+          return newValue
+        stored = angular.fromJson(localStorage.getItem('youstars:volume'))
+        return stored if stored?
+        100
   }
 ])
 
@@ -45,6 +60,28 @@ youstars.factory('suggestedchannelsService', ['$http', ($http) ->
   }
 ])
 
+youstars.factory('recentchannelsService', ['$http', ($http) ->
+  return {
+    fetchSimilarrecentchannels: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/channels/recently_watched.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
+youstars.factory('mychannelService', ['$http', ($http) ->
+  return {
+    fetchSimilarrecentchannels: () ->
+      if $("#ys-app").is(".ys-logged-in")
+        $http.get('/suggest/channels/my_channel.json').then (response) ->
+          response.data
+      else
+        $.Deferred().resolve([])
+  }
+])
+
 youstars.factory('similarrecentchannelsService', ['$http', ($http) ->
   return {
     fetchSimilarrecentchannels: () ->
@@ -64,6 +101,14 @@ youstars.factory('mostsubscribedchannelsService', ['$http', ($http) ->
   }
 ])
 
+youstars.factory('mostviewedchannelsService', ['$http', ($http) ->
+  return {
+    fetchMostsubscribedchannels: () ->
+      $http.get('/suggest/channels/most_viewed.json').then (response) ->
+        response.data
+  }
+])
+
 youstars.factory('similarchannelsService', ['$http', 'userService', ($http, userService) ->
   return {
     fetchSimilarchannels: () ->
@@ -71,8 +116,6 @@ youstars.factory('similarchannelsService', ['$http', 'userService', ($http, user
         response.data
   }
 ])
-
-
 
 youstars.factory('mostwatchedvideosService', ['$http', ($http) ->
   return {
@@ -169,6 +212,62 @@ youstars.directive('mostsubscribedchannels', ['mostsubscribedchannelsService', (
   }
 ])
 
+youstars.directive('mostviewedchannels', ['mostviewedchannelsService', (mostviewedchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      mostviewedchannelsService.fetchMostviewedchannels().then (data) ->
+        scope.mostviewedChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in mostviewedChannelsArray">
+            <a class="ys-recommendation-info" href="#/{{channel.name}}">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
+youstars.directive('recentchannels', ['recentchannelsService', (recentchannelsService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+        recentchannelsService.fetchRecentchannels().then (data) ->
+        scope.recentChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in recentChannelsArray">
+            <a class="ys-recommendation-info" href="#/{{channel.name}}">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
+
 youstars.directive('similarchannels', ['similarchannelsService', (similarchannelsService) ->
   return {
     restrict: 'E'
@@ -197,6 +296,33 @@ youstars.directive('similarchannels', ['similarchannelsService', (similarchannel
   }
 ])
 
+youstars.directive('mychannel', ['mychannelService', (mychannelService) ->
+  return {
+    restrict: 'E'
+    replace: true
+    link: (scope, element, attr) ->
+      mychannelService.fetchSimilarmychannel().then (data) ->
+        scope.similarMyChannelsArray = data
+    template:
+      """
+      <div class="ys-recommendations">
+        <ul class="ys-recommendations-list">
+          <li class="ys-recommendation ys-recommendation-channel" ng-repeat="channel in MyChannelsArray">
+            <a class="ys-recommendation-info" href="#/{{channel.name}}">
+              <h3>{{channel.title}}</h3>
+              <h4>{{channel.view_count | number: 0}} views</h4>
+              <h4>{{channel.subscriber_count | number: 0}} subs</h4>
+            </a>
+            <a class="ys-recommendation-content" href="#">
+              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <h3>{{channel.title}}</h3>
+            </a>
+          </li>
+        </ul>
+      </div>
+      """
+  }
+])
 
 
 youstars.directive('mostwatchedvideos', ['mostwatchedvideosService', (mostwatchedvideosService) ->
@@ -462,17 +588,16 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
       scope.views = 0
       scope.subscribers = 0
       statsService.getStats().then (data) ->
-        scope.real_views = data.view_count
-        scope.real_subscribers = data.subscriber_count
         $timeout ->
+          scope.real_views = data.view_count
+          scope.real_subscribers = data.subscriber_count
           element.find('span').addClass("visible")
           ['views', 'subscribers'].forEach (val, index) ->
             bg = element.find("#ys-#{val}-bg")
             holder = element.find("#ys-#{val} span")
-            console.log 'holder', holder
             targetNum = scope['real_' + val]
             baseNum = scope[val]
-            incrementBy = (if Math.abs(targetNum) < 50 then 1 else Math.abs(Math.round(targetNum / 50)))
+            incrementBy = (if Math.abs(targetNum) < 10 then 1 else Math.abs(Math.round(targetNum / 10)))
             interval = setInterval(->
               if targetNum > 0
                 scope[val] = $filter('number')(baseNum)
@@ -489,14 +614,13 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
               else
                 scope[val] = $filter('number')(targetNum)
               scope.$apply()
-              bg.width(holder.width() + 30)
-            , 10)
+            , 50)
         , 2500
 
     template: """
-      <div id="ys-stats">
-        <div id="ys-views">
-          <div id="ys-views-bg"></div>
+    <div id="ys-stats">
+      <div id="ys-views">
+        <span><strong>{{views}}</strong> views</span>
           <ul id="ys-social-links">
             <li><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://youstars.herokuapp.com/#/{{currentChannel}}&p[images][0]=&p[title]=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}&p[summary]="><i class="ss-icon ss-social">Facebook</i></i></a></li>
             <li><a href="http://twitter.com/home?status=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20http://youstars.herokuapp.com/#/{{currentChannel}}"><i class="ss-icon ss-social">Twitter</i></a></li>
@@ -504,17 +628,17 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
             <li><a href="http://www.tumblr.com/share/link?url=http://youstars.herokuapp.com/#/{{currentChannel}}&name={{currentChannel}}&description=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">Tumblr</i></a></li>
             <li><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://youstars.herokuapp.com/#/{{currentChannel}}&title={{currentChannel}}&summary=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}"><i class="ss-icon ss-social">LinkedIn</i></a></li>
           </ul>
-          <span><strong>{{views}}</strong> views</span>
-        </div>
-        <!-- #ys-views -->
-        <!-- #ys-social-links -->
-        <br />
-        <div id="ys-subscribers">
-          <div id="ys-subscribers-bg"></div>
-          <span><strong>{{subscribers}}</strong> subs</span>
-        </div>
-        <!-- #ys-subs -->
+        <div id="ys-views-bg" ng-class="{'adjusted': real_views}"><strong>{{real_views | number}}</strong> views</div>
       </div>
+      <!-- #ys-views -->
+      <!-- #ys-social-links -->
+      <br />
+      <div id="ys-subscribers">
+        <span><strong>{{subscribers}}</strong> subs</span>
+        <div id="ys-subscribers-bg" ng-class="{'adjusted': real_subscribers}"><strong>{{real_subscribers | number}}</strong> subs</div>
+      </div>
+      <!-- #ys-subs -->
+    </div>
     """
   }
 ])
@@ -749,12 +873,14 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $scope.visibleVideo = !$scope.visibleVideo
 
   $scope.visibleVideo = false
+  $scope.muted = userService.volumeSettings.muted()
 
   # Load the IFrame Player API code asynchronously.
 
   # Replace the 'ys-player' element with an <iframe> and
   # YouTube player after the API code downloads.
   youtubeInit.afterPlayerAPIReady.then(->    
+    settings = userService.volumeSettings
     player = youtubeInit.player = new YT.Player("ys-player",
       playerVars:
         enablejsapi: 1
@@ -768,7 +894,14 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
         onReady: ->
           player = youtubeInit.player
           youtubeInit.resize()
-          player.mute()
+          if settings.muted()
+            player.mute()
+            $scope.muted = true
+          else
+            player.setVolume settings.volume()
+            $scope.volume = settings.volume()
+            $(".volume-indicator").width(settings.volume() * 1.5)
+            $('.volume').val(settings.volume())
           player.loadPlaylist
             listType: "user_uploads"
             list: youtubeInit.currentChannel
@@ -780,13 +913,17 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $(window).on "resize", youtubeInit.resize
     $(".mute-container").on "click", (e) ->
       if player.isMuted()
-        $(".volume").val 100
         player.unMute()
+        settings.muted(false)
+        $scope.muted = false
         $(this).find(".ss-ban").hide();
-        $(".volume-indicator").width("100%")
+        $(".volume-indicator").width(settings.volume() * 1.5)
+        $(".volume").val settings.volume()
       else
         $(".volume").val 0
         player.mute()
+        settings.muted(true)
+        $scope.muted = true
         $(this).find(".ss-ban").show();
         $(".volume-indicator").width(0)
 
@@ -822,6 +959,7 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
       else
         $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
+      settings.volume(newVolume)
       $(".volume-indicator").width( (newVolume / 100) * 150 )
 
     $("#ys-player-bar").on "click", (e) ->
@@ -895,12 +1033,12 @@ youstars.controller('homeController', ['$scope', 'channelsService', '$location',
     $scope.channelNames = names
     $scope.channels = channels
   $scope.$watch 'query', ->
-    regex = new RegExp('^' + $scope.query, 'i')
-    filtered = $filter('filter')($scope.channelNames, (name) ->
-      name.match(regex)
-    )
-    if filtered
-      $scope.suggestion = filtered[0]
-    else
-      $scope.suggestion = null
+    return unless $scope.channelNames?
+    newSuggestion = null
+    if $scope.query && $scope.channelNames
+      regex = new RegExp('^' + $scope.query, 'i')
+      for name in $scope.channelNames when name.match(regex)
+        newSuggestion = name
+        break
+    $scope.suggestion = newSuggestion
 ])
