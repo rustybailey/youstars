@@ -21,7 +21,10 @@ class Suggest::ChannelsController < ApiController
   end
   
   def most_viewed
-    recs = Rails.cache.fetch( auto_cache_key( user: current_user.guid ), :expires_in => 1.day ) do
+    params = {}
+    params[:user] = current_user.id if current_user.present?
+
+    recs = Rails.cache.fetch( auto_cache_key(params), :expires_in => 1.day ) do
 
       url      = "https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_viewed?v=2&alt=json"
       response = YoutubeApi.v2_authorized_request( url, current_user.get_token )
@@ -51,7 +54,7 @@ class Suggest::ChannelsController < ApiController
       response = YoutubeApi.v2_authorized_request( url, nil )
     
       recs = response.parsed_response["feed"]["entry"].map do |entry|
-        'UC' + entry.dig("author", 0, "yt$userId", "$t")
+        'UC' + entry.dig("author", 0, "yt$userID", "$t")
       end
 
       recs = recs.reject { |r| Bragi.test_channel(current_user.guid, r) } if current_user.present?
@@ -71,7 +74,7 @@ class Suggest::ChannelsController < ApiController
     recs = Rails.cache.fetch( auto_cache_key( {:user => current_user.guid} ), :expires_in => 1.day ) do
     
       url       = "https://gdata.youtube.com/feeds/api/users/default/recommendations?max-results=50&v=2&alt=json"
-      response  = YoutubeApi.v2_authorized_request( url, current_user.get_token )
+      response  = YoutubeApi.v2_authorized_request( url, "ya29.AHES6ZQKf621QsmNP8Dm2HzLQl49Uap0IuWAy2zWmNyJgJw" ) #current_user.get_token )
 
       recs = response.parsed_response["feed"]["entry"].map do |entry|
         entry.dig("media$group", "yt$uploaderId", "$t")
