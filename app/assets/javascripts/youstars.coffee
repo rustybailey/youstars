@@ -3,6 +3,7 @@ youstars.factory('userService', ['$http', ($http) ->
     userName: "devinsupertramp"   # STATIC PLACEHOLDER.
     currentChannel: null
     afterInit: $.Deferred()
+    # user's remembered volume settings
     volumeSettings:
       muted: (newValue)->
         if newValue?
@@ -18,6 +19,11 @@ youstars.factory('userService', ['$http', ($http) ->
         stored = angular.fromJson(localStorage.getItem('youstars:volume'))
         return stored if stored?
         100
+    checkUserValidity: (user) ->
+      userUrl = "https://gdata.youtube.com/feeds/api/users/#{user}?alt=json"
+      $http.get(userUrl).then (data) ->
+        data.entry
+
   }
 ])
 
@@ -467,7 +473,7 @@ youstars.factory('channelsService', ['$http', 'userService', '$location',
           hash.channels = res.data
 
     hash.fetch_popular = ->
-      $http.get('https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json&max-results=50').then (res) ->
+      $http.get('https://gdata.youtube.com/feeds/api/channelstandardfeeds/most_subscribed?v=2&alt=json&max-results=50&time=this_month').then (res) ->
         res.data.feed.entry
 
     hash.suggestChannel = (query) ->
@@ -1009,15 +1015,21 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
 
 ])
 
-youstars.controller('homeController', ['$scope', 'channelsService', '$location', '$timeout', '$filter', ($scope, channelsService, $location, $timeout, $filter) ->
+youstars.controller('homeController', ['$scope', 'channelsService', '$location', '$timeout', '$filter', 'userService', ($scope, channelsService, $location, $timeout, $filter, userService) ->
   timeout = null
   $scope.pendingSuggestion = null
   $scope.goToChannel = (ev) ->
     targ = $(ev.target)
     val = targ.val()
-    if ev.which == 13
+    if ev.which == 13 # enter key
       chan = '/' + val
-      $location.path(chan)
+      userService.checkUserValidity(val).then ->
+        $location.path(chan)
+      , -> # error callback, 404 means bad user
+        targ.addClass('error')
+        $timeout ->
+          targ.removeClass('error')
+        , 200
     else if [9,39,40].indexOf(ev.which) >= 0 && $scope.suggestion
       $scope.query = $scope.suggestion
       ev.preventDefault()

@@ -469,6 +469,12 @@ a {
 		position: relative;
 		z-index: 75;
 		@include text-shadow(3px 3px 0 #4df7bd);
+    @include transition-property(padding,color);
+    @include transition-duration(.2s);
+    @include transition-timing-function(cubic-bezier);
+    &.error {
+      color: $red;
+    }
 	}
 	input[type="text"]:focus {
 		outline: 0;
@@ -544,7 +550,7 @@ a {
 		li.ys-home-tile:nth-child(4n) {
 			@include rotate(-135deg);
 		}
-		li.ys-home-tile:hover {
+		li.ys-home-tile:hover, li.ys-home-tile.highlighted {
 			@include opacity(1);
 			@include rotate(0);
 		}
