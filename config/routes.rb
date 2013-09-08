@@ -18,6 +18,8 @@ Youstars::Application.routes.draw do
   put  '/channel/:youtube_id',        :controller => 'channel', :action => 'create'
   post '/channel/:youtube_id',        :controller => 'channel', :action => 'update'
 
+  get '/channel/:channel/subscribe',  :controller => 'channel', :action => 'subscribe'
+
 
   namespace :suggest do
 
