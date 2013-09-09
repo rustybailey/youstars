@@ -15,7 +15,7 @@ class Suggest::ChannelsController < ApiController
 #####  removing this
 #      cheap_channels        = Pythia.cheap_related(@channel_id, 45, 2)
       
-      recs = [topical_channels, cheap_channels].flatten.uniq { |c| c[:channel_id] }
+      recs = topical_channels.uniq { |c| c[:channel_id] }
       
     end
     
