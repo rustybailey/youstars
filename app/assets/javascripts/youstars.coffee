@@ -816,7 +816,7 @@ youstars.directive('mysubscribers', ['userService', 'channelsService', 'mysubscr
             <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
             <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
-          <a class="ys-profile-action ss-icon" ng-class="{'ss-addheart': userService.loggedIn, 'ss-heart': !userService.loggedIn}" ng-click="subscribe($event, '{{channel.name}}')"></a>
+          <a class="ys-profile-action ss-icon" ng-class="{'ss-addheart': loggedIn, 'ss-heart': !loggedIn}" ng-click="subscribe($event, '{{channel.name}}')"></a>
         </li>
       </ul>
     </div>
