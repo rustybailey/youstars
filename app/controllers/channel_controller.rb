@@ -85,6 +85,7 @@ class ChannelController < ApiController
         title: search_term
       }
     }
+
     query = query.merge( { pageToken: params[:page_token] } ) if params[:page_token].present?
 
     response = YoutubeApi.v3_authorized_request( url, token, query )
@@ -106,6 +107,7 @@ class ChannelController < ApiController
         title: search_term
       }
     }
+
     query = query.merge( { pageToken: params[:page_token] } ) if params[:page_token].present?
 
     response = YoutubeApi.v3_authorized_request( url, token, query )
