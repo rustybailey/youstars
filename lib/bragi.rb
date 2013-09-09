@@ -12,7 +12,7 @@ module Bragi
     channel_filter = Bloomfilter.new(channel_filter_name, block_width, block_count, k)
 
     video_filter.add_element(video_id)
-    channel_filter.add_element(YoutubeApi.video_data_for_video_id(video_id)[:channel_id])    
+    channel_filter.add_element( YoutubeApi.video_data_for_video_ids(video_id)[:channel_id] )    
   end
 
   def self.test_video(user_id, video_id, block_width = @@block_width, block_count = @@block_count, k = @@k)
