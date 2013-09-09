@@ -1021,13 +1021,12 @@ $ys-profile-tile-large-size:	230px;
 	background: transparent url("/assets/background-black-33.png") repeat 0 0;
 	position: relative;
 	z-index: 10;
-	overflow: hidden;
 	@include box-sizing(border-box);
 	@include transition-property(margin);
 	@include transition-duration(0.33s);
 	ul#ys-profiles-list {
 		display: block;
-		width: 265px;
+		width: 250px;
 		height: 100%;
 		position: relative;
 		padding: 14px 0 0 10px;
