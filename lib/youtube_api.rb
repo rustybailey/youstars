@@ -86,7 +86,7 @@ module YoutubeApi
     query = {
       key:    ENV['YOUTUBE_API'],
       id:     video_ids,
-      part:   'snippet,statistics,topicDetails'
+      part:   'snippet,statistics,contentDetails,topicDetails'
       #fields: 'items(id,snippet(title,thumbnails,tags),statistics/viewCount,topicDetails/topicIds)'
     }
 
@@ -96,6 +96,7 @@ module YoutubeApi
     json['items'].each do |item|
       data << {
         video_id:     item['id'],
+        channel_id:   item.dig('snippet', 'channelId'),
         title:        item.dig('snippet', 'title'),
         published_at: item.dig('snippet', 'publishedAt'),
         thumbnails:   item.dig('snippet', 'thumbnails'),
