@@ -804,7 +804,7 @@ youstars.directive('mysubscribers', ['userService', 'channelsService', 'mysubscr
   ]
   template:
     """
-    <div id="ys-profiles">
+    <div id="ys-profiles" class="ys-long-profile-list">
       <ul id="ys-profiles-list">
         <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray | filter:nameIsntPoop">
           <a href="#/{{channel.name}}" class="ys-profile-tile-content">
@@ -1074,7 +1074,11 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
           $scope.makingARequest = false
           $scope.$apply()
 
-
+    $("#ys-profiles-list").on "scroll", (e) ->
+      if e.target.scrollTop >= e.target.scrollHeight - e.target.clientHeight
+        $("#ys-profiles").removeClass("ys-long-profile-list")
+      else
+        $("#ys-profiles").addClass("ys-long-profile-list")
   )
 
 
