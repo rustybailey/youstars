@@ -21,6 +21,7 @@ Youstars::Application.routes.draw do
   get '/channel/:channel/subscribe',  :controller => 'channel', :action => 'subscribe'
 
   get '/channel/:channel/search_channel_videos/:search_term', :controller => 'channel', :action => 'search_within_channel'
+  get '/channel/search/:search_term', :controller => 'channel', :action => 'search'
 
   namespace :suggest do
 
