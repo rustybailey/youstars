@@ -74,9 +74,22 @@ class ChannelController < ApiController
   def search_within_channel
     search_term = params[:search_term]
 
-    response = YoutubeApi.search_videos_for_channel(@channel_id, search_term)
+    url = 'https://www.googleapis.com/youtube/v3/search'
 
-    render :json => response
+    token = current_user.get_token if current_user.present?
+
+    query = {
+      key: ENV['YOUTUBE_API'],
+      part: 'id',
+      channelId: channel_id,
+      snippet: {
+        title: search_term
+      }
+    }
+
+    response = YoutubeApi.v3_authorized_request( url, token, query )
+
+    render :json => JSON.parse( response )
   end
 
   def subscribe
