@@ -71,6 +71,14 @@ class ChannelController < ApiController
   end
 
 
+  def search_within_channel
+    search_term = params[:search_term]
+
+    response = YoutubeApi.search_videos_for_channel(@channel_id, search_term)
+
+    render :json => response
+  end
+
   def subscribe
     authenticate_user!
 

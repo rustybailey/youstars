@@ -30,6 +30,19 @@ module YoutubeApi
 
     JSON.parse( HTTParty.post( url, :headers => headers, :body => body.to_json ).body )
   end
+  
+  def self.search_videos_for_channel(channel_id, search_term)
+    url = "#{@@V3_URL}/search"
+    query = {
+      part: 'id',
+      channelId: channel_id,
+      snippet: {
+        title: search_term
+      }
+    }
+
+    JSON.parse( HTTParty.get( url, :query => query ).body )
+  end
 
   def self.uploads_playlist_id_for_channel(channel_id)
     url   = "#{@@V3_URL}/channels"
