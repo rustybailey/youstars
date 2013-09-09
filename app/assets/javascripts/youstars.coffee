@@ -804,7 +804,7 @@ youstars.directive('mysubscribers', ['userService', 'channelsService', 'mysubscr
   ]
   template:
     """
-    <div id="ys-profiles">
+    <div id="ys-profiles" class="ys-long-profile-list">
       <ul id="ys-profiles-list">
         <li class="ys-profile-tile-small" ng-repeat="channel in channelsArray | filter:nameIsntPoop">
           <a href="#/{{channel.name}}" class="ys-profile-tile-content">
@@ -816,7 +816,7 @@ youstars.directive('mysubscribers', ['userService', 'channelsService', 'mysubscr
             <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
             <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
-          <a class="ys-profile-action ss-icon" ng-class="{'ss-addheart': userService.loggedIn, 'ss-heart': !userService.loggedIn}" ng-click="subscribe($event, '{{channel.name}}')"></a>
+          <a class="ys-profile-action ss-icon" ng-class="{'ss-addheart': loggedIn, 'ss-heart': !loggedIn}" ng-click="subscribe($event, '{{channel.name}}')"></a>
         </li>
       </ul>
     </div>
@@ -1040,8 +1040,12 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $("#ys-player-controls").on "change", ".volume", ->
       newVolume = @valueAsNumber
       if newVolume > 0
+        settings.muted(false)
+        $scope.muted = false
         $(".mute-container").find(".ss-ban").hide();
       else
+        settings.muted(true)
+        $scope.muted = true
         $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
       settings.volume(newVolume)
@@ -1070,7 +1074,11 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
           $scope.makingARequest = false
           $scope.$apply()
 
-
+    $("#ys-profiles-list").on "scroll", (e) ->
+      if e.target.scrollTop >= e.target.scrollHeight - e.target.clientHeight
+        $("#ys-profiles").removeClass("ys-long-profile-list")
+      else
+        $("#ys-profiles").addClass("ys-long-profile-list")
   )
 
 
