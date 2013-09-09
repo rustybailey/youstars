@@ -780,8 +780,10 @@ youstars.directive('mysubscribers', ['userService', 'channelsService', 'mysubscr
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # scope.hideMysubscribers = () ->
     #   $timeout( mysubscribersService.repositionMysubscribers, 0 )
-    scope.subscribe = (channel) ->
-      $http.get('/channel/' + channel + '/subscribe.json')
+    scope.subscribe = (ev, channel) ->
+      if userService.loggedIn
+        $http.get('/channel/' + channel + '/subscribe.json')
+          .success $(ev.target).removeClass('ss-addheart').addClass('ss-check')
   controller: ['$scope', '$element', '$attrs', ($scope,$element,$attrs) ->
     $scope.nameIsntPoop = (item) ->
       !item.name.match(/[ .]/)?
@@ -804,7 +806,7 @@ youstars.directive('mysubscribers', ['userService', 'channelsService', 'mysubscr
             <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
             <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
-          <a class="ys-profile-action ss-icon" ng-class="{'ss-addheart': userService.loggedIn, 'ss-heart': !userService.loggedIn}" ng-click="subscribe('{{channel.name}}')"></a>
+          <a class="ys-profile-action ss-icon" ng-class="{'ss-addheart': userService.loggedIn, 'ss-heart': !userService.loggedIn}" ng-click="subscribe($event, '{{channel.name}}')"></a>
         </li>
       </ul>
     </div>
