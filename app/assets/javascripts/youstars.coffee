@@ -771,7 +771,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
 ])
 
 
-youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', '$timeout', (channelsService, mysubscribersService, $timeout) ->
+youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', '$timeout', '$http', (channelsService, mysubscribersService, $timeout, $http) ->
   restrict: "E"
   replace: true
   link: (scope, element, attr) ->
@@ -780,6 +780,8 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
     $timeout( mysubscribersService.sizeMysubscribers, 0 )
     # scope.hideMysubscribers = () ->
     #   $timeout( mysubscribersService.repositionMysubscribers, 0 )
+    scope.subscribe = (channel) ->
+      $http.get('/channel/' + channel + '/subscribe.json')
   controller: ['$scope', '$element', '$attrs', ($scope,$element,$attrs) ->
     $scope.nameIsntPoop = (item) ->
       !item.name.match(/[ .]/)?
@@ -802,7 +804,7 @@ youstars.directive('mysubscribers', ['channelsService', 'mysubscribersService', 
             <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
             <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
-          <a class="ys-profile-action ss-icon ss-addheart"></a>
+          <a class="ys-profile-action ss-icon ss-addheart" ng-click="subscribe('{{channel.name}}')"></a>
         </li>
       </ul>
     </div>
