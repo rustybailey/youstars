@@ -320,8 +320,8 @@ youstars.directive('mostwatchedvideos', ['videosService', (videosService) ->
             </a>
             <a class="ys-recommendation-content" href="#">
               <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
-              <h3>{{video.channel_name}}</h3>
               <h4>{{video.title}}</h4>
+              <h3>{{video.channel_name}}</h3>
             </a>
           </li>
         </ul>
@@ -361,8 +361,8 @@ youstars.directive('suggestedvideos', ['videosService', (videosService) ->
             </a>
             <a class="ys-recommendation-content" href="#">
               <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
-              <h3>{{video.channel_name}}</h3>
               <h4>{{video.title}}</h4>
+              <h3>{{video.channel_name}}</h3>
             </a>
           </li>
         </ul>
