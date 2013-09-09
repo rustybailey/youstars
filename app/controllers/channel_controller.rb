@@ -2,7 +2,7 @@ require 'youtube_api'
 
 class ChannelController < ApiController
 
-  before_filter :load_channel_id
+  before_filter :load_channel_id, :except => [:search]
 
   def create
     return if current_user.nil?
