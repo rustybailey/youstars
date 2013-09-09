@@ -1040,8 +1040,12 @@ youstars.controller('indexController', ['$window', '$scope', '$routeParams', 'us
     $("#ys-player-controls").on "change", ".volume", ->
       newVolume = @valueAsNumber
       if newVolume > 0
+        settings.muted(false)
+        $scope.muted = false
         $(".mute-container").find(".ss-ban").hide();
       else
+        settings.muted(true)
+        $scope.muted = true
         $(".mute-container").find(".ss-ban").show();
       player.setVolume newVolume
       settings.volume(newVolume)
