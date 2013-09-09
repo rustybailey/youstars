@@ -155,6 +155,22 @@ class UserDataJob
   end
 
 
+  def self.parse_v2_video_response(entry)
+    {
+      :id           => entry.dig("media$group", "yt$videoid", "$t"),
+      :title        => entry.dig("title", "$t"),
+      :channel_name => entry.dig("author", 0, "name", "$t"),
+      :channel_guid => entry.dig("author", 0, "yt$userId", "$t"),
+      :category     => entry.dig("media$group", "media$category", 0, "$t"),
+      :statistics   => {
+        :views    => entry.dig("yt$statistics", "viewCount").to_i,
+        :likes    => entry.dig("yt$rating", "numLikes").to_i,
+        :dislikes => entry.dig("yt$rating", "numDislikes").to_i,
+        :comments => entry.dig("gd$comments", "gd$feedLink", "countHint").to_i
+      }
+    }
+  end
+
 
 
 
