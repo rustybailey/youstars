@@ -51,7 +51,15 @@ class UserDataJob
     recs = []
     ids.each do |youtube_id|
       url       = "https://gdata.youtube.com/feeds/api/videos/#{youtube_id}/related?v=2&alt=json"
-      recs += Rails.cache.fetch( url , :expires_in => 1.day ){ YoutubeApi.v2_authorized_request( url, nil ).parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) } }
+      recs += Rails.cache.fetch( url , :expires_in => 1.day ) do 
+        ret = nil
+        begin
+          ret = YoutubeApi.v2_authorized_request( url, nil ).parsed_response["feed"]["entry"].map{ |entry| parse_v2_video_response( entry ) }
+        rescue
+          ret = []
+        end
+        ret 
+      end
     end
 
     recs = recs.uniq.reject{ |v| Bragi.test_video(u, v[:id]) }
