@@ -155,13 +155,6 @@ a {
 
 
 
-
-
-
-
-
-
-
 #ys-app {
 	display: block;
 	width: 100%;
@@ -1517,6 +1510,21 @@ $ys-profile-tile-large-size:	230px;
 }
 #ys-videos.ys-move-myvideos-forwards {
 	z-index: 15;
+}
+
+@-webkit-keyframes rotating {
+  from{
+    -webkit-transform: rotate(0deg);
+  }
+  to{
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+body.rotating {
+	li {
+		-webkit-animation: rotating 2s linear infinite;
+	}
 }
 
 
