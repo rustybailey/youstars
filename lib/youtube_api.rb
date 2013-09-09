@@ -226,6 +226,7 @@ module YoutubeApi
   def self.v3_authorized_request( url, oauth2_token, params = {})
     headers = { "X-GData-Key" => "key=#{ENV['YOUTUBE_API']}" }
     headers["Authorization"] = "Bearer #{oauth2_token}" if oauth2_token.present?
+    params[:key] = ENV['YOUTUBE_API']
     HTTParty.get( url, :query => params, :headers => headers )
   end
 
