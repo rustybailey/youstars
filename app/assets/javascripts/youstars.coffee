@@ -761,7 +761,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
           </a>
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-content" style="transition-delay: {{$index * 100}}ms">
             <h3>{{video.title}}</h3>
-            <img src="{{ video.thumbnails.medium.url || video.thumbnails.medium.url }}" />
+            <img src="{{ video.thumbnails.medium.url || video.thumbnails.default.url }}" />
           </a>
         </li>
         <li class="video-spinner" ng-class="{'more-results': page_token}"></li>
@@ -894,6 +894,7 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
     loadingBar = setInterval(->
       loadingBar = $(".ys-loading-bar")
       duration = hash.player.getDuration()
+      return unless hash.player
       currentTime = hash.player.getCurrentTime()
       percentLoaded = currentTime / duration
       if hash.player.getPlayerState() is 1 # playing

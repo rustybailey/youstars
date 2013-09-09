@@ -8,12 +8,6 @@ task "resque:setup" => :environment do
 
   Resque.after_fork do |worker|
     ActiveRecord::Base.establish_connection
-    if Rails.env.production? 
-      NewRelic::Agent.after_fork(
-        :report_to_channel    => worker.object_id,
-        :report_instance_busy => false
-      )
-    end
   end
 end
 
