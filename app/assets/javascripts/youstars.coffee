@@ -624,7 +624,6 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
     restrict: "E"
     replace: true
     link: (scope, element, attr) ->
-      # $timeout( , 1000 )
       scope.currentChannel = null
       userService.afterInit.then (currentChannel) ->
         scope.currentChannel = userService.currentChannel
@@ -660,6 +659,17 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
               scope.$apply()
             , 50)
         , 2500
+
+      streamStats = (d) ->
+        scope.views = $filter('number')(d.view_count)
+        scope.subscribers = $filter('number')(d.subscriber_count)
+
+      $timeout ->
+        setInterval ->
+          scope.$apply ->
+              statsService.getStats().then(streamStats)
+        , 10000 # How fast to check stats
+      , 5000 # Delay to start the streaming (must start after initial animation)
 
     template: """
     <div id="ys-stats">
