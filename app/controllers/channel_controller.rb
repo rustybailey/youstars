@@ -81,7 +81,7 @@ class ChannelController < ApiController
     query = {
       key: ENV['YOUTUBE_API'],
       part: 'id',
-      channelId: channel_id,
+      channelId: @channel_id,
       snippet: {
         title: search_term
       }
