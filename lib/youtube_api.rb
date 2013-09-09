@@ -33,6 +33,10 @@ module YoutubeApi
   
   def self.search_videos_for_channel(channel_id, search_term)
     url = "#{@@V3_URL}/search"
+
+    headers = { }
+    headers["X-GData-Key"]   = "key=#{ENV['YOUTUBE_API']}"
+
     query = {
       part: 'id',
       channelId: channel_id,
@@ -41,7 +45,7 @@ module YoutubeApi
       }
     }
 
-    JSON.parse( HTTParty.get( url, :query => query ).body )
+    JSON.parse( HTTParty.get( url, :headers => headers, :query => query ).body )
   end
 
   def self.uploads_playlist_id_for_channel(channel_id)
