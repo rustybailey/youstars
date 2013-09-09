@@ -89,7 +89,7 @@ class ChannelController < ApiController
 
     response = YoutubeApi.v3_authorized_request( url, token, query )
 
-    render :json => JSON.parse( response )
+    render :json => JSON.parse( response.body )
   end
 
   def subscribe
