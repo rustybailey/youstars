@@ -13,8 +13,12 @@ module YoutubeApi
 
   def self.subscribe_current_user_to_channel(channel_id, oauth2_token)
     url   = "#{@@V3_URL}/subscriptions?part=snippet"
-    headers = { "X-GData-Key" => "key=#{ENV['YOUTUBE_API']}" }
+    
+    headers = { }
+    headers["X-GData-Key"]   = "key=#{ENV['YOUTUBE_API']}"
+    headers["Content-Type"]  = "application/json"
     headers["Authorization"] = "Bearer #{oauth2_token}" if oauth2_token.present?
+    
     body  = {
       snippet: {
         resourceId: {
@@ -24,7 +28,7 @@ module YoutubeApi
       }
     }
 
-    JSON.parse( HTTParty.post( url, :headers => headers, :body => body ).body )
+    JSON.parse( HTTParty.post( url, :headers => headers, :body => body.to_json ).body )
   end
 
   def self.uploads_playlist_id_for_channel(channel_id)
