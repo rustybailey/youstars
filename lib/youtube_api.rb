@@ -33,9 +33,7 @@ module YoutubeApi
   
   def self.search_videos_for_channel(channel_id, search_term)
     url = "#{@@V3_URL}/search"
-
-    headers = { }
-    headers["X-GData-Key"]   = "key=#{ENV['YOUTUBE_API']}"
+    token = current_user.get_token if current_user.present?
 
     query = {
       part: 'id',
@@ -44,6 +42,8 @@ module YoutubeApi
         title: search_term
       }
     }
+
+    response = self.v3_authorized_request( url, token, query )
 
     JSON.parse( HTTParty.get( url, :headers => headers, :query => query ).body )
   end
