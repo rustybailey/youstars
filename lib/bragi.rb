@@ -6,15 +6,13 @@ module Bragi
 
   def self.register_view(user_id, video_id, block_width = @@block_width, block_count = @@block_count, k = @@k)
     video_filter_name   = "#{user_id}_video_filter"
-    channel_filter_name = "#{user_id}_channel_filter"
-
     video_filter   = Bloomfilter.new(video_filter_name,   block_width, block_count, k)
-    channel_filter = Bloomfilter.new(channel_filter_name, block_width, block_count, k)
-
-    channel_id = YoutubeApi.video_data_for_video_ids(video_id).dig( 0, :channel_id )
-
     video_filter.add_element(video_id)
-    channel_filter.add_element(channel_id) if channel_id.present? 
+
+#    channel_filter_name = "#{user_id}_channel_filter"
+#    channel_filter = Bloomfilter.new(channel_filter_name, block_width, block_count, k)    
+#    channel_id = YoutubeApi.video_data_for_video_ids(video_id).dig( 0, :channel_id )
+#    channel_filter.add_element(channel_id) if channel_id.present? 
   end
 
   def self.test_video(user_id, video_id, block_width = @@block_width, block_count = @@block_count, k = @@k)
