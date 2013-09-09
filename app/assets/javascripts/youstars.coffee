@@ -893,8 +893,8 @@ youstars.service('youtubeInit', ['$window', '$q', '$routeParams', 'userService',
   hash.onPlayerReady.then ->
     loadingBar = setInterval(->
       loadingBar = $(".ys-loading-bar")
-      duration = hash.player.getDuration()
       return unless hash.player
+      duration = hash.player.getDuration()
       currentTime = hash.player.getCurrentTime()
       percentLoaded = currentTime / duration
       if hash.player.getPlayerState() is 1 # playing
