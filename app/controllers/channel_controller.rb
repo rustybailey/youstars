@@ -51,13 +51,14 @@ class ChannelController < ApiController
     page_token = params[:page_token]
     limit      = params[:limit] || 20
 
-    Rails.cache.fetch( auto_cache_key(params), :expires_in => 1.hour ) do
+    # increasing expiration for the demo
+    list = Rails.cache.fetch( auto_cache_key(params), :expires_in => 3.days ) do
 
-      video_list = YoutubeApi.video_list(@channel_id, limit, page_token)
+      list = YoutubeApi.video_list(@channel_id, limit, page_token)
 
     end
 
-    render :json => video_list
+    render :json => list
   end
   
   def topics

@@ -10,8 +10,10 @@ class Suggest::ChannelsController < ApiController
 
     recs = Rails.cache.fetch( auto_cache_key( channel: @channel_id ), :expires_in => 1.day, :force => params[:skip_cache].present? ) do
 
-      topical_channels = Pythia.related(@channel_id, 30, 0.2)
-      cheap_channels   = Pythia.cheap_related(@channel_id, 45, 2)
+      topical_channels      = Pythia.related(@channel_id, 20, 0.2)
+
+#####  removing this
+#      cheap_channels        = Pythia.cheap_related(@channel_id, 45, 2)
       
       recs = [topical_channels, cheap_channels].flatten.uniq { |c| c[:channel_id] }
       
