@@ -70,7 +70,6 @@ class ChannelController < ApiController
     render :json => topics
   end
 
-
   def search_within_channel
     search_term = params[:search_term]
 
@@ -80,9 +79,29 @@ class ChannelController < ApiController
 
     query = {
       key: ENV['YOUTUBE_API'],
-      part: 'id',
+      part: 'id,snippet',
       channelId: @channel_id,
       snippet: {
+        title: search_term
+      }
+    }
+
+    response = YoutubeApi.v3_authorized_request( url, token, query )
+
+    render :json => JSON.parse( response.body )
+  end
+
+  def search
+    search_term = params[:search_term]
+
+    url = 'https://www.googleapis.com/youtube/v3/search'
+
+    token = current_user.get_token if current_user.present?
+
+    query = { 
+      key: ENV['YOUTUBE_API'],
+      part: 'id,snippet',
+      snippet: { 
         title: search_term
       }
     }
