@@ -81,9 +81,7 @@ class ChannelController < ApiController
       key: ENV['YOUTUBE_API'],
       part: 'id,snippet',
       channelId: @channel_id,
-      snippet: {
-        title: search_term
-      }
+      q: search_term
     }
     query = query.merge( { pageToken: params[:page_token] } ) if params[:page_token].present?
 
@@ -102,9 +100,7 @@ class ChannelController < ApiController
     query = { 
       key: ENV['YOUTUBE_API'],
       part: 'id,snippet',
-      snippet: { 
-        title: search_term
-      }
+      q: search_term
     }
     query = query.merge( { pageToken: params[:page_token] } ) if params[:page_token].present?
 
