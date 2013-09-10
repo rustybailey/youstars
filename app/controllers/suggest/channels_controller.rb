@@ -17,7 +17,7 @@ class Suggest::ChannelsController < ApiController
       
       recs = topical_channels.uniq { |c| c[:channel_id] }
       
-    end
+   end
     
     render :json => recs
   end

@@ -23,19 +23,23 @@ module Pythia
     target_channel_data = YoutubeApi.channel_data_for_channel_id(channel_id)[0]
     description_space   = channels.collect { |c| c[:description] }
 
-    channels.sort { |a, b| Pythia.score(b, target_channel_data, description_space, stats_weighting) <=> Pythia.score(a, target_channel_data, description_space, stats_weighting) } # descending
+    channels.sort do |a, b|
+
+      Pythia.score(b, channel_videos[b[:channel_id]], target_channel_data, description_space, stats_weighting) <=> 
+        Pythia.score(a, channel_videos[a[:channel_id]], target_channel_data, description_space, stats_weighting) 
+
+    end
   end
 
 
-  def self.score(channel_data, target_data = nil, data_space = nil, stats_weighting = 0.5)
+  def self.score(channel_data, initial_score, target_data = nil, data_space = nil, stats_weighting = 0.5)
 
-    # weighted geometric mean of subscribers and log-scaled views
-    score = channel_data[:subscriber_count] * Math.log( channel_data[:view_count] )
+    score = channel_data[:subscriber_count] * initial_score
     score = score ** stats_weighting    
 
     if target_data.present? and data_space.present? and target_data.dig(:description).length > 0
-      score *= Pythia.string_score(channel_data[:description], target_data[:description], data_space)     
-    end
+      score *= Pythia.string_score(channel_data.dig(:description), target_data.dig(:description), data_space)
+    end    
     
     score
   end
