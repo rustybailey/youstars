@@ -141,7 +141,7 @@ module YoutubeApi
         alt: 'json'
       }
     
-      output[i][:name] = JSON.parse( HTTParty.get(v2_channel_url, query: v2_query).body ).dig('entry', 'yt$username', '$t')
+      output[i][:name] = JSON.parse( v2_authorized_request(v2_channel_url, nil, {query: v2_query}).body ).dig('entry', 'yt$username', '$t')
     end
     
     output

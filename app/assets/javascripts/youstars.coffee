@@ -320,8 +320,8 @@ youstars.directive('mostwatchedvideos', ['videosService', (videosService) ->
             </a>
             <a class="ys-recommendation-content" href="#">
               <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
-              <h3>{{video.channel_name}}</h3>
               <h4>{{video.title}}</h4>
+              <h3>{{video.channel_name}}</h3>
             </a>
           </li>
         </ul>
@@ -361,8 +361,8 @@ youstars.directive('suggestedvideos', ['videosService', (videosService) ->
             </a>
             <a class="ys-recommendation-content" href="#">
               <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
-              <h3>{{video.channel_name}}</h3>
               <h4>{{video.title}}</h4>
+              <h3>{{video.channel_name}}</h3>
             </a>
           </li>
         </ul>
@@ -607,7 +607,7 @@ youstars.factory('mysubscribersService', [ () ->
   return {
     sizeMysubscribers: () ->
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n + 1)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
-      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n + 8)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
+      subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n + 7)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
       subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(10n + 0)').toggleClass('ys-profile-tile-large', true).toggleClass('ys-profile-tile-small', false)
       # subscribersArray = $('#ys-profiles ul#ys-profiles-list li.ys-profile-tile-small:nth-child(11n)').toggleClass('ys-profile-tile-medium', true).toggleClass('ys-profile-tile-small', false)
     positionMysubscribers: () ->
@@ -616,6 +616,7 @@ youstars.factory('mysubscribersService', [ () ->
     repositionMysubscribers: () ->
       $('#ys-player-controls').addClass('ys-player-controls-after')
       $('#ys-profiles').addClass('ys-profiles-after')
+
   }
 ])
 
@@ -678,7 +679,7 @@ youstars.directive('stats', ['userService', 'statsService', '$timeout', '$routeP
           <ul id="ys-social-links">
             <li class="ys-social-link"><a href="http://www.facebook.com/sharer/sharer.php?s=100&p[url]=http://youstars.herokuapp.com/{{currentChannel}}&p[images][0]=&p[title]=YouStars%20-%20{{currentChannel}}&p[summary]=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!"><i class="ss-icon ss-social">Facebook</i></i></a></li>
             <li class="ys-social-link"><a href="http://twitter.com/home?status=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!%20http://youstars.herokuapp.com/{{currentChannel}}"><i class="ss-icon ss-social">Twitter</i></a></li>
-            <li class="ys-social-link"><a href="https://plus.google.com/share?url=http://youstars.herokuapp.com/{{currentChannel}}"><i class="ss-icon ss-social">Google+</i></a></li>
+            <li class="ys-social-link"><a href="https://plus.google.com/share?url=http://youstars.herokuapp.com/{{currentChannel}}"><i class="ss-icon ss-social">GooglePlus</i></a></li>
             <li class="ys-social-link"><a href="http://www.tumblr.com/share/link?url=http%3A%2F%2Fyoustars.herokuapp.com%2F{{currentChannel}}&name=YouStars%20-%20{{currentChannel}}&description=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!"><i class="ss-icon ss-social">Tumblr</i></a></li>
             <li class="ys-social-link"><a href="http://www.linkedin.com/shareArticle?mini=true&url=http://youstars.herokuapp.com/{{currentChannel}}&title=YouStars%20-%20{{currentChannel}}&summary=Just%20watched%20some%20awesome%20videos%20from%20{{currentChannel}}%20on%20YouStars!"><i class="ss-icon ss-social">LinkedIn</i></a></li>
             <li><a class="ys-claim">Claim This Channel</a></li>

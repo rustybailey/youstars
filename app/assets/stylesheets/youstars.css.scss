@@ -1021,12 +1021,13 @@ $ys-profile-tile-large-size:	230px;
 	background: transparent url("/assets/background-black-33.png") repeat 0 0;
 	position: relative;
 	z-index: 10;
+	overflow: hidden;
 	@include box-sizing(border-box);
 	@include transition-property(margin);
 	@include transition-duration(0.33s);
 	ul#ys-profiles-list {
 		display: block;
-		width: 250px;
+		width: 265px;
 		height: 100%;
 		position: relative;
 		padding: 14px 0 0 10px;
@@ -1060,14 +1061,20 @@ $ys-profile-tile-large-size:	230px;
 		li:nth-child(10n + 7) {
 			float: left;
 			a.ys-profile-tile-content { background: $purple url("/assets/white-glare.png") no-repeat top right; }
+			position: relative;
+			margin-left: 80px;
 		}
 		li:nth-child(10n + 8) {
-			float: right !important;
+			float: left;
 			a.ys-profile-tile-content { background: $teal url("/assets/white-glare.png") no-repeat top right; }
+			position: relative;
+			margin-left: -240px;
 		}
 		li:nth-child(10n + 9) {
 			float: left;
 			a.ys-profile-tile-content { background: $crimson url("/assets/white-glare.png") no-repeat top right; }
+			position: relative;
+			margin: 80px 0 0 -240px;
 		}
 		li:nth-child(10n + 0) {
 			float: left;

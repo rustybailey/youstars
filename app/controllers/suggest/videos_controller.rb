@@ -46,7 +46,6 @@ class Suggest::VideosController < ApiController
   end
 
   def most_watched
-
     recs          = Rails.cache.fetch( auto_cache_key(:user => current_user.id ), :expires_in => 1.day ) do
       youtube_ids   = current_user.views.order("unique_view_count desc, weight desc").includes(:video).limit(50).collect{ |view| view.video.youtube_id }
       url           = "https://www.googleapis.com/youtube/v3/videos?part=id%2Csnippet%2CcontentDetails%2Cstatistics&id=#{youtube_ids.join(',')}"
