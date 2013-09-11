@@ -100,7 +100,6 @@ module Pythia
     term_scores.each_pair do |k, v|
       sum += v
     end
-    puts term_scores
 
     sum
   end
