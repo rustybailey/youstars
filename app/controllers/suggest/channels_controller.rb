@@ -12,9 +12,6 @@ class Suggest::ChannelsController < ApiController
 
       topical_channels      = Pythia.related(@channel_id, 20, 0.2)
 
-#####  removing this
-#      cheap_channels        = Pythia.cheap_related(@channel_id, 45, 2)
-      
       recs = topical_channels.uniq { |c| c[:channel_id] }
       
    end

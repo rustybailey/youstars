@@ -24,8 +24,9 @@ module Pythia
     description_space   = channels.collect { |c| c[:description] }
 
     channels.sort do |a, b|
+      # descending
 
-      Pythia.score(b, channel_videos[b[:channel_id]], target_channel_data, description_space, stats_weighting) <=> 
+      Pythia.score(b, channel_videos[b[:channel_id]], target_channel_data, description_space, stats_weighting) <=>
         Pythia.score(a, channel_videos[a[:channel_id]], target_channel_data, description_space, stats_weighting) 
 
     end
@@ -33,8 +34,7 @@ module Pythia
 
 
   def self.score(channel_data, initial_score, target_data = nil, data_space = nil, stats_weighting = 0.5)
-
-    score = channel_data[:subscriber_count] * initial_score
+    score = Math.log( channel_data[:subscriber_count] ) * initial_score
     score = score ** stats_weighting    
 
     if target_data.present? and data_space.present? and target_data.dig(:description).length > 0
