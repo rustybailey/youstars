@@ -1,5 +1,6 @@
 # Youstars
 Youstars is a **better** frontend for YouTube pages.
+[http://www.youstars.herokuapp.com](http://www.youstars.herokuapp.com)
 
 ## Setup
 Youstars is a Rails 4 app. You must use it with Ruby 2.0 with the latest available patch level.
