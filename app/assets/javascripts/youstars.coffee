@@ -55,7 +55,7 @@ youstars.directive('suggestedchannels', ['channelsService', (channelsService) ->
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <img ng-src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
               <h3>{{channel.title}}</h3>
             </a>
           </li>
@@ -93,7 +93,7 @@ youstars.directive('similarrecentchannels', ['channelsService', (channelsService
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <img ng-src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
               <h3>{{channel.title}}</h3>
             </a>
           </li>
@@ -130,7 +130,7 @@ youstars.directive('mostsubscribedchannels', ['channelsService', (channelsServic
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <img ng-src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
               <h3>{{channel.title}}</h3>
             </a>
           </li>
@@ -167,7 +167,7 @@ youstars.directive('mostviewedchannels', ['channelsService', (channelsService) -
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <img ng-src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
               <h3>{{channel.title}}</h3>
             </a>
           </li>
@@ -205,7 +205,7 @@ youstars.directive('recentchannels', ['channelsService', (channelsService) ->
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <img ng-src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
               <h3>{{channel.title}}</h3>
             </a>
           </li>
@@ -242,7 +242,7 @@ youstars.directive('similarchannels', ['channelsService', (channelsService) ->
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <img ng-src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
               <h3>{{channel.title}}</h3>
             </a>
           </li>
@@ -280,7 +280,7 @@ youstars.directive('mychannel', ['channelsService', (channelsService) ->
               <h4>{{channel.subscriber_count | number: 0}} subs</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
+              <img ng-src="{{ channel.thumbnails.medium.url || channel.thumbnails.default.url }}" />
               <h3>{{channel.title}}</h3>
             </a>
           </li>
@@ -319,7 +319,7 @@ youstars.directive('mostwatchedvideos', ['videosService', (videosService) ->
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <img ng-src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
               <h4>{{video.title}}</h4>
               <h3>{{video.channel_name}}</h3>
             </a>
@@ -360,7 +360,7 @@ youstars.directive('suggestedvideos', ['videosService', (videosService) ->
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <img ng-src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
               <h4>{{video.title}}</h4>
               <h3>{{video.channel_name}}</h3>
             </a>
@@ -399,7 +399,7 @@ youstars.directive('trendingvideos', ['videosService', (videosService) ->
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <img ng-src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
               <h4>{{video.title}}</h4>
               <h3>{{video.channel_name}}</h3>
             </a>
@@ -438,7 +438,7 @@ youstars.directive('featuredvideos', ['videosService', (videosService) ->
               <h4>{{video.statistics.views | number: 0}} views&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;{{video.statistics.likes | number: 0}} likes</h4>
             </a>
             <a class="ys-recommendation-content" href="#">
-              <img src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
+              <img ng-src="https://i1.ytimg.com/vi/{{video.id}}/mqdefault.jpg" />
               <h4>{{video.title}}</h4>
               <h3>{{video.channel_name}}</h3>
             </a>
@@ -772,7 +772,7 @@ youstars.directive('myvideos', ['videosService', 'myvideosService', '$timeout', 
           </a>
           <a ng-click="playVideo('{{video.video_id}}')" class="ys-video-content" style="transition-delay: {{$index * 100}}ms">
             <h3>{{video.title}}</h3>
-            <img src="{{ video.thumbnails.medium.url || video.thumbnails.default.url }}" />
+            <img ng-src="{{ video.thumbnails.medium.url || video.thumbnails.default.url }}" />
           </a>
         </li>
         <li class="video-spinner" ng-class="{'more-results': page_token}"></li>
@@ -812,10 +812,10 @@ youstars.directive('mysubscribers', ['userService', 'channelsService', 'mysubscr
             <div class="ys-profile-tile-info">
               <span>{{channel.title}}</span>
             </div>
-            <div class="ys-profile-tile-door-1"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
-            <div class="ys-profile-tile-door-2"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
-            <div class="ys-profile-tile-door-3"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
-            <div class="ys-profile-tile-door-4"><img src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-1"><img ng-src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-2"><img ng-src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-3"><img ng-src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
+            <div class="ys-profile-tile-door-4"><img ng-src="{{channel.thumbnails.medium.url || channel.thumbnails.default.url}}" /></div>
           </a>
           <a class="ys-profile-action ss-icon" ng-class="{'ss-addheart': loggedIn, 'ss-heart': !loggedIn}" ng-click="subscribe($event, '{{channel.name}}')"></a>
         </li>
