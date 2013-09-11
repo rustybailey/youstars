@@ -1,4 +1,5 @@
 require 'youtube_api.rb'
+require 'parts_of_speech.rb'
 
 module Pythia
   
@@ -66,12 +67,11 @@ module Pythia
 
   def self.string_score(target_0, target_1, space)
     # a TF-IDF mutual relevancy algorithm
-
-    stop_words = ['a', 'an', 'the', 'and', 'or']
+    stop_words = PartsOfSpeech::StopWords
 
     # depunctuate and split
-    target_0 = target_0.downcase.split.collect { |t| t.gsub( /\W/, '' ) }.reject { |t| t.in? stop_words }.compact
-    target_1 = target_1.downcase.split.collect { |t| t.gsub( /\W/, '' ) }.reject { |t| t.in? stop_words }.compact
+    target_0 = target_0.downcase.split.collect { |t| t.gsub( /\W/, '' ) }.reject { |t| t.in? stop_words or t.length < 3 }.compact
+    target_1 = target_1.downcase.split.collect { |t| t.gsub( /\W/, '' ) }.reject { |t| t.in? stop_words or t.length < 3 }.compact
     
     space = space.collect do |string|
       string.downcase.split.collect { |t| t.gsub( /\W/, '' ) }.reject { |t| t.in? stop_words }.compact
@@ -100,6 +100,7 @@ module Pythia
     term_scores.each_pair do |k, v|
       sum += v
     end
+    puts term_scores
 
     sum
   end
